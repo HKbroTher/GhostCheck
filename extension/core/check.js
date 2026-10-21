@@ -316,7 +316,12 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   if (!(await deps.hasOriginPermission(url.origin).catch(() => false))) {
     return unknown(t(deps.lang, 'unknown.needPermission', { host }), {
       ...base,
-      action: { type: 'grant-origin', origin: url.origin, label: t(deps.lang, 'ui.allowSite', { host }) },
+      action: {
+        type: 'grant-origin',
+        origin: url.origin,
+        label: t(deps.lang, 'ui.allowSite', { host }),
+        allLabel: t(deps.lang, 'ui.allowAll'),
+      },
     });
   }
 

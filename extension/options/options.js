@@ -2,6 +2,7 @@
 import { resolveLanguage, t } from '../core/i18n.js';
 
 const MODEL_CACHE = 'transformers-cache'; // Transformers.js browser cache name
+const ALL_SITES = 'https://*/*'; // optional_host_permissions in manifest.json
 const MODEL_NAMES = { 'all-MiniLM-L6-v2': 'English', 'paraphrase-multilingual-MiniLM-L12-v2': 'Multilingual' };
 const $ = (id) => document.getElementById(id);
 let lang = 'en';
@@ -95,6 +96,19 @@ for (const radio of document.querySelectorAll('input[name="model"]')) {
   });
 }
 
+// Automatic checking of every careers site = the optional "all https sites"
+// permission. Chrome asks once; turning it off gives the permission back.
+$('all-sites').addEventListener('change', async (e) => {
+  if (e.target.checked) {
+    const granted = await chrome.permissions.request({ origins: [ALL_SITES] }).catch(() => false);
+    e.target.checked = granted;
+    say(granted ? 'options.autoOn' : 'options.autoDenied');
+  } else {
+    await chrome.permissions.remove({ origins: [ALL_SITES] }).catch(() => {});
+    say('options.autoOff');
+  }
+});
+
 $('delete-model').addEventListener('click', async () => {
   await caches.delete(MODEL_CACHE);
   say('options.deleted');
@@ -109,5 +123,6 @@ $('delete-model').addEventListener('click', async () => {
   $('models').disabled = settings.semantic === false;
   const model = settings.semanticModel === 'multilingual' ? 'multilingual' : 'english';
   document.querySelector(`input[name="model"][value="${model}"]`).checked = true;
+  $('all-sites').checked = await chrome.permissions.contains({ origins: [ALL_SITES] }).catch(() => false);
   render();
 })();

@@ -301,7 +301,8 @@ const ldPosting = (over = {}) => ({
 test('self-hosted: no permission yet -> unknown with an allow button', async () => {
   const r = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ hasOriginPermission: async () => false }));
   assert.equal(r.badge, 'unknown');
-  assert.deepEqual(r.action, { type: 'grant-origin', origin: 'https://careers.acme.com', label: 'Allow checking careers.acme.com' });
+  assert.equal(r.action.type, 'grant-origin');
+  assert.equal(r.action.origin, 'https://careers.acme.com');
 });
 
 test('self-hosted: JSON-LD JobPosting confirms the job', async () => {
@@ -379,4 +380,10 @@ test('Chinese output: badge, reasons and notes', async () => {
   const u = await checkJob(job({ company: 'Nobody', linkedinCompanySlug: null, applyHref: null, applyType: 'easy' }), deps({ lang: 'zh' }));
   assert.equal(u.label, '无法确认');
   assert.match(u.reasons[0].text, /Easy Apply 职位/);
+});
+
+test('permission prompt offers this site or all careers sites', async () => {
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ hasOriginPermission: async () => false }));
+  assert.equal(r.action.label, 'Allow checking careers.acme.com');
+  assert.equal(r.action.allLabel, "Allow all careers sites (don't ask again)");
 });

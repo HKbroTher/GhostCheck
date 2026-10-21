@@ -67,7 +67,9 @@
     dd { margin: 0; overflow-wrap: anywhere; }
     .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px;
             border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px; color: var(--muted); }
-    .action { display: block; margin: 0 0 10px; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; }
+    .action.secondary { color: var(--link); background: transparent; box-shadow: inset 0 0 0 1px var(--link); }
+    .action { display: block; margin: 0; padding: 6px 14px; border-radius: 999px; cursor: pointer;
               font: 600 13px/18px -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; color: #fff; background: var(--link); border: 0; }
     .recheck { all: unset; cursor: pointer; color: var(--link); font-weight: 600; white-space: nowrap; }
   `;
@@ -288,9 +290,11 @@
 
         // Something the user can do to make the check possible.
         if (s.action?.type === 'grant-origin' && typeof s.action.origin === 'string') {
-          const btn = el('button', { class: 'action', type: 'button' }, s.action.label || this.t('ui.allowSite', { host: '' }));
-          btn.addEventListener('click', () => this.onAction(s.action));
-          card.append(btn);
+          const site = el('button', { class: 'action', type: 'button' }, s.action.label || this.t('ui.allowSite', { host: '' }));
+          site.addEventListener('click', () => this.onAction({ ...s.action, scope: 'site' }));
+          const all = el('button', { class: 'action secondary', type: 'button' }, s.action.allLabel || this.t('ui.allowAll'));
+          all.addEventListener('click', () => this.onAction({ ...s.action, scope: 'all' }));
+          card.append(el('div', { class: 'actions' }, site, all));
         }
 
         if (s.officialUrl && isSafeHttpUrl(s.officialUrl)) {
