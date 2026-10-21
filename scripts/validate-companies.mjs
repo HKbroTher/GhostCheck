@@ -37,6 +37,7 @@ function selfMatchCheck(company, postings) {
     const location = p.location.split(';')[0];
     const m = matchPosting({ title: p.title, location }, postings);
     selfMatch.tried++;
+    // Identical titles in several locations are fine to swap.
     if (m.status === 'found' && normalizeCompanyName(m.posting.title) === normalizeCompanyName(p.title)) selfMatch.found++;
     else if (selfMatch.misses.length < 25) selfMatch.misses.push(`${company}: "${p.title}" @ ${location} -> ${m.status}${m.mismatch ? ` (${m.mismatch})` : ''}`);
   }
