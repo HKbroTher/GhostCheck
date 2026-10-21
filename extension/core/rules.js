@@ -2,6 +2,7 @@
  * Load, validate and evaluate rules.yaml.
  */
 import { load as parseYaml } from './vendor/js-yaml.mjs';
+import { DEFAULT_SEMANTIC } from './semantic.js';
 
 /**
  * @typedef {object} SignalRule
@@ -16,6 +17,7 @@ import { load as parseYaml } from './vendor/js-yaml.mjs';
  * @property {number} max_reasons
  * @property {{ title_match: number, title_similar: number }} matching
  * @property {{ recent_days: number, old_days: number }} age
+ * @property {typeof DEFAULT_SEMANTIC} semantic
  * @property {SignalRule[]} signals
  */
 
@@ -58,6 +60,16 @@ export function parseRules(yamlText) {
     age: {
       recent_days: num(raw.age?.recent_days ?? 30, 'age.recent_days'),
       old_days: num(raw.age?.old_days ?? 90, 'age.old_days'),
+    },
+    semantic: {
+      enabled: raw.semantic?.enabled !== false,
+      min_chars: num(raw.semantic?.min_chars ?? DEFAULT_SEMANTIC.min_chars, 'semantic.min_chars'),
+      promote_min_similarity: num(
+        raw.semantic?.promote_min_similarity ?? DEFAULT_SEMANTIC.promote_min_similarity,
+        'semantic.promote_min_similarity',
+      ),
+      min_margin: num(raw.semantic?.min_margin ?? DEFAULT_SEMANTIC.min_margin, 'semantic.min_margin'),
+      tie_title_gap: num(raw.semantic?.tie_title_gap ?? DEFAULT_SEMANTIC.tie_title_gap, 'semantic.tie_title_gap'),
     },
     signals,
   };

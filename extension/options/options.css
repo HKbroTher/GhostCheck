@@ -1,0 +1,8 @@
+h2 { font-size: 16px; margin: 22px 0 8px; }
+section + section { border-top: 1px solid var(--line); margin-top: 18px; }
+.toggle { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.toggle input { margin-top: 4px; }
+.hint { color: var(--muted); font-size: 14px; }
+#origins { list-style: none; padding: 0; }
+#origins li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; overflow-wrap: anywhere; }
+#origins button { padding: 4px 12px; font-size: 13px; }

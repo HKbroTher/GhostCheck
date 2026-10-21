@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GhostCheck options</title>
+  <link rel="stylesheet" href="../permission/permission.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <h1>GhostCheck options</h1>
+
+    <section>
+      <h2>Description matching</h2>
+      <label class="toggle">
+        <input type="checkbox" id="semantic">
+        <span>Compare job descriptions with a small AI model that runs on this computer.</span>
+      </label>
+      <p class="hint">Helps when a company words a job title differently on LinkedIn and on its careers site.
+        The model (~23 MB) is downloaded from Hugging Face the first time it is needed and kept by your browser.
+        Job descriptions never leave your computer.</p>
+      <p>Model: <span id="model-status">checking…</span></p>
+      <button type="button" id="delete-model" class="secondary">Delete downloaded model</button>
+    </section>
+
+    <section>
+      <h2>Careers sites you allowed</h2>
+      <p class="hint">GhostCheck can read these company sites to confirm jobs. Remove any you no longer want.</p>
+      <ul id="origins"></ul>
+    </section>
+
+    <p id="status" role="status"></p>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

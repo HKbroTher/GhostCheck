@@ -35,6 +35,17 @@ matching:
   title_match: 0.8     # at or above: same job (if level and location agree)
   title_similar: 0.6   # at or above: "a similar job is listed" (neutral, never negative)
 
+# Description matching with a small embedding model that runs on your
+# computer (downloaded once, ~23 MB). It can only IMPROVE a title match:
+# confirm a job whose title was reworded, or choose between near-identical
+# titles. It never makes a job look worse. See core/semantic.js.
+semantic:
+  enabled: true
+  min_chars: 300                 # role-specific text needed on both sides
+  promote_min_similarity: 0.85   # cosine similarity to accept a reworded title
+  min_margin: 0.05               # ...and how far ahead of the runner-up it must be
+  tie_title_gap: 0.05            # titles this close are a tie the descriptions may break
+
 # Age thresholds in days. The age is the oldest of: the careers site's own
 # publish date, GhostCheck's daily snapshots, and the Wayback Machine.
 age:

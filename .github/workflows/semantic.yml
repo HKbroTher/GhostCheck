@@ -1,0 +1,47 @@
+name: Description model
+
+# Checks the local embedding model with real data. Dev-only: installs
+# packages that the extension does not need (it bundles its own copy).
+on:
+  push:
+    paths:
+      - core/semantic.js
+      - core/matcher.js
+      - scripts/eval-semantic.mjs
+      - tests/e2e/**
+      - extension/offscreen/**
+      - extension/vendor/transformers/**
+      - extension/background/**
+      - .github/workflows/semantic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    name: Thresholds on live job boards
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save --ignore-scripts=false @huggingface/transformers@3.7.6
+      - run: node scripts/eval-semantic.mjs
+
+  browser:
+    name: Extension in Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/e2e/model.e2e.mjs
+        env:
+          PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS: '1'

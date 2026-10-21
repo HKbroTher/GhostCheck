@@ -15,6 +15,7 @@ import { linkedinJobUrl } from './wayback.js';
 import { combineAge, ageSignals, AGE_SOURCE_LABELS } from './age.js';
 import { workday } from './sources/workday.js';
 import { canonicalUrl } from './sitemap.js';
+import { refineMatch } from './semantic.js';
 
 const ATS_NAMES = { greenhouse: 'Greenhouse', lever: 'Lever', ashby: 'Ashby', workday: 'Workday' };
 /** Workday boards up to this size are paged through completely. */
@@ -42,6 +43,8 @@ const WORKDAY_FULL_LIST_MAX = 100;
  *   a careers page and the schema.org JobPostings found in it
  * @property {(origin: string) => Promise<Set<string> | null>} [fetchSitemapUrls]
  *   canonical URLs listed in the site's sitemaps, or null when there are none
+ * @property {(texts: string[]) => Promise<number[][] | null>} [embed]
+ *   local sentence embeddings (normalized vectors); null while the model loads
  * @property {() => Date} [now]
  */
 
@@ -190,8 +193,12 @@ async function lookupListAts(job, board, deps, rules) {
       officialUrl: boardUrl,
     });
   }
-  const match = matchPosting(job, postings, ref, rules.matching);
-  return outcomeFromMatch(match, {
+  let match = matchPosting(job, postings, ref, rules.matching);
+  let semantic = null;
+  if (deps.embed && rules.semantic?.enabled) {
+    ({ match, semantic } = await refineMatch(job, match, postings, deps.embed, rules.semantic));
+  }
+  const outcome = outcomeFromMatch(match, {
     siteName,
     boardUrl,
     // A board found by name might belong to another company with the same
@@ -200,6 +207,14 @@ async function lookupListAts(job, board, deps, rules) {
     missingReason: `We couldn't find this job on a ${siteName} board named "${ref.slug}", but we're not sure that board belongs to this company.`,
     notes: [`Checked ${postings.length} open job${postings.length === 1 ? '' : 's'} on ${siteName}.`],
   });
+  if (semantic) {
+    const runnerUp = semantic.runnerUp !== null ? `, next best ${semantic.runnerUp}` : '';
+    outcome.detected.descriptionMatch = `${semantic.similarity}${runnerUp}: ${semantic.decision}`;
+  }
+  if (outcome.status === 'found' && match.via === 'description') {
+    outcome.notes.unshift(`Matched by job description: the careers site calls it "${match.posting.title}".`);
+  }
+  return outcome;
 }
 
 /**

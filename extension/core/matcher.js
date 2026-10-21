@@ -18,6 +18,8 @@ import { titleSimilarity } from './fuzzy.js';
 const MANAGER_TOKENS = ['manager', 'director', 'head', 'vp', 'president', 'chief'];
 
 export const DEFAULT_THRESHOLDS = { title_match: 0.8, title_similar: 0.6 };
+/** Candidates kept for description matching (core/semantic.js). */
+const POOL_SIZE = 12;
 
 function sameTrack(a, b) {
   return MANAGER_TOKENS.every((t) => a.tokens.includes(t) === b.tokens.includes(t));
@@ -50,7 +52,9 @@ function levelOk(a, b) {
  * @param {{ title_match?: number, title_similar?: number }} [thresholds]
  * @returns {{ status: 'found' | 'id_missing' | 'similar' | 'not_found' | 'unmatchable',
  *             posting: import('./sources/index.js').Posting | null,
- *             score: number, via: string | null, mismatch: string | null }}
+ *             score: number, via: string | null, mismatch: string | null,
+ *             pool?: Array<{ posting: object, score: number, mismatch: string | null }> }}
+ *   pool: best title candidates that pass the role/level/location rules
  */
 export function matchPosting(job, postings, ref = {}, thresholds = {}) {
   const t = { ...DEFAULT_THRESHOLDS, ...thresholds };
@@ -66,11 +70,12 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
   if (!target.tokens.length) return { status: 'unmatchable', posting: null, score: 0, via: null, mismatch: null };
   let best = null; // best acceptable match
   let near = null; // best title-similar candidate, regardless of filters
+  /** Postings that pass the role/level/location rules, for description matching. */
+  const pool = [];
 
   for (const posting of postings) {
     const cand = normalizeTitle(posting.title);
     const score = scoreTitles(target, cand);
-    if (score < t.title_similar) continue;
 
     let mismatch = null;
     if (!sameTrack(target, cand)) mismatch = 'role';
@@ -78,17 +83,21 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
     else if (!locationsCompatible(job.location || '', posting.location || '')) mismatch = 'location';
     else if (score < t.title_match) mismatch = 'title';
 
+    if (!mismatch || mismatch === 'title') pool.push({ posting, score: round(score), mismatch });
+    if (score < t.title_similar) continue;
     if (!mismatch && (!best || score > best.score)) best = { posting, score };
     if (!near || score > near.score) near = { posting, score, mismatch };
   }
+  pool.sort((a, b) => b.score - a.score);
+  const extra = { pool: pool.slice(0, POOL_SIZE) };
 
-  if (best) return { status: 'found', posting: best.posting, score: round(best.score), via: 'title', mismatch: null };
+  if (best) return { status: 'found', posting: best.posting, score: round(best.score), via: 'title', mismatch: null, ...extra };
   // Managerial vs individual-contributor titles are different jobs, not "similar".
   if (near && near.mismatch !== 'role') {
-    return { status: 'similar', posting: near.posting, score: round(near.score), via: 'title', mismatch: near.mismatch };
+    return { status: 'similar', posting: near.posting, score: round(near.score), via: 'title', mismatch: near.mismatch, ...extra };
   }
-  if (ref?.jobId) return { status: 'id_missing', posting: null, score: 0, via: 'id', mismatch: null };
-  return { status: 'not_found', posting: null, score: near ? round(near.score) : 0, via: null, mismatch: null };
+  if (ref?.jobId) return { status: 'id_missing', posting: null, score: 0, via: 'id', mismatch: null, ...extra };
+  return { status: 'not_found', posting: null, score: near ? round(near.score) : 0, via: null, mismatch: null, ...extra };
 }
 
 const round = (n) => Math.round(n * 100) / 100;
