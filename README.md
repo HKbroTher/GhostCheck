@@ -50,7 +50,11 @@ flowchart LR
    |---|---|---|
    | Greenhouse, Lever, Ashby, Workable | Full list of open jobs from the public API | Yes |
    | Workday | The exact posting from the apply link, otherwise a title search | Only for boards small enough (≤ 100 jobs) to list completely |
+   | amazon.jobs and Phenom careers sites (e.g. careers.mastercard.com) | The site's own job search, by job id or title | No: a search can miss jobs, so it only confirms |
    | Company's own site | The ATS the page links to or embeds (checked as above); otherwise schema.org `JobPosting` data on the page, then the site's `sitemap.xml` | Only through a linked ATS; the page itself can only confirm a job, or show it is gone |
+   | Job boards and recruiters (Indeed, Liepin 猎聘, BOSS 直聘, Michael Page, ...) | Never treated as the company's site; GhostCheck checks the company through `data/companies.json` instead | No |
+
+   When the apply link opens a careers site's home or search page instead of the job's own page, the job is simply not on that page: the card says so and links to the site's search, and never counts it as "not found".
 
 4. **Match the job.** Titles are normalized (`Sr.` → `Senior`, `SWE` → `Software Engineer`, noise like `(m/w/d)` or `Remote` removed), then compared with fuzzy matching. Seniority level, location and manager vs. individual-contributor roles must agree. When titles are worded differently, a small AI model that runs on your computer compares the job descriptions (see [below](#description-matching-local-ai-model)).
 5. **Estimate the job's age** from the oldest of: the careers site's own publish date, GhostCheck's daily snapshots (`data/first-seen/`), and the earliest [Wayback Machine](https://web.archive.org/) capture. Snapshots and captures prove a job existed *by* a date, so they can show a job is old but never that it is new.
@@ -110,7 +114,7 @@ Two models are available on the options page:
 
 - Japanese and Chinese titles are understood: seniority words (シニア, 高级, 资深, インターン, 实习), employment-type words (正社員, 全职, リモート, 远程) and place names (東京, 上海, ...) are recognized.
 - Pay ranges in Japanese and Chinese formats are detected (年収600万円〜900万円, 月給, 月薪15k-25k), as are team names (決済基盤チーム, 支付平台团队) and pipeline wording (タレントプール, 人才储备).
-- If the LinkedIn title and the careers-site titles are in different languages, GhostCheck never reports "not found"; it shows ⚪, or confirms the job with the multilingual model.
+- GhostCheck tells English, German, French, Spanish, Portuguese, Italian, Dutch, Japanese, Chinese and Korean apart (common words and writing system). If the careers site publishes its jobs in another language than the LinkedIn post, GhostCheck never reports "not found": the card says which language the site uses and asks you to check the job's working language. A job confirmed on the careers site in another language gets the same note.
 - The English model only reads English descriptions; other languages fall back to title matching unless you choose the multilingual model.
 
 ## Privacy
@@ -152,6 +156,10 @@ Easy Apply jobs have no link to the careers site, so GhostCheck needs to know wh
 
 When you open the pull request, GitHub Actions checks every board against the live API and confirms the Greenhouse board name matches the company. Once merged, everyone's extension picks up the new list within a day, without an update.
 
+### Add a job board or recruiter
+
+Apply links to job boards and recruitment agencies are never read as the company's careers site. The list is in [`core/job-boards.js`](core/job-boards.js): add `{ name, native?, domains?, brands? }` (domains match the site and its subdomains; brands match the name under any country domain, like `michaelpage.co.jp`), then run `node scripts/sync.mjs` and `node --test`.
+
 ### Translate GhostCheck
 
 Interface text lives in [`core/i18n.js`](core/i18n.js) and reason texts in [`rules.yaml`](rules.yaml) (`reason.en`, `reason.zh`). A test checks that every language has every sentence with the same placeholders. After editing, run `node scripts/sync.mjs`: it also regenerates `extension/content/strings.js` for the page script.
@@ -192,10 +200,11 @@ To preview every badge state, open `chrome-extension://<extension id>/dev/previe
 
 - GhostCheck can be wrong. The card says **"Signals, not verdicts"** for a reason: use it as one input, not as proof.
 - Careers sites that render jobs only with JavaScript, block automated reading, or use an ATS other than those above give ⚪. The card names the system when it recognises one (HERP, HRMOS, SmartRecruiters, iCIMS, ...), so you know why.
-- Large Workday sites (over 100 jobs) can confirm a job but never report it missing.
+- Large Workday sites (over 100 jobs) can confirm a job but never report it missing; so can site searches (amazon.jobs, Phenom).
+- When something fails, the card shows ⚪ and the details go to the browser console (`[GhostCheck] Some lookups failed`), so you can include them in a bug report.
 - With the default English model, descriptions in other languages are not compared; choose the multilingual model on the options page.
 - LinkedIn changes its pages often. If badges stop appearing, the selectors probably need an update (see [Contributing](#fix-ghostcheck-after-a-linkedin-redesign)).
 
 ## License
 
-[MIT](LICENSE). Bundled third-party code (Transformers.js, ONNX Runtime Web, js-yaml) is listed with its licenses in [`extension/vendor/THIRD_PARTY_NOTICES.md`](extension/vendor/THIRD_PARTY_NOTICES.md).
+[MIT](LICENSE). Bundled third-party code and fonts (Transformers.js, ONNX Runtime Web, js-yaml, VT323) are listed with its licenses in [`extension/vendor/THIRD_PARTY_NOTICES.md`](extension/vendor/THIRD_PARTY_NOTICES.md).

@@ -9,6 +9,8 @@ import { matchPosting } from './matcher.js';
 import { sameTitleLanguage } from './normalize.js';
 import { detectJobBoard, jobBoardName } from './job-boards.js';
 import { compareLanguages, detectLanguage, postingLanguage } from './language.js';
+import { isGenericCareersUrl } from './careers-page.js';
+import { amazonSearchPage, amazonSite, phenomSearchPage } from './sources/site-search.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
@@ -46,6 +48,8 @@ const WORKDAY_FULL_LIST_MAX = 100;
  * @property {(url: string) => Promise<{ status: number, ok: boolean, url: string, postings: object[],
  *   discovered?: ReturnType<import('./discover.js').discoverAts> }>} [fetchPageJobs]
  *   a careers page, the schema.org JobPostings in it and the ATS it links to
+ * @property {(site: object, query: string) => Promise<import('./sources/index.js').Posting[]>} [searchSite]
+ *   a careers site's own job search (see sources/site-search.js)
  * @property {(origin: string) => Promise<Set<string> | null>} [fetchSitemapUrls]
  *   canonical URLs listed in the site's sitemaps, or null when there are none
  * @property {'english' | 'multilingual'} [semanticModel]   which local model `embed` runs
@@ -354,9 +358,42 @@ export function hostMatchesCompany(host, company) {
 }
 
 /**
- * A company's own careers page: schema.org JobPosting (JSON-LD), then the
- * site's sitemap. Pages can confirm a job or show the link is dead; they can
- * never show a job is missing, because there is no complete list to compare.
+ * Ask a careers site's own job search (amazon.jobs, Phenom sites). Only a
+ * found job counts: search results are never a complete list.
+ * @returns {Promise<{ outcome: Outcome | null, searchPage: string }>}
+ */
+async function searchCareersSite(job, site, host, deps, rules) {
+  const searchPage = site.kind === 'amazon' ? amazonSearchPage(job.title) : phenomSearchPage(site, job.title);
+  const found = (posting) => ({
+    outcome: {
+      siteName: host,
+      status: 'found',
+      posting,
+      officialUrl: posting.url || searchPage,
+      notes: [t(deps.lang, 'note.siteSearch', { host })],
+      detected: { matchStatus: 'found (site search)', matchedTitle: posting.title },
+    },
+    searchPage,
+  });
+  try {
+    // The job id from the apply link is the surest match.
+    if (site.jobId) {
+      const byId = (await deps.searchSite(site, site.jobId)).find((p) => p.id === site.jobId);
+      if (byId) return found(byId);
+    }
+    const match = matchPosting(job, await deps.searchSite(site, job.title), {}, rules.matching);
+    if (match.status === 'found') return found(match.posting);
+  } catch (err) {
+    deps.report?.(`job search on ${host}`, err);
+  }
+  return { outcome: null, searchPage };
+}
+
+/**
+ * A company's own careers page: schema.org JobPosting (JSON-LD), the site's
+ * job search, the ATS it links to, then its sitemap. Pages can confirm a job
+ * or show the link is dead; they can never show a job is missing, because
+ * there is no complete list to compare.
  */
 async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   let url;
@@ -437,6 +474,15 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
     structured = outcome; // inconclusive; the ATS behind the page may know more
   }
 
+  // The site's own job search, when it has one we can ask.
+  let searchPage = null;
+  const site = amazonSite(page.url) || amazonSite(applyUrl) || page.siteSearch;
+  if (site && deps.searchSite) {
+    const searched = await searchCareersSite(job, site, host, deps, rules);
+    if (searched.outcome) return searched.outcome;
+    searchPage = searched.searchPage;
+  }
+
   // The page links to or embeds an ATS we can query: ask it directly.
   const discovered = page.discovered?.refs?.[0]?.ref;
   if (discovered) {
@@ -467,6 +513,16 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
         detected: { matchStatus: 'listed in sitemap' },
       };
     }
+  }
+  // A general careers or search page: the job isn't on it, and that means nothing.
+  const generic = isGenericCareersUrl(applyUrl) || isGenericCareersUrl(page.url) || page.postings.length > 1;
+  if (searchPage || generic) {
+    return unknown(t(deps.lang, searchPage ? 'unknown.searchMissed' : 'unknown.genericPage', { host, title: job.title }), {
+      ...base,
+      officialUrl: searchPage || page.url,
+      linkLabel: t(deps.lang, 'ui.searchSite', { host }),
+      detected: { matchStatus: searchPage ? 'not in site search results' : 'general careers page' },
+    });
   }
   if (structured) return structured;
   const others = page.discovered?.unsupported || [];
@@ -612,7 +668,7 @@ export async function checkJob(job, deps) {
     score: verdict.score,
     reasons: verdict.reasons,
     officialUrl: outcome.officialUrl ?? null,
-    officialLabel: t(lang, signals.found_on_official_site ? 'ui.viewJob' : 'ui.viewBoard'),
+    officialLabel: outcome.linkLabel || t(lang, signals.found_on_official_site ? 'ui.viewJob' : 'ui.viewBoard'),
     action: outcome.action ?? null,
     detected,
     signals,

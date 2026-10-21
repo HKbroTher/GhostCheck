@@ -475,3 +475,57 @@ test('found, but the official posting is in another language: say so', async () 
   assert.equal(r.badge, 'green');
   assert.ok(r.reasons.some((x) => /official posting is in German/.test(x.text)));
 });
+
+const { parseAmazon, parsePhenom, phenomSite } = await import('../core/sources/site-search.js');
+const PHENOM_PAGE =
+  '<script>phApp = phApp || {"widgetApiEndpoint":"https://careers.mastercard.com/widgets","country":"us","locale":"en_us","refNum":"MASRUS","baseUrl":"https://careers.mastercard.com/us/en/","siteType":"external"};</script>';
+const readFixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8'));
+
+test('general careers page: never "not found", and the card links to the site', async () => {
+  const href = 'https://careers.acme.com/careers';
+  const r = await checkJob(job({ applyHref: href }), pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: href, postings: [] }) }));
+  assert.equal(r.badge, 'unknown');
+  assert.equal(r.signals.not_found_on_official_site, null);
+  assert.match(r.reasons[0].text, /general careers or search page of careers\.acme\.com/);
+  assert.equal(r.officialUrl, href);
+  assert.equal(r.officialLabel, 'Search for this job on careers.acme.com ↗');
+});
+
+test('amazon.jobs: the job id from the apply link is found through the site search', async () => {
+  const href = 'https://www.amazon.jobs/en/jobs/10583145/software-development-engineer';
+  const queries = [];
+  const r = await checkJob(
+    job({ company: 'Amazon', title: 'Software Development Engineer', location: 'Seattle, WA', applyHref: href }),
+    pageDeps({
+      fetchPageJobs: async () => ({ status: 200, ok: true, url: href, postings: [] }),
+      searchSite: async (site, query) => {
+        queries.push(query);
+        return parseAmazon(readFixture('amazon-search.json'));
+      },
+    }),
+  );
+  assert.deepEqual(queries, ['10583145']);
+  assert.equal(r.badge, 'green');
+  assert.equal(r.officialUrl, href);
+  assert.ok(r.reasons.some((x) => /amazon\.jobs's own job search/.test(x.text)));
+});
+
+test('Phenom careers page: found by title through the site search; a miss is never "not found"', async () => {
+  const href = 'https://careers.mastercard.com/us/en/';
+  const page = async () => ({ status: 200, ok: true, url: href, postings: [], siteSearch: phenomSite(PHENOM_PAGE, href) });
+  const found = await checkJob(
+    job({ company: 'Mastercard', title: 'Senior Software Engineer', location: "O'Fallon, Missouri, United States", applyHref: href }),
+    pageDeps({ fetchPageJobs: page, searchSite: async (site) => parsePhenom(readFixture('phenom-search.json'), site) }),
+  );
+  assert.equal(found.badge, 'green');
+  assert.equal(found.officialUrl, 'https://careers.mastercard.com/us/en/job/R-286356');
+
+  const missed = await checkJob(
+    job({ company: 'Mastercard', title: 'Head of Payments Research', applyHref: href }),
+    pageDeps({ fetchPageJobs: page, searchSite: async (site) => parsePhenom(readFixture('phenom-search.json'), site) }),
+  );
+  assert.equal(missed.badge, 'unknown');
+  assert.equal(missed.signals.not_found_on_official_site, null);
+  assert.match(missed.reasons[0].text, /job search did not return this job/);
+  assert.equal(missed.officialUrl, 'https://careers.mastercard.com/us/en/search-results?keywords=Head+of+Payments+Research');
+});

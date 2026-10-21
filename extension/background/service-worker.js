@@ -15,6 +15,7 @@ import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
 import { workday, WORKDAY_PAGE_SIZE } from '../core/sources/workday.js';
 import { extractJobPostings } from '../core/jsonld.js';
 import { discoverAts } from '../core/discover.js';
+import { amazonSearchUrl, parseAmazon, parsePhenom, phenomSearchBody, phenomSite } from '../core/sources/site-search.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
@@ -254,9 +255,29 @@ async function fetchPageJobs(url) {
       postings: page.ok ? extractJobPostings(page.text) : [],
       // ATS the page links to or embeds (the real home of many jobs).
       discovered: page.ok ? discoverAts(page.text) : { refs: [], unsupported: [] },
+      // A job search the site exposes (Phenom).
+      siteSearch: page.ok ? phenomSite(page.text, page.url) : null,
     };
     await cacheSet(key, result, TTL.page);
     return result;
+  });
+}
+
+/** A careers site's own job search (amazon.jobs, Phenom); search results, not a full list. */
+async function searchSite(site, query) {
+  const key = `sitesearch:${site.kind}:${site.endpoint || site.origin}:${query.toLowerCase()}`;
+  const cached = await cacheGet(key);
+  if (cached) return cached;
+  return dedupe(key, async () => {
+    const postings =
+      site.kind === 'amazon'
+        ? parseAmazon(await fetchJson(amazonSearchUrl(query), { timeoutMs: 15000, retries: 1, limiter }))
+        : parsePhenom(
+            await fetchJson(site.endpoint, { method: 'POST', body: phenomSearchBody(site, query), timeoutMs: 15000, retries: 1, limiter }),
+            site,
+          );
+    await cacheSet(key, postings, TTL.page);
+    return postings;
   });
 }
 
@@ -468,6 +489,7 @@ async function handleCheck(rawJob, force, pageLang) {
     hasOriginPermission,
     fetchPageJobs,
     fetchSitemapUrls,
+    searchSite,
   };
   const result = await checkJob(job, deps);
   if (result.errors) console.warn('[GhostCheck] lookups failed', job.title, result.errors);

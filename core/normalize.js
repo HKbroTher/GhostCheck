@@ -284,7 +284,8 @@ export function parseLocation(text) {
     .replace(/\(\s*\)/g, ' ');
 
   for (const segment of s.split(/;|\||\/|\bor\b|&|\n|\(|\)|•|·/)) {
-    const parts = segment.split(/,|\s-\s|\s–\s/).map((p) => p.replace(/[^a-z .'-]/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    // Apostrophes are dropped: "O'Fallon" and "O Fallon" are the same place.
+    const parts = segment.split(/,|\s-\s|\s–\s/).map((p) => p.replace(/[^a-z .-]/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
     parts.forEach((part, i) => {
       const p = part.replace(/^-+|-+$/g, '').trim();
       if (!p) return;

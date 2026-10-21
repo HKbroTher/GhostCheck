@@ -3,3 +3,6 @@
 # sitemap. Add pages that show "Can't verify" so we can see why.
 https://sakana.ai/careers/software-engineer-finance/
 https://sakana.ai/careers/
+# General careers / search pages (LinkedIn "Apply" often points here)
+https://careers.fedex.com/jobs?keywords=engineer
+https://careers.mastercard.com/us/en/search-results
