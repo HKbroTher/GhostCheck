@@ -6,6 +6,7 @@ import { resolveApplyUrl, isLinkedInHost } from './apply-url.js';
 import { detectAts } from './ats.js';
 import { lookupCompany, guessSlugs, normalizeCompanyName } from './companies.js';
 import { matchPosting } from './matcher.js';
+import { sameTitleLanguage } from './normalize.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
@@ -199,13 +200,17 @@ async function lookupListAts(job, board, deps, rules) {
   if (deps.embed && rules.semantic?.enabled) {
     ({ match, semantic } = await refineMatch(job, match, postings, deps.embed, rules.semantic));
   }
+  // A board found by name might belong to another company with the same
+  // name, and a title in another language may simply be a translation:
+  // never count "not found" against the job in those cases.
+  const sameLanguage = sameTitleLanguage(job.title, postings);
   const outcome = outcomeFromMatch(match, {
     siteName,
     boardUrl,
-    // A board found by name might belong to another company with the same
-    // name: never count "not found" against the job in that case.
-    canBeMissing: board.source !== 'guess',
-    missingReason: `We couldn't find this job on a ${siteName} board named "${ref.slug}", but we're not sure that board belongs to this company.`,
+    canBeMissing: board.source !== 'guess' && sameLanguage,
+    missingReason: !sameLanguage
+      ? `The job title is in a different language from the titles on ${siteName}, so we can't tell whether it is listed.`
+      : `We couldn't find this job on a ${siteName} board named "${ref.slug}", but we're not sure that board belongs to this company.`,
     notes: [`Checked ${postings.length} open job${postings.length === 1 ? '' : 's'} on ${siteName}.`],
   });
   if (semantic) {
@@ -251,8 +256,10 @@ async function lookupWorkday(job, board, deps, rules) {
   const outcome = outcomeFromMatch(match, {
     ...base,
     boardUrl: base.officialUrl,
-    canBeMissing: result.complete && board.source !== 'guess',
-    missingReason: "Workday's search didn't return this job. Large Workday sites can't be checked completely, so this is not counted against it.",
+    canBeMissing: result.complete && board.source !== 'guess' && sameTitleLanguage(job.title, result.postings),
+    missingReason: !sameTitleLanguage(job.title, result.postings)
+      ? "The job title is in a different language from the titles on Workday, so we can't tell whether it is listed."
+      : "Workday's search didn't return this job. Large Workday sites can't be checked completely, so this is not counted against it.",
     notes: [result.complete ? `Checked all ${result.total} open jobs on Workday.` : `Searched ${result.total} open jobs on Workday.`],
   });
 

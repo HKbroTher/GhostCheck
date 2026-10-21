@@ -362,3 +362,10 @@ test('careers page using an unsupported ATS says which one', async () => {
   assert.match(r.reasons[0].text, /HERP, which GhostCheck can't check yet/);
   assert.equal(r.detected.unsupportedAts, 'HERP');
 });
+
+test('Japanese LinkedIn title, English-only board: unknown, never "not found"', async () => {
+  const r = await checkJob(job({ title: 'シニアソフトウェアエンジニア', description: '', applyHref: null, applyType: 'easy' }), deps());
+  assert.equal(r.badge, 'unknown');
+  assert.equal(r.signals.not_found_on_official_site, null);
+  assert.match(r.reasons[0].text, /different language/);
+});

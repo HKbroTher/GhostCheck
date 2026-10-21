@@ -116,3 +116,13 @@ test('level and location rules still apply: only rule-passing postings are candi
   const { match: refined } = await refineMatch(job, matchPosting(job, board), board, fakeEmbed, OPTS);
   assert.notEqual(refined.status, 'found');
 });
+
+test('English detection keeps other Latin-script languages away from the English model', async () => {
+  const { isLikelyEnglish } = await import('../core/semantic.js');
+  assert.ok(isLikelyEnglish(LEDGER + MOBILE));
+  const de = 'Du entwickelst und betreibst unseren Ledger-Service, der jede Geldbewegung auf unserer Plattform erfasst. '.repeat(4);
+  assert.ok(!isLikelyEnglish(de));
+  const job = { title: 'Mitglied des technischen Stabs', location: 'San Francisco, CA', description: de + ABOUT };
+  const { semantic } = await refineMatch(job, matchPosting(job, BOARD), BOARD, fakeEmbed, OPTS);
+  assert.equal(semantic, null); // skipped, not guessed
+});
