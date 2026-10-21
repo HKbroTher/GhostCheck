@@ -236,7 +236,7 @@ export function parseLocation(text) {
     .replace(/\b(remote|anywhere|distributed|work from home|wfh|hybrid|on-?site|in-office|office)\b/g, ' ')
     .replace(/\(\s*\)/g, ' ');
 
-  for (const segment of s.split(/;|\||\/|\bor\b|&|\n|\(|\)/)) {
+  for (const segment of s.split(/;|\||\/|\bor\b|&|\n|\(|\)|•|·/)) {
     const parts = segment.split(/,|\s-\s|\s–\s/).map((p) => p.replace(/[^a-z .'-]/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
     parts.forEach((part, i) => {
       const p = part.replace(/^-+|-+$/g, '').trim();
@@ -252,10 +252,11 @@ export function parseLocation(text) {
         loc.regions.add(p);
         return loc.countries.add(US_STATES[p] ? 'us' : 'ca');
       }
-      if (i === 0 || !loc.cities.size) {
-        const city = cleanCity(p);
-        if (city.length > 1) loc.cities.add(city);
-      }
+      // Any other part is treated as a city: postings often list several
+      // ("Seattle, San Francisco, New York City"). Extra cities only make a
+      // match more lenient, never stricter.
+      const city = cleanCity(p);
+      if (city.length > 1) loc.cities.add(city);
     });
   }
   return loc;

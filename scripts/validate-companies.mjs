@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs';
 import { buildCompanyIndex, normalizeCompanyName } from '../core/companies.js';
 import { fetchJson, RateLimiter } from '../core/http.js';
 import { SOURCES } from '../core/sources/index.js';
+import { matchPosting } from '../core/matcher.js';
 
 const filter = (process.argv[2] || '').toLowerCase();
 const index = buildCompanyIndex(JSON.parse(readFileSync(new URL('../data/companies.json', import.meta.url), 'utf8')));
@@ -25,6 +26,21 @@ if (index.errors.length) {
 }
 
 const failures = [];
+const selfMatch = { tried: 0, found: 0, misses: [] };
+
+/**
+ * Feed each live posting back to the matcher as if it were the LinkedIn job
+ * (its title and first location). Misses point at normalization gaps.
+ */
+function selfMatchCheck(company, postings) {
+  for (const p of postings.slice(0, 60)) {
+    const location = p.location.split(';')[0];
+    const m = matchPosting({ title: p.title, location }, postings);
+    selfMatch.tried++;
+    if (m.status === 'found' && normalizeCompanyName(m.posting.title) === normalizeCompanyName(p.title)) selfMatch.found++;
+    else if (selfMatch.misses.length < 25) selfMatch.misses.push(`${company}: "${p.title}" @ ${location} -> ${m.status}${m.mismatch ? ` (${m.mismatch})` : ''}`);
+  }
+}
 const warnings = [];
 const shownRawKeys = new Set();
 
@@ -57,6 +73,7 @@ for (const c of index.entries) {
       nameNote = ` board name "${info?.name}"`;
       if (!same) failures.push(`${c.name}: Greenhouse board "${c.slug}" is named "${info?.name}"`);
     }
+    selfMatchCheck(c.name, postings);
     const dated = postings.filter((p) => p.createdAt).length;
     const sample = postings[0] ? ` e.g. "${postings[0].title}" @ ${postings[0].location || '?'}` : '';
     console.log(`OK    ${label}  ${postings.length} jobs, ${dated} with publish date.${nameNote}${sample}`);
@@ -70,6 +87,12 @@ for (const c of index.entries) {
       warnings.push(`${c.name}: ${err?.message || err}`);
     }
   }
+}
+
+if (selfMatch.tried) {
+  const rate = ((100 * selfMatch.found) / selfMatch.tried).toFixed(1);
+  console.log(`\nSelf-match recall: ${selfMatch.found}/${selfMatch.tried} (${rate}%)`);
+  for (const m of selfMatch.misses) console.log(`  miss: ${m}`);
 }
 
 if (warnings.length) {
