@@ -76,3 +76,33 @@ test('incompatible locations', () => {
   assert.ok(!locationsCompatible('Remote - US', 'Remote - Canada'));
   assert.ok(!locationsCompatible('Toronto, ON', 'Austin, TX'));
 });
+
+test('Japanese and Chinese titles: levels and noise inside tokens', () => {
+  const ja = normalizeTitle('シニアソフトウェアエンジニア【東京/フルリモート可】');
+  assert.equal(ja.level, 'senior');
+  assert.deepEqual(ja.core, normalizeTitle('ソフトウェアエンジニア').core);
+  assert.equal(normalizeTitle('ジュニアエンジニア').level, 'junior');
+  const zh = normalizeTitle('高级软件工程师（远程）');
+  assert.equal(zh.level, 'senior');
+  assert.deepEqual(zh.tokens, normalizeTitle('软件工程师').tokens);
+  assert.equal(normalizeTitle('软件工程实习生').level, 'intern');
+});
+
+test('Japanese and Chinese place names', () => {
+  assert.ok(locationsCompatible('東京都', 'Tokyo, Japan'));
+  assert.ok(locationsCompatible('東京都港区', 'Tokyo'));
+  assert.ok(locationsCompatible('上海', 'Shanghai, China'));
+  assert.ok(!locationsCompatible('上海', 'Tokyo, Japan'));
+  assert.ok(parseLocation('フルリモート').remote);
+});
+
+test('title language', async () => {
+  const { titleScript, sameTitleLanguage } = await import('../core/normalize.js');
+  assert.equal(titleScript('ソフトウェアエンジニア'), 'cjk');
+  assert.equal(titleScript('Software Engineer'), 'latin');
+  assert.equal(titleScript('ソフトウェアエンジニア / Software Engineer'), 'mixed');
+  const english = [{ title: 'Software Engineer' }, { title: 'Data Scientist' }];
+  assert.equal(sameTitleLanguage('ソフトウェアエンジニア', english), false);
+  assert.equal(sameTitleLanguage('Backend Engineer', english), true);
+  assert.equal(sameTitleLanguage('ソフトウェアエンジニア / Software Engineer', english), true);
+});

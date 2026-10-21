@@ -17,7 +17,7 @@ import { fetchJson, RateLimiter } from '../core/http.js';
 import { SOURCES } from '../core/sources/index.js';
 import { normalizeTitle } from '../core/normalize.js';
 import { titleSimilarity } from '../core/fuzzy.js';
-import { buildBoilerplate, stripBoilerplate, splitSentences, isMostlyLatin, cosine, decide, DEFAULT_SEMANTIC } from '../core/semantic.js';
+import { buildBoilerplate, stripBoilerplate, splitSentences, isLikelyEnglish, cosine, decide, DEFAULT_SEMANTIC } from '../core/semantic.js';
 
 const BOARDS = [
   ['greenhouse', 'stripe'],
@@ -60,7 +60,7 @@ for (const [ats, slug] of BOARDS) {
   }
   const boilerplate = buildBoilerplate(postings.map((p) => p.text));
   const stripped = new Map(postings.map((p) => [p, stripBoilerplate(p.text, boilerplate)]));
-  const usable = postings.filter((p) => stripped.get(p).length >= DEFAULT_SEMANTIC.min_chars && isMostlyLatin(stripped.get(p)));
+  const usable = postings.filter((p) => stripped.get(p).length >= DEFAULT_SEMANTIC.min_chars && isLikelyEnglish(stripped.get(p)));
   const titles = new Map(usable.map((p) => [p, normalizeTitle(p.title)]));
   const vectors = new Map();
   const vec = async (p) => {

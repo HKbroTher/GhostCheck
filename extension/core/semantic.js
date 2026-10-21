@@ -21,6 +21,7 @@ const MAX_CANDIDATES = 8;
 
 export const DEFAULT_SEMANTIC = {
   enabled: true,
+  multilingual: false, // set at runtime from the user's model choice
   min_chars: 300, // role-specific text needed on both sides
   promote_min_similarity: 0.88, // see rules.yaml for the measurements
   min_margin: 0.05,
@@ -58,6 +59,21 @@ export function stripBoilerplate(text, boilerplate, maxChars = MAX_EMBED_CHARS) 
     .filter((s) => !boilerplate.has(sentenceKey(s)))
     .join(' ')
     .slice(0, maxChars);
+}
+
+/** Very common English words: their share tells English text from other Latin-script languages. */
+const ENGLISH_WORDS = new Set([
+  'the', 'and', 'to', 'of', 'a', 'in', 'for', 'with', 'you', 'our', 'we', 'will', 'is', 'are', 'on', 'as', 'be',
+  'your', 'or', 'this', 'that', 'an', 'by', 'at', 'from', 'have', 'who', 'work', 'team', 'experience', 'about',
+]);
+
+/** Is this text English? (The default model only understands English.) */
+export function isLikelyEnglish(text) {
+  if (!isMostlyLatin(text)) return false;
+  const words = String(text).toLowerCase().match(/\p{L}+/gu) || [];
+  if (words.length < 30) return false;
+  const common = words.filter((w) => ENGLISH_WORDS.has(w)).length;
+  return common / words.length >= 0.12;
 }
 
 /** The bundled model is English-only; skip text that is mostly another script. */
@@ -114,10 +130,11 @@ export async function refineMatch(job, match, postings, embed, opts = {}) {
 
   const boilerplate = buildBoilerplate(postings.map((p) => p.text));
   const jd = stripBoilerplate(job.description, boilerplate);
-  if (jd.length < o.min_chars || !isMostlyLatin(jd)) return none;
+  // The default model is English-only; the multilingual one reads any language.
+  if (jd.length < o.min_chars || (!o.multilingual && !isLikelyEnglish(jd))) return none;
   const usable = pool
     .map((c) => ({ ...c, text: stripBoilerplate(c.posting.text, boilerplate) }))
-    .filter((c) => c.text.length >= o.min_chars);
+    .filter((c) => c.text.length >= o.min_chars && (o.multilingual || isLikelyEnglish(c.text)));
   if (!usable.length) return none;
 
   let vectors;
