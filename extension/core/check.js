@@ -13,7 +13,8 @@ import { makeResult } from './result.js';
 import { SOURCES } from './sources/index.js';
 import { lookupFirstSeen } from './snapshot.js';
 import { linkedinJobUrl } from './wayback.js';
-import { combineAge, ageSignals, AGE_SOURCE_LABELS } from './age.js';
+import { combineAge, ageSignals } from './age.js';
+import { t } from './i18n.js';
 import { workday } from './sources/workday.js';
 import { canonicalUrl } from './sitemap.js';
 import { refineMatch } from './semantic.js';
@@ -47,6 +48,7 @@ const WORKDAY_FULL_LIST_MAX = 100;
  *   canonical URLs listed in the site's sitemaps, or null when there are none
  * @property {(texts: string[]) => Promise<number[][] | null>} [embed]
  *   local sentence embeddings (normalized vectors); null while the model loads
+ * @property {'en' | 'zh'} [lang]   language of reasons and notes (default English)
  * @property {() => Date} [now]
  */
 
@@ -74,7 +76,7 @@ async function resolveBoard(job, applyUrl, deps) {
       note: null,
     };
   }
-  if (fromLink) return { ref: null, source: null, note: `${ATS_NAMES[fromLink.ats]} board for this company is not in GhostCheck's list yet.` };
+  if (fromLink) return { ref: null, source: null, note: t(deps.lang, 'ats.notInList', { ats: ATS_NAMES[fromLink.ats] }) };
 
   // Last resort: guess a Greenhouse board from the company name, and accept it
   // only if the board's own name is the same company.
@@ -140,9 +142,9 @@ async function gatherAgeEvidence(job, ref, posting, deps) {
 
 const unknown = (reason, extra = {}) => ({ status: 'unknown', reason, ...extra });
 
-function similarReason(match) {
-  const why = { level: 'a different seniority level', location: 'a different location', title: 'a somewhat different title' }[match.mismatch];
-  return `A similar job is listed ("${match.posting.title}"), but with ${why || 'differences'}, so we can't be sure it's the same one.`;
+function similarReason(match, lang) {
+  const why = t(lang, ['level', 'location', 'title'].includes(match.mismatch) ? `why.${match.mismatch}` : 'why.other');
+  return t(lang, 'unknown.similar', { title: match.posting.title, why });
 }
 
 function matchDetected(match) {
@@ -156,7 +158,7 @@ function matchDetected(match) {
  * Turn a match result into an outcome.
  * @param {boolean} canBeMissing  "not found" may count against the job
  */
-function outcomeFromMatch(match, { siteName, boardUrl, canBeMissing, missingReason, notes }) {
+function outcomeFromMatch(match, { siteName, boardUrl, canBeMissing, missingReason, notes, lang }) {
   const base = { siteName, officialUrl: boardUrl, notes, detected: matchDetected(match) };
   switch (match.status) {
     case 'found':
@@ -164,9 +166,9 @@ function outcomeFromMatch(match, { siteName, boardUrl, canBeMissing, missingReas
     case 'id_missing':
       return { ...base, status: 'closed' };
     case 'similar':
-      return { ...base, ...unknown(similarReason(match)) };
+      return { ...base, ...unknown(similarReason(match, lang)) };
     case 'unmatchable':
-      return { ...base, ...unknown("We couldn't compare this job title with the careers site.") };
+      return { ...base, ...unknown(t(lang, 'unknown.unmatchable')) };
     default:
       return canBeMissing ? { ...base, status: 'not_found' } : { ...base, ...unknown(missingReason) };
   }
@@ -184,13 +186,13 @@ async function lookupListAts(job, board, deps, rules) {
   } catch (err) {
     return unknown(
       err?.isNotFound
-        ? `The ${siteName} board "${ref.slug}" was not found; the company may have moved.`
-        : `We couldn't reach ${siteName} right now. This is not evidence against the job.`,
+        ? t(deps.lang, 'unknown.boardMissing', { ats: siteName, slug: ref.slug })
+        : t(deps.lang, 'unknown.unreachable', { ats: siteName }),
       { siteName, officialUrl: boardUrl },
     );
   }
   if (!postings.length) {
-    return unknown(`${job.company || 'The company'}'s ${siteName} board lists no open jobs, so we can't compare.`, {
+    return unknown(t(deps.lang, 'unknown.emptyBoard', { company: job.company || t(deps.lang, 'fallback.Company'), ats: siteName }), {
       siteName,
       officialUrl: boardUrl,
     });
@@ -209,16 +211,24 @@ async function lookupListAts(job, board, deps, rules) {
     boardUrl,
     canBeMissing: board.source !== 'guess' && sameLanguage,
     missingReason: !sameLanguage
-      ? `The job title is in a different language from the titles on ${siteName}, so we can't tell whether it is listed.`
-      : `We couldn't find this job on a ${siteName} board named "${ref.slug}", but we're not sure that board belongs to this company.`,
-    notes: [`Checked ${postings.length} open job${postings.length === 1 ? '' : 's'} on ${siteName}.`],
+      ? t(deps.lang, 'unknown.language', { ats: siteName })
+      : t(deps.lang, 'unknown.guessMissing', { ats: siteName, slug: ref.slug }),
+    notes: [
+      postings.length === 1
+        ? t(deps.lang, 'note.checkedOne', { ats: siteName })
+        : t(deps.lang, 'note.checked', { count: postings.length, ats: siteName }),
+    ],
+    lang: deps.lang,
   });
   if (semantic) {
-    const runnerUp = semantic.runnerUp !== null ? `, next best ${semantic.runnerUp}` : '';
-    outcome.detected.descriptionMatch = `${semantic.similarity}${runnerUp}: ${semantic.decision}`;
+    const decision = t(deps.lang, `semantic.${semantic.decision}`);
+    outcome.detected.descriptionMatch =
+      semantic.runnerUp !== null
+        ? t(deps.lang, 'semantic.detail', { similarity: semantic.similarity, runnerUp: semantic.runnerUp, decision })
+        : t(deps.lang, 'semantic.detailSingle', { similarity: semantic.similarity, decision });
   }
   if (outcome.status === 'found' && match.via === 'description') {
-    outcome.notes.unshift(`Matched by job description: the careers site calls it "${match.posting.title}".`);
+    outcome.notes.unshift(t(deps.lang, 'note.byDescription', { title: match.posting.title }));
   }
   return outcome;
 }
@@ -230,8 +240,8 @@ async function lookupListAts(job, board, deps, rules) {
  */
 async function lookupWorkday(job, board, deps, rules) {
   const { ref } = board;
-  if (!ref.workday?.apiBase) return unknown("We couldn't tell which Workday careers site this link belongs to.");
-  if (!deps.searchWorkday) return unknown('Workday careers sites are not supported here.');
+  if (!ref.workday?.apiBase) return unknown(t(deps.lang, 'unknown.workdaySite'));
+  if (!deps.searchWorkday) return unknown(t(deps.lang, 'unknown.workdayUnsupported'));
   const base = { siteName: 'Workday', officialUrl: workday.boardUrl(ref) };
 
   if (ref.jobId && deps.fetchWorkdayDetail) {
@@ -248,7 +258,7 @@ async function lookupWorkday(job, board, deps, rules) {
   try {
     result = await deps.searchWorkday(ref, job.title);
   } catch {
-    return unknown("We couldn't reach the company's Workday site right now. This is not evidence against the job.", base);
+    return unknown(t(deps.lang, 'unknown.workdayUnreachable'), base);
   }
   // The apply-link id is deliberately not passed: a search result missing it
   // does not mean the posting was removed.
@@ -258,9 +268,10 @@ async function lookupWorkday(job, board, deps, rules) {
     boardUrl: base.officialUrl,
     canBeMissing: result.complete && board.source !== 'guess' && sameTitleLanguage(job.title, result.postings),
     missingReason: !sameTitleLanguage(job.title, result.postings)
-      ? "The job title is in a different language from the titles on Workday, so we can't tell whether it is listed."
-      : "Workday's search didn't return this job. Large Workday sites can't be checked completely, so this is not counted against it.",
-    notes: [result.complete ? `Checked all ${result.total} open jobs on Workday.` : `Searched ${result.total} open jobs on Workday.`],
+      ? t(deps.lang, 'unknown.language', { ats: 'Workday' })
+      : t(deps.lang, 'unknown.workdayIncomplete'),
+    notes: [t(deps.lang, result.complete ? 'note.workdayAll' : 'note.workdaySearched', { count: result.total })],
+    lang: deps.lang,
   });
 
   // Search results carry only a rough date and no description: fetch details.
@@ -300,9 +311,9 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   const base = { siteName: host, officialUrl: url.origin };
 
   if (!(await deps.hasOriginPermission(url.origin).catch(() => false))) {
-    return unknown(`This job is on ${host}. Allow GhostCheck to read that site to check it.`, {
+    return unknown(t(deps.lang, 'unknown.needPermission', { host }), {
       ...base,
-      action: { type: 'grant-origin', origin: url.origin, label: `Allow checking ${host}` },
+      action: { type: 'grant-origin', origin: url.origin, label: t(deps.lang, 'ui.allowSite', { host }) },
     });
   }
 
@@ -310,12 +321,12 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   try {
     page = await deps.fetchPageJobs(applyUrl);
   } catch {
-    return unknown(`We couldn't reach ${host} right now. This is not evidence against the job.`, base);
+    return unknown(t(deps.lang, 'unknown.pageUnreachable', { host }), base);
   }
   if (page.status === 404 || page.status === 410) {
     return { ...base, status: 'closed', detected: { matchStatus: `apply page returned ${page.status}` } };
   }
-  if (!page.ok) return unknown(`${host} answered with an error (${page.status}), so we couldn't check the job.`, base);
+  if (!page.ok) return unknown(t(deps.lang, 'unknown.pageError', { host, status: page.status }), base);
 
   const postings = page.postings.map((p, i) => ({
     id: p.url || `${applyUrl}#${i}`,
@@ -339,16 +350,17 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
       ...base,
       boardUrl: page.url,
       canBeMissing: false,
-      missingReason: `The page on ${host} describes a different job.`,
-      notes: [`Read the job details published on ${host}.`],
+      missingReason: t(deps.lang, 'unknown.pageOtherJob', { host }),
+      notes: [t(deps.lang, 'note.pageRead', { host })],
+      lang: deps.lang,
     });
     if (outcome.status === 'found') {
       const p = outcome.posting;
       if (p.orgName && !sameCompany(p.orgName, job.company)) {
-        return unknown(`The apply page on ${host} is published by ${p.orgName}, not ${job.company}.`, base);
+        return unknown(t(deps.lang, 'unknown.otherOrg', { host, org: p.orgName, company: job.company }), base);
       }
       if (p.validThrough && Date.parse(p.validThrough) < now.getTime()) {
-        outcome.notes.push(`The page says applications closed on ${p.validThrough.slice(0, 10)}.`);
+        outcome.notes.push(t(deps.lang, 'note.pageClosed', { date: p.validThrough.slice(0, 10) }));
       }
       return outcome;
     }
@@ -363,7 +375,7 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
     if (discovered.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
     else if (SOURCES[discovered.ats]) outcome = await lookupListAts(job, board, deps, rules);
     if (outcome) {
-      outcome.notes = [`${host} uses ${ATS_NAMES[discovered.ats]} for its job listings.`, ...(outcome.notes || [])];
+      outcome.notes = [t(deps.lang, 'note.usesAts', { host, ats: ATS_NAMES[discovered.ats] }), ...(outcome.notes || [])];
       return { ...outcome, ref: discovered, viaPage: host };
     }
   }
@@ -378,7 +390,7 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
         status: 'found',
         posting: { id: page.url, title: job.title, location: '', url: page.url, createdAt: null, salary: null, text: '' },
         officialUrl: page.url,
-        notes: [`The apply page is listed in ${host}'s sitemap.`],
+        notes: [t(deps.lang, 'note.inSitemap', { host })],
         detected: { matchStatus: 'listed in sitemap' },
       };
     }
@@ -386,12 +398,12 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   if (structured) return structured;
   const others = page.discovered?.unsupported || [];
   if (others.length) {
-    return unknown(`${host} lists its jobs on ${others.join(' / ')}, which GhostCheck can't check yet.`, {
+    return unknown(t(deps.lang, 'unknown.unsupportedAts', { host, systems: others.join(' / ') }), {
       ...base,
       detected: { unsupportedAts: others.join(', ') },
     });
   }
-  return unknown(`We couldn't confirm the job on ${host}: the page has no job data we can read.`, base);
+  return unknown(t(deps.lang, 'unknown.noJobData', { host }), base);
 }
 
 /**
@@ -432,8 +444,9 @@ export async function checkJob(job, deps) {
     generic_template: template.value,
     reposted_to_look_new: null,
   };
+  const lang = deps.lang || 'en';
   const vars = {
-    company: job.company || 'the company',
+    company: job.company || t(lang, 'fallback.company'),
     salary: salary.detail,
     team: team.detail,
     phrase: template.detail,
@@ -446,30 +459,28 @@ export async function checkJob(job, deps) {
   if (board.ref) {
     detected.ats = ATS_NAMES[board.ref.ats];
     detected.board = board.ref.ats === 'workday' ? board.ref.workday?.publicBase : board.ref.slug;
-    detected.boardSource = { apply_link: 'apply link', companies: 'GhostCheck company list', guess: 'matched by company name' }[board.source];
+    detected.boardSource = t(lang, { apply_link: 'source.applyLink', companies: 'source.companies', guess: 'source.guess' }[board.source]);
     if (board.ref.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
     else if (SOURCES[board.ref.ats]) outcome = await lookupListAts(job, board, deps, rules);
-    else outcome = unknown(`${ATS_NAMES[board.ref.ats]} careers sites are not supported yet.`);
+    else outcome = unknown(t(lang, 'ats.unsupported', { ats: ATS_NAMES[board.ref.ats] }));
   } else if (applyUrl) {
     outcome = await lookupSelfHosted(job, applyUrl, deps, rules, now);
     if (outcome?.viaPage) {
       detected.ats = ATS_NAMES[outcome.ref.ats];
       detected.board = outcome.ref.ats === 'workday' ? outcome.ref.workday?.publicBase : outcome.ref.slug;
-      detected.boardSource = `link on ${outcome.viaPage}`;
+      detected.boardSource = t(lang, 'source.page', { host: outcome.viaPage });
     } else if (outcome) {
-      detected.ats = `Careers page (${outcome.siteName})`;
+      detected.ats = t(lang, 'ats.careersPage', { host: outcome.siteName });
     }
   }
   if (!outcome) {
     outcome = unknown(
       board.note ||
-        (job.applyType === 'easy'
-          ? "This is an Easy Apply job and we don't know which careers site this company uses."
-          : "We couldn't identify the company's careers site from the apply link."),
+        t(lang, job.applyType === 'easy' ? 'unknown.easyApply' : 'unknown.noSite'),
     );
   }
   Object.assign(detected, outcome.detected || {});
-  vars.ats = outcome.siteName || 'their careers site';
+  vars.ats = outcome.siteName || t(lang, 'fallback.site');
   const notes = [...(outcome.notes || [])];
 
   // 2. Turn the outcome into signals.
@@ -493,8 +504,8 @@ export async function checkJob(job, deps) {
       signals.posted_recently = a.posted_recently;
       signals.posted_long_ago = a.posted_long_ago;
       vars.days = age.days;
-      vars.ageSource = AGE_SOURCE_LABELS[age.oldest.source];
-      detected.firstSeen = `${age.oldest.date.slice(0, 10)} (${AGE_SOURCE_LABELS[age.oldest.source]})`;
+      vars.ageSource = t(lang, `age.${age.oldest.source}`);
+      detected.firstSeen = `${age.oldest.date.slice(0, 10)} (${vars.ageSource})`;
       // Only judged when the careers site gives its own date to compare.
       signals.reposted_to_look_new = age.atsDays === null ? null : a.refreshed;
       vars.atsDays = age.atsDays;
@@ -507,14 +518,14 @@ export async function checkJob(job, deps) {
     signals.not_found_on_official_site = true;
   }
 
-  if (signals.salary_listed === false) notes.push('No pay range is stated (common, and not counted against the job).');
+  if (signals.salary_listed === false) notes.push(t(lang, 'note.noPay'));
 
-  const verdict = evaluate(rules, signals, { vars, notes, unknownReason: outcome.reason ?? null });
-  return makeResult(verdict.badge, {
+  const verdict = evaluate(rules, signals, { vars, notes, unknownReason: outcome.reason ?? null, lang });
+  return makeResult(verdict.badge, lang, {
     score: verdict.score,
     reasons: verdict.reasons,
     officialUrl: outcome.officialUrl ?? null,
-    officialLabel: signals.found_on_official_site ? 'View this job on the company careers site ↗' : 'See the company’s open jobs ↗',
+    officialLabel: t(lang, signals.found_on_official_site ? 'ui.viewJob' : 'ui.viewBoard'),
     action: outcome.action ?? null,
     detected,
     signals,

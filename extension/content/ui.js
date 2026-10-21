@@ -7,28 +7,12 @@
   const BADGE_TAG = 'ghostcheck-badge';
   const CARD_TAG = 'ghostcheck-card';
 
-  const LOADING = { badge: 'loading', emoji: '⏳', label: 'Checking…' };
-
-  const DETECTED_LABELS = {
-    company: 'Company',
-    title: 'Job title',
-    location: 'Location',
-    applyType: 'Apply type',
-    applyUrl: 'Apply link',
-    salaryText: 'Pay shown',
-    descriptionChars: 'Description length',
-    linkedinCompanySlug: 'LinkedIn company id',
-    ats: 'Careers site',
-    board: 'Board id',
-    boardSource: 'Board found via',
-    boardSize: 'Open jobs on board',
-    matchStatus: 'Match result',
-    matchedTitle: 'Matched posting',
-    closestScore: 'Closest title score',
-    descriptionMatch: 'Description match',
-    unsupportedAts: 'Job system (not supported yet)',
-    firstSeen: 'First seen',
-  };
+  /** Fields shown under "What GhostCheck read", in this order (labels in strings.js). */
+  const DETECTED_FIELDS = [
+    'company', 'title', 'location', 'applyType', 'applyUrl', 'salaryText', 'descriptionChars', 'linkedinCompanySlug',
+    'ats', 'board', 'boardSource', 'boardSize', 'matchStatus', 'matchedTitle', 'closestScore', 'descriptionMatch',
+    'unsupportedAts', 'firstSeen',
+  ];
 
   const STYLE = `
     :host { all: initial; }
@@ -129,10 +113,11 @@
   const MARKS = { positive: '+', negative: '−', neutral: '•' };
 
   class GhostCheckUI {
-    constructor({ onRecheck, onAction } = {}) {
+    constructor({ onRecheck, onAction, strings } = {}) {
+      this.strings = strings || globalThis.GhostCheckStrings?.en || {};
       this.onRecheck = onRecheck || (() => {});
       this.onAction = onAction || (() => {});
-      this.state = LOADING;
+      this.state = this._loading();
       this.badge = null; // { host, shadow, button }
       this.card = null; // { host, shadow }
       this._onDocPointer = this._onDocPointer.bind(this);
@@ -163,8 +148,26 @@
       return !!this.badge && this.badge.host.isConnected && (!titleEl || titleEl.contains(this.badge.host));
     }
 
+    /** Translate a key (see core/i18n.js); falls back to English, then the key. */
+    t(key, vars = {}) {
+      const text = this.strings[key] ?? globalThis.GhostCheckStrings?.en?.[key] ?? key;
+      return text.replace(/\{(\w+)\}/g, (m, k) => (vars[k] !== undefined ? String(vars[k]) : ''));
+    }
+
+    /** Switch language; the current badge and card re-render. */
+    setStrings(strings) {
+      this.strings = strings || {};
+      if (this.state.badge === 'loading') this.state = this._loading();
+      this._renderBadge();
+      if (this.card) this._renderCard();
+    }
+
+    _loading() {
+      return { badge: 'loading', emoji: '⏳', label: this.t('badge.loading') };
+    }
+
     setLoading() {
-      this.state = LOADING;
+      this.state = this._loading();
       this._renderBadge();
       if (this.card) this._renderCard();
     }
@@ -248,8 +251,8 @@
       button.dataset.badge = s.badge;
       button.textContent = '';
       button.append(el('span', { 'aria-hidden': 'true' }, s.emoji), el('span', {}, s.label));
-      button.title = s.badge === 'loading' ? 'GhostCheck is checking this job' : 'GhostCheck: click for details';
-      button.setAttribute('aria-label', `GhostCheck: ${s.label}. Show details`);
+      button.title = this.t(s.badge === 'loading' ? 'ui.badgeLoadingTitle' : 'ui.badgeTitle');
+      button.setAttribute('aria-label', this.t('ui.badgeAria', { label: s.label }));
     }
 
     _renderCard() {
@@ -257,18 +260,18 @@
       shadow.querySelector('.card')?.remove();
       const s = this.state;
 
-      const closeBtn = el('button', { class: 'close', type: 'button', 'aria-label': 'Close' }, '×');
+      const closeBtn = el('button', { class: 'close', type: 'button', 'aria-label': this.t('ui.close') }, '×');
       closeBtn.addEventListener('click', () => this.closeCard());
 
-      const scoreText = typeof s.score === 'number' ? ` · score ${s.score}` : '';
+      const scoreText = typeof s.score === 'number' ? ` · ${this.t('ui.score', { score: s.score })}` : '';
       const card = el(
         'div',
-        { class: 'card', role: 'dialog', 'aria-label': 'GhostCheck details' },
+        { class: 'card', role: 'dialog', 'aria-label': this.t('ui.cardAria') },
         el('div', { class: 'head' }, el('span', { class: 'verdict' }, `${s.emoji} ${s.label}${scoreText}`), closeBtn),
       );
 
       if (s.badge === 'loading') {
-        card.append(el('p', {}, 'Checking the company careers site…'));
+        card.append(el('p', {}, this.t('ui.checking')));
       } else {
         const list = el('ul', { class: 'reasons' });
         for (const r of (s.reasons || []).slice(0, 5)) {
@@ -285,7 +288,7 @@
 
         // Something the user can do to make the check possible.
         if (s.action?.type === 'grant-origin' && typeof s.action.origin === 'string') {
-          const btn = el('button', { class: 'action', type: 'button' }, s.action.label || 'Allow checking this site');
+          const btn = el('button', { class: 'action', type: 'button' }, s.action.label || this.t('ui.allowSite', { host: '' }));
           btn.addEventListener('click', () => this.onAction(s.action));
           card.append(btn);
         }
@@ -295,25 +298,25 @@
             el(
               'a',
               { class: 'official', href: s.officialUrl, target: '_blank', rel: 'noopener noreferrer' },
-              s.officialLabel || 'View on company careers site ↗',
+              s.officialLabel || this.t('ui.viewJob'),
             ),
           );
         }
 
         const detected = s.detected || {};
-        const rows = Object.entries(DETECTED_LABELS).filter(([k]) => detected[k] !== undefined && detected[k] !== '');
+        const rows = DETECTED_FIELDS.filter((k) => detected[k] !== undefined && detected[k] !== '');
         if (rows.length) {
           const dl = el('dl');
-          for (const [key, label] of rows) {
-            dl.append(el('dt', {}, label), el('dd', {}, detected[key] === null ? '—' : String(detected[key])));
+          for (const key of rows) {
+            dl.append(el('dt', {}, this.t(`field.${key}`)), el('dd', {}, detected[key] === null ? '—' : String(detected[key])));
           }
-          card.append(el('details', {}, el('summary', {}, 'What GhostCheck read'), dl));
+          card.append(el('details', {}, el('summary', {}, this.t('ui.detected')), dl));
         }
       }
 
-      const recheck = el('button', { class: 'recheck', type: 'button' }, 'Recheck');
+      const recheck = el('button', { class: 'recheck', type: 'button' }, this.t('ui.recheck'));
       recheck.addEventListener('click', () => this.onRecheck());
-      card.append(el('div', { class: 'foot' }, el('span', {}, 'Signals, not verdicts. Use your judgment.'), recheck));
+      card.append(el('div', { class: 'foot' }, el('span', {}, this.t('ui.footer')), recheck));
 
       shadow.append(card);
       this._reposition();

@@ -369,3 +369,14 @@ test('Japanese LinkedIn title, English-only board: unknown, never "not found"', 
   assert.equal(r.signals.not_found_on_official_site, null);
   assert.match(r.reasons[0].text, /different language/);
 });
+
+test('Chinese output: badge, reasons and notes', async () => {
+  const r = await checkJob(job(), deps({ lang: 'zh' }));
+  assert.equal(r.label, '可信');
+  assert.equal(r.lang, 'zh');
+  assert.ok(r.reasons.some((x) => x.text === '该职位在Acme的官网招聘页上能找到。'));
+  assert.ok(r.reasons.some((x) => /已核对 Greenhouse 上的/.test(x.text)));
+  const u = await checkJob(job({ company: 'Nobody', linkedinCompanySlug: null, applyHref: null, applyType: 'easy' }), deps({ lang: 'zh' }));
+  assert.equal(u.label, '无法确认');
+  assert.match(u.reasons[0].text, /Easy Apply 职位/);
+});

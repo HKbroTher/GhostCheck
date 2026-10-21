@@ -23,26 +23,25 @@
  * @property {Record<string, unknown>} detected  what GhostCheck read / derived
  */
 
-/** @type {Record<BadgeId, {emoji: string, label: string}>} */
-export const BADGES = {
-  green: { emoji: '🟢', label: 'Likely real' },
-  yellow: { emoji: '🟡', label: 'Questionable' },
-  red: { emoji: '🔴', label: 'Suspicious' },
-  unknown: { emoji: '⚪', label: "Can't verify" },
-};
+import { t } from './i18n.js';
+
+/** @type {Record<BadgeId, string>} */
+export const BADGE_EMOJI = { green: '🟢', yellow: '🟡', red: '🔴', unknown: '⚪' };
 
 /**
  * Build a result object.
  * @param {BadgeId} badge
+ * @param {'en' | 'zh'} [lang]
  * @param {Partial<CheckResult>} [fields]
  * @returns {CheckResult}
  */
-export function makeResult(badge, fields = {}) {
-  const display = BADGES[badge] ?? BADGES.unknown;
+export function makeResult(badge, lang = 'en', fields = {}) {
+  const id = BADGE_EMOJI[badge] ? badge : 'unknown';
   return {
-    badge: BADGES[badge] ? badge : 'unknown',
-    emoji: display.emoji,
-    label: display.label,
+    badge: id,
+    emoji: BADGE_EMOJI[id],
+    label: t(lang, `badge.${id}`),
+    lang,
     score: null,
     reasons: [],
     officialUrl: null,
@@ -56,11 +55,12 @@ export function makeResult(badge, fields = {}) {
  * A "can't verify" result. Used for every failure path: failures must never
  * be presented as negative evidence.
  * @param {string} text  plain-language reason shown to the user
+ * @param {'en' | 'zh'} [lang]
  * @param {Partial<CheckResult>} [fields]
  * @returns {CheckResult}
  */
-export function unknownResult(text, fields = {}) {
-  return makeResult('unknown', {
+export function unknownResult(text, lang = 'en', fields = {}) {
+  return makeResult('unknown', lang, {
     ...fields,
     reasons: [{ id: 'unknown', text, polarity: 'neutral' }, ...(fields.reasons ?? [])],
   });

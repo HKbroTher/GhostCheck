@@ -8,7 +8,8 @@
 # Edit this file and open a pull request to change how GhostCheck scores jobs.
 # After editing, run `node scripts/sync.mjs` and `node --test`.
 #
-# Reason text placeholders (filled in when available):
+# Each reason has an English (en) and a Chinese (zh) version; the card shows
+# the user's language. Reason text placeholders (filled in when available):
 #   {company} {ats} {days} {atsDays} {ageSource} {team} {phrase} {salary} {matchedTitle}
 
 version: 1
@@ -61,22 +62,30 @@ signals:
   - id: found_on_official_site
     type: positive
     weight: 3
-    reason: "This job is listed on {company}'s own careers site."
+    reason:
+      en: "This job is listed on {company}'s own careers site."
+      zh: "该职位在{company}的官网招聘页上能找到。"
 
   - id: posted_recently
     type: positive
     weight: 1
-    reason: "It was first published {days} days ago, according to {ageSource}."
+    reason:
+      en: "It was first published {days} days ago, according to {ageSource}."
+      zh: "首次发布于 {days} 天前（来源：{ageSource}）。"
 
   - id: salary_listed
     type: positive
     weight: 1
-    reason: "The posting states a pay range ({salary})."
+    reason:
+      en: "The posting states a pay range ({salary})."
+      zh: "职位写明了薪资范围（{salary}）。"
 
   - id: specific_team
     type: positive
     weight: 1
-    reason: "The description names a specific team or project ({team})."
+    reason:
+      en: "The description names a specific team or project ({team})."
+      zh: "职位描述提到了具体的团队或项目（{team}）。"
 
   # ---------------------------------------------------------------- negative
   # Only counted when the full list of open jobs was fetched successfully
@@ -84,22 +93,30 @@ signals:
   - id: not_found_on_official_site
     type: negative
     weight: 3
-    reason: "We could not find this job among {company}'s open jobs on {ats}."
+    reason:
+      en: "We could not find this job among {company}'s open jobs on {ats}."
+      zh: "在{company}于 {ats} 上的在招职位中找不到这个职位。"
 
   - id: apply_link_closed
     type: negative
     weight: 3
-    reason: "The apply link points to a job that is no longer listed on {company}'s careers site."
+    reason:
+      en: "The apply link points to a job that is no longer listed on {company}'s careers site."
+      zh: "申请链接指向的职位已不在{company}的官网招聘页上。"
 
   - id: posted_long_ago
     type: negative
     weight: 2
-    reason: "It has been listed for at least {days} days, according to {ageSource}."
+    reason:
+      en: "It has been listed for at least {days} days, according to {ageSource}."
+      zh: "已挂出至少 {days} 天（来源：{ageSource}）。"
 
   - id: generic_template
     type: negative
     weight: 1
-    reason: "The description reads like a generic or pipeline posting (\"{phrase}\")."
+    reason:
+      en: "The description reads like a generic or pipeline posting (\"{phrase}\")."
+      zh: "职位描述像是通用模板或人才储备岗位（「{phrase}」）。"
 
   # The careers site shows a publish date more than recent_days newer than the
   # oldest evidence (snapshots / Wayback): the posting was re-published so it
@@ -107,4 +124,6 @@ signals:
   - id: reposted_to_look_new
     type: negative
     weight: 1
-    reason: "The careers site dates it {atsDays} days ago, but it existed long before, so it was probably re-posted to look new."
+    reason:
+      en: "The careers site dates it {atsDays} days ago, but it existed long before, so it was probably re-posted to look new."
+      zh: "官网显示的发布日期是 {atsDays} 天前，但这个职位早已存在，可能是为了显得新而重新发布。"

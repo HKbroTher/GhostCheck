@@ -8,6 +8,7 @@ import { RAW_BASE } from '../core/config.js';
 import { fetchJson, fetchText, RateLimiter } from '../core/http.js';
 import { parseRules } from '../core/rules.js';
 import { unknownResult } from '../core/result.js';
+import { resolveLanguage, t } from '../core/i18n.js';
 import { SOURCES } from '../core/sources/index.js';
 import { snapshotPath } from '../core/snapshot.js';
 import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
@@ -326,15 +327,17 @@ const EMBED_TIMEOUT_MS = { cold: 25000, warm: 10000 };
 let offscreenCreating = null;
 let modelWarm = false;
 
-/** User setting (options page). Stored outside the "gc:" cache namespace. */
-async function semanticEnabled() {
+/** User settings (options page). Stored outside the "gc:" cache namespace. */
+async function getSettings() {
   try {
     const { settings } = await chrome.storage.local.get('settings');
-    return settings?.semantic !== false;
+    return settings || {};
   } catch {
-    return true;
+    return {};
   }
 }
+
+const languageOf = (settings) => resolveLanguage(settings.language, chrome.i18n.getUILanguage());
 
 async function ensureOffscreen() {
   const url = chrome.runtime.getURL(OFFSCREEN_PATH);
@@ -409,20 +412,22 @@ function sanitizeJob(job) {
   };
 }
 
-/** Results are cached per LinkedIn job and invalidated if what we read changes. */
-function resultKey(job) {
+/** Results are cached per LinkedIn job and language, invalidated if what we read changes. */
+function resultKey(job, lang) {
   const fingerprint = [job.title, job.company, job.location, job.applyHref, job.description.length].join('|');
   let h = 0;
   for (let i = 0; i < fingerprint.length; i++) h = (Math.imul(31, h) + fingerprint.charCodeAt(i)) | 0;
-  return `result:${job.jobId || 'nojob'}:${(h >>> 0).toString(36)}`;
+  return `result:${lang}:${job.jobId || 'nojob'}:${(h >>> 0).toString(36)}`;
 }
 
 async function handleCheck(rawJob, force) {
   const job = sanitizeJob(rawJob);
+  const settings = await getSettings();
+  const lang = languageOf(settings);
   if (!job.title || !job.company) {
-    return unknownResult("We couldn't read the job title or company from this page.");
+    return unknownResult(t(lang, 'error.unreadable'), lang);
   }
-  const key = resultKey(job);
+  const key = resultKey(job, lang);
   if (!force) {
     const cached = await cacheGet(key);
     if (cached) return cached;
@@ -431,9 +436,11 @@ async function handleCheck(rawJob, force) {
     recentFailures.clear();
   }
 
-  const [rules, companies, useModel] = await Promise.all([getRules(), getCompanies(), semanticEnabled()]);
+  const [rules, companies] = await Promise.all([getRules(), getCompanies()]);
+  const useModel = settings.semantic !== false;
   let modelPending = false;
   const deps = {
+    lang,
     embed: useModel
       ? (texts) =>
           embed(texts, () => {
@@ -498,7 +505,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     .then(sendResponse)
     .catch((err) => {
       console.warn('[GhostCheck] check failed', err);
-      sendResponse(unknownResult('GhostCheck hit an internal error. This is not evidence against the job.'));
+      getSettings().then((settings) => {
+        const lang = languageOf(settings);
+        sendResponse(unknownResult(t(lang, 'error.internal'), lang));
+      });
     });
   return true; // keep the channel open for the async response
 });

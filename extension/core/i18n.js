@@ -1,0 +1,316 @@
+/**
+ * Interface languages. Every user-visible sentence lives here, in English
+ * and Chinese; tests/i18n.test.js checks both tables have the same keys and
+ * placeholders. Reason texts for scoring signals live in rules.yaml.
+ *
+ * To add a language: add a table below, add it to LANGUAGES, and give every
+ * signal in rules.yaml a reason in that language.
+ */
+
+/** Selectable languages, in the order the options page lists them. */
+export const LANGUAGES = { en: 'English', zh: '中文' };
+
+/**
+ * @param {string | undefined} setting   'auto' | 'en' | 'zh'
+ * @param {string | undefined} uiLanguage  browser language, e.g. "zh-CN"
+ * @returns {'en' | 'zh'}
+ */
+export function resolveLanguage(setting, uiLanguage) {
+  if (setting && setting !== 'auto' && LANGUAGES[setting]) return setting;
+  return /^zh\b/i.test(uiLanguage || '') ? 'zh' : 'en';
+}
+
+const en = {
+  // badges
+  'badge.green': 'Likely real',
+  'badge.yellow': 'Questionable',
+  'badge.red': 'Suspicious',
+  'badge.unknown': "Can't verify",
+  'badge.loading': 'Checking…',
+
+  // card
+  'ui.checking': 'Checking the company careers site…',
+  'ui.close': 'Close',
+  'ui.recheck': 'Recheck',
+  'ui.footer': 'Signals, not verdicts. Use your judgment.',
+  'ui.score': 'score {score}',
+  'ui.detected': 'What GhostCheck read',
+  'ui.badgeTitle': 'GhostCheck: click for details',
+  'ui.badgeLoadingTitle': 'GhostCheck is checking this job',
+  'ui.badgeAria': 'GhostCheck: {label}. Show details',
+  'ui.cardAria': 'GhostCheck details',
+  'ui.viewJob': 'View this job on the company careers site ↗',
+  'ui.viewBoard': 'See the company’s open jobs ↗',
+  'ui.allowSite': 'Allow checking {host}',
+  'field.company': 'Company',
+  'field.title': 'Job title',
+  'field.location': 'Location',
+  'field.applyType': 'Apply type',
+  'field.applyUrl': 'Apply link',
+  'field.salaryText': 'Pay shown',
+  'field.descriptionChars': 'Description length',
+  'field.linkedinCompanySlug': 'LinkedIn company id',
+  'field.ats': 'Careers site',
+  'field.board': 'Board id',
+  'field.boardSource': 'Board found via',
+  'field.boardSize': 'Open jobs on board',
+  'field.matchStatus': 'Match result',
+  'field.matchedTitle': 'Matched posting',
+  'field.closestScore': 'Closest title score',
+  'field.descriptionMatch': 'Description match',
+  'field.unsupportedAts': 'Job system (not supported yet)',
+  'field.firstSeen': 'First seen',
+
+  // errors shown by the page script
+  'error.reloaded': 'GhostCheck was updated or reloaded. Refresh this page to check again.',
+  'error.failed': 'GhostCheck could not complete the check. This is not evidence against the job.',
+  'error.internal': 'GhostCheck hit an internal error. This is not evidence against the job.',
+  'error.unreadable': "We couldn't read the job title or company from this page.",
+
+  // reasons and notes built by core/check.js
+  'fallback.company': 'the company',
+  'fallback.Company': 'The company',
+  'fallback.site': 'their careers site',
+  'source.applyLink': 'apply link',
+  'source.companies': 'GhostCheck company list',
+  'source.guess': 'matched by company name',
+  'source.page': 'link on {host}',
+  'ats.careersPage': 'Careers page ({host})',
+  'ats.notInList': "{ats} board for this company is not in GhostCheck's list yet.",
+  'ats.unsupported': '{ats} careers sites are not supported yet.',
+  'unknown.easyApply': "This is an Easy Apply job and we don't know which careers site this company uses.",
+  'unknown.noSite': "We couldn't identify the company's careers site from the apply link.",
+  'unknown.similar': 'A similar job is listed ("{title}"), but with {why}, so we can\'t be sure it\'s the same one.',
+  'why.level': 'a different seniority level',
+  'why.location': 'a different location',
+  'why.title': 'a somewhat different title',
+  'why.other': 'differences',
+  'unknown.unmatchable': "We couldn't compare this job title with the careers site.",
+  'unknown.boardMissing': 'The {ats} board "{slug}" was not found; the company may have moved.',
+  'unknown.unreachable': "We couldn't reach {ats} right now. This is not evidence against the job.",
+  'unknown.emptyBoard': "{company}'s {ats} board lists no open jobs, so we can't compare.",
+  'unknown.language': "The job title is in a different language from the titles on {ats}, so we can't tell whether it is listed.",
+  'unknown.guessMissing': 'We couldn\'t find this job on a {ats} board named "{slug}", but we\'re not sure that board belongs to this company.',
+  'unknown.workdaySite': "We couldn't tell which Workday careers site this link belongs to.",
+  'unknown.workdayUnsupported': 'Workday careers sites are not supported here.',
+  'unknown.workdayUnreachable': "We couldn't reach the company's Workday site right now. This is not evidence against the job.",
+  'unknown.workdayIncomplete': "Workday's search didn't return this job. Large Workday sites can't be checked completely, so this is not counted against it.",
+  'unknown.needPermission': 'This job is on {host}. Allow GhostCheck to read that site to check it.',
+  'unknown.pageUnreachable': "We couldn't reach {host} right now. This is not evidence against the job.",
+  'unknown.pageError': "{host} answered with an error ({status}), so we couldn't check the job.",
+  'unknown.pageOtherJob': 'The page on {host} describes a different job.',
+  'unknown.otherOrg': 'The apply page on {host} is published by {org}, not {company}.',
+  'unknown.unsupportedAts': "{host} lists its jobs on {systems}, which GhostCheck can't check yet.",
+  'unknown.noJobData': "We couldn't confirm the job on {host}: the page has no job data we can read.",
+  'note.checked': 'Checked {count} open jobs on {ats}.',
+  'note.checkedOne': 'Checked 1 open job on {ats}.',
+  'note.workdayAll': 'Checked all {count} open jobs on Workday.',
+  'note.workdaySearched': 'Searched {count} open jobs on Workday.',
+  'note.byDescription': 'Matched by job description: the careers site calls it "{title}".',
+  'note.pageRead': 'Read the job details published on {host}.',
+  'note.pageClosed': 'The page says applications closed on {date}.',
+  'note.usesAts': '{host} uses {ats} for its job listings.',
+  'note.inSitemap': "The apply page is listed in {host}'s sitemap.",
+  'note.noPay': 'No pay range is stated (common, and not counted against the job).',
+  'age.ats': "the company's careers site",
+  'age.snapshot': "GhostCheck's daily snapshots",
+  'age.wayback': 'the Wayback Machine',
+  'semantic.kept': 'kept the title match',
+  'semantic.tiebreak': 'picked the posting with the closest description',
+  'semantic.promoted': 'same description, different title',
+  'semantic.detail': '{similarity}, next best {runnerUp}: {decision}',
+  'semantic.detailSingle': '{similarity}: {decision}',
+
+  // options page
+  'options.title': 'GhostCheck options',
+  'options.language': 'Language',
+  'options.languageAuto': 'Same as browser',
+  'options.descTitle': 'Description matching',
+  'options.descToggle': 'Compare job descriptions with a small AI model that runs on this computer.',
+  'options.descHint': 'Helps when a company words a job title differently on LinkedIn and on its careers site. Job descriptions never leave your computer.',
+  'options.modelEnglish': 'English model (~23 MB) — fast, English descriptions only',
+  'options.modelMultilingual': 'Multilingual model (~120 MB) — 50+ languages, can compare a Japanese or Chinese job with an English posting; slower and uses more memory',
+  'options.modelStatus': 'Downloaded models: {status}',
+  'options.modelNone': 'none yet',
+  'options.modelUnknown': 'unknown',
+  'options.deleteModels': 'Delete downloaded models',
+  'options.sitesTitle': 'Careers sites you allowed',
+  'options.sitesHint': 'GhostCheck can read these company sites to confirm jobs. Remove any you no longer want.',
+  'options.sitesNone': 'None yet.',
+  'options.remove': 'Remove',
+  'options.removed': 'Removed access to {site}.',
+  'options.descOn': 'Description matching is on.',
+  'options.descOff': 'Description matching is off. No model will be downloaded.',
+  'options.modelChanged': 'Model changed. The new model is downloaded the next time it is needed.',
+  'options.deleted': 'Downloaded models deleted. They are downloaded again only when needed.',
+  'options.languageChanged': 'Language changed. Open LinkedIn pages update automatically.',
+
+  // permission page
+  'perm.pageTitle': 'GhostCheck: allow a careers site',
+  'perm.heading': 'Let GhostCheck read {host}?',
+  'perm.body': "The job you are looking at is published on {host}, the company's own careers page. To check that the job is really listed there, GhostCheck needs to read that site's public pages.",
+  'perm.scope': 'Only {origin} is affected. You can remove access anytime on the GhostCheck options page.',
+  'perm.privacy': "GhostCheck reads the job page and the site's public sitemap. It sends no cookies and nothing about you.",
+  'perm.allow': 'Allow',
+  'perm.cancel': 'Not now',
+  'perm.invalid': 'This link is not a valid https careers site.',
+  'perm.refused': 'Chrome refused the request: {error}',
+  'perm.denied': 'Access was not granted. The job stays "Can\'t verify".',
+  'perm.granted': 'Access granted. Rechecking the job…',
+};
+
+const zh = {
+  'badge.green': '可信',
+  'badge.yellow': '存疑',
+  'badge.red': '可疑',
+  'badge.unknown': '无法确认',
+  'badge.loading': '检查中…',
+
+  'ui.checking': '正在核对公司官网…',
+  'ui.close': '关闭',
+  'ui.recheck': '重新检查',
+  'ui.footer': '仅供参考，不是定论，请自行判断。',
+  'ui.score': '得分 {score}',
+  'ui.detected': 'GhostCheck 读到的信息',
+  'ui.badgeTitle': 'GhostCheck：点击查看详情',
+  'ui.badgeLoadingTitle': 'GhostCheck 正在检查这个职位',
+  'ui.badgeAria': 'GhostCheck：{label}。查看详情',
+  'ui.cardAria': 'GhostCheck 详情',
+  'ui.viewJob': '在公司官网查看这个职位 ↗',
+  'ui.viewBoard': '查看该公司的在招职位 ↗',
+  'ui.allowSite': '允许检查 {host}',
+  'field.company': '公司',
+  'field.title': '职位名',
+  'field.location': '地点',
+  'field.applyType': '申请方式',
+  'field.applyUrl': '申请链接',
+  'field.salaryText': '页面显示的薪资',
+  'field.descriptionChars': '职位描述长度',
+  'field.linkedinCompanySlug': 'LinkedIn 公司 ID',
+  'field.ats': '招聘网站',
+  'field.board': '招聘页 ID',
+  'field.boardSource': '招聘页来源',
+  'field.boardSize': '招聘页上的在招职位数',
+  'field.matchStatus': '匹配结果',
+  'field.matchedTitle': '匹配到的职位',
+  'field.closestScore': '最接近的职位名相似度',
+  'field.descriptionMatch': '职位描述匹配',
+  'field.unsupportedAts': '招聘系统（暂不支持）',
+  'field.firstSeen': '首次出现',
+
+  'error.reloaded': 'GhostCheck 已更新或重新加载，请刷新本页面后再检查。',
+  'error.failed': 'GhostCheck 未能完成检查。这不代表这个职位有问题。',
+  'error.internal': 'GhostCheck 内部出错。这不代表这个职位有问题。',
+  'error.unreadable': '无法从本页面读取职位名或公司名。',
+
+  'fallback.company': '该公司',
+  'fallback.Company': '该公司',
+  'fallback.site': '其官网',
+  'source.applyLink': '申请链接',
+  'source.companies': 'GhostCheck 公司名单',
+  'source.guess': '按公司名匹配',
+  'source.page': '{host} 上的链接',
+  'ats.careersPage': '公司官网（{host}）',
+  'ats.notInList': '这家公司的 {ats} 招聘页还不在 GhostCheck 的名单里。',
+  'ats.unsupported': '暂不支持 {ats} 招聘网站。',
+  'unknown.easyApply': '这是 Easy Apply 职位，我们不知道这家公司用的是哪个招聘网站。',
+  'unknown.noSite': '无法从申请链接判断公司的招聘网站。',
+  'unknown.similar': '官网上有一个相似的职位（"{title}"），但{why}，无法确定是同一个职位。',
+  'why.level': '级别不同',
+  'why.location': '地点不同',
+  'why.title': '职位名有一定差异',
+  'why.other': '存在差异',
+  'unknown.unmatchable': '无法将这个职位名与官网进行比较。',
+  'unknown.boardMissing': '找不到 {ats} 招聘页 "{slug}"，公司可能已经更换了招聘网站。',
+  'unknown.unreachable': '暂时无法连接 {ats}。这不代表这个职位有问题。',
+  'unknown.emptyBoard': '{company}的 {ats} 招聘页上目前没有在招职位，无法比较。',
+  'unknown.language': '职位名与 {ats} 上的职位名语言不同，无法判断是否在招。',
+  'unknown.guessMissing': '在名为 "{slug}" 的 {ats} 招聘页上没找到这个职位，但不确定这个招聘页是否属于这家公司。',
+  'unknown.workdaySite': '无法判断这个链接属于哪个 Workday 招聘网站。',
+  'unknown.workdayUnsupported': '此处不支持 Workday 招聘网站。',
+  'unknown.workdayUnreachable': '暂时无法连接这家公司的 Workday 网站。这不代表这个职位有问题。',
+  'unknown.workdayIncomplete': 'Workday 搜索没有返回这个职位。大型 Workday 网站无法完整核对，所以不计为负面证据。',
+  'unknown.needPermission': '这个职位在 {host} 上。允许 GhostCheck 读取该网站后即可检查。',
+  'unknown.pageUnreachable': '暂时无法连接 {host}。这不代表这个职位有问题。',
+  'unknown.pageError': '{host} 返回错误（{status}），无法检查这个职位。',
+  'unknown.pageOtherJob': '{host} 上的页面描述的是另一个职位。',
+  'unknown.otherOrg': '{host} 上的申请页面由 {org} 发布，而不是 {company}。',
+  'unknown.unsupportedAts': '{host} 的职位发布在 {systems} 上，GhostCheck 暂不支持。',
+  'unknown.noJobData': '无法在 {host} 上确认这个职位：页面里没有可读取的职位数据。',
+  'note.checked': '已核对 {ats} 上的 {count} 个在招职位。',
+  'note.checkedOne': '已核对 {ats} 上的 1 个在招职位。',
+  'note.workdayAll': '已核对 Workday 上全部 {count} 个在招职位。',
+  'note.workdaySearched': '已在 Workday 的 {count} 个在招职位中搜索。',
+  'note.byDescription': '通过职位描述匹配：官网上的职位名是 "{title}"。',
+  'note.pageRead': '已读取 {host} 上发布的职位信息。',
+  'note.pageClosed': '页面显示申请已于 {date} 截止。',
+  'note.usesAts': '{host} 使用 {ats} 发布职位。',
+  'note.inSitemap': '申请页面在 {host} 的网站地图（sitemap）里。',
+  'note.noPay': '未写明薪资范围（很常见，不计为负面证据）。',
+  'age.ats': '公司官网',
+  'age.snapshot': 'GhostCheck 每日快照',
+  'age.wayback': 'Wayback Machine 存档',
+  'semantic.kept': '保留职位名匹配结果',
+  'semantic.tiebreak': '选择了职位描述最接近的职位',
+  'semantic.promoted': '职位描述相同，职位名不同',
+  'semantic.detail': '{similarity}，次高 {runnerUp}：{decision}',
+  'semantic.detailSingle': '{similarity}：{decision}',
+
+  'options.title': 'GhostCheck 设置',
+  'options.language': '界面语言',
+  'options.languageAuto': '跟随浏览器',
+  'options.descTitle': '职位描述比对',
+  'options.descToggle': '用在本机运行的小型 AI 模型比较职位描述。',
+  'options.descHint': '当公司在 LinkedIn 和官网上用不同的职位名时有帮助。职位描述不会离开你的电脑。',
+  'options.modelEnglish': '英文模型（约 23 MB）：速度快，只支持英文职位描述',
+  'options.modelMultilingual': '多语言模型（约 120 MB）：支持 50 多种语言，能把日文或中文职位和英文职位对上；速度较慢，占用更多内存',
+  'options.modelStatus': '已下载的模型：{status}',
+  'options.modelNone': '暂无',
+  'options.modelUnknown': '未知',
+  'options.deleteModels': '删除已下载的模型',
+  'options.sitesTitle': '你允许读取的公司网站',
+  'options.sitesHint': 'GhostCheck 可以读取这些公司网站来核对职位。不需要的可以移除。',
+  'options.sitesNone': '暂无。',
+  'options.remove': '移除',
+  'options.removed': '已移除对 {site} 的访问权限。',
+  'options.descOn': '已开启职位描述比对。',
+  'options.descOff': '已关闭职位描述比对，不会下载模型。',
+  'options.modelChanged': '已更换模型，下次需要时会下载新模型。',
+  'options.deleted': '已删除下载的模型，需要时会重新下载。',
+  'options.languageChanged': '已切换语言，已打开的 LinkedIn 页面会自动更新。',
+
+  'perm.pageTitle': 'GhostCheck：允许读取招聘网站',
+  'perm.heading': '允许 GhostCheck 读取 {host}？',
+  'perm.body': '你正在看的职位发布在公司自己的招聘网站 {host} 上。为了确认这个职位确实在招，GhostCheck 需要读取该网站的公开页面。',
+  'perm.scope': '只涉及 {origin}。你可以随时在 GhostCheck 设置页里撤销。',
+  'perm.privacy': 'GhostCheck 只读取职位页面和网站公开的网站地图，不会发送 cookie 或任何关于你的信息。',
+  'perm.allow': '允许',
+  'perm.cancel': '暂不',
+  'perm.invalid': '这个链接不是有效的 https 招聘网站。',
+  'perm.refused': 'Chrome 拒绝了请求：{error}',
+  'perm.denied': '未获得授权，这个职位仍显示"无法确认"。',
+  'perm.granted': '已授权，正在重新检查这个职位…',
+};
+
+export const MESSAGES = { en, zh };
+
+/**
+ * Translate a key. Missing keys fall back to English, then to the key.
+ * @param {'en' | 'zh' | string} lang
+ * @param {string} key
+ * @param {Record<string, unknown>} [vars]
+ */
+export function t(lang, key, vars = {}) {
+  const text = (MESSAGES[lang] || en)[key] ?? en[key] ?? key;
+  return text.replace(/\{(\w+)\}/g, (m, k) => (vars[k] !== undefined && vars[k] !== null ? String(vars[k]) : ''));
+}
+
+/** Strings the page script needs (badge, card, field labels, errors). */
+export function pageStrings(lang) {
+  const table = MESSAGES[lang] || en;
+  const out = {};
+  for (const key of Object.keys(en)) {
+    if (/^(badge|ui|field|error)\./.test(key)) out[key] = table[key] ?? en[key];
+  }
+  return out;
+}
