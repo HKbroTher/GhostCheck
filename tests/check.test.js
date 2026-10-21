@@ -158,7 +158,7 @@ test('unmatchable title -> unknown', async () => {
 
 // ------------------------------------------------------------- stage 3: age
 
-test('snapshot baseline older than 90 days -> long-listed, with refreshed note', async () => {
+test('snapshot baseline older than 90 days -> long-listed and re-posted', async () => {
   const d = deps({
     fetchFirstSeen: async () => ({
       version: 1, ats: 'greenhouse', slug: 'acme', since: '2026-05-01',
@@ -170,9 +170,10 @@ test('snapshot baseline older than 90 days -> long-listed, with refreshed note',
   assert.ok(ids.includes('posted_long_ago'));
   assert.ok(!ids.includes('posted_recently'));
   assert.match(r.reasons.find((x) => x.id === 'posted_long_ago').text, /at least 173 days, according to GhostCheck's daily snapshots/);
-  assert.ok(r.reasons.some((x) => /re-published/.test(x.text)));
-  // found +3, pay +1, team +1, long-listed -2 = 3
-  assert.equal(r.score, 3);
+  assert.ok(ids.includes('reposted_to_look_new'));
+  // found +3, pay +1, team +1, long-listed -2, re-posted -1 = 2
+  assert.equal(r.score, 2);
+  assert.equal(r.badge, 'yellow');
 });
 
 test('wayback capture of the LinkedIn page counts as evidence', async () => {
