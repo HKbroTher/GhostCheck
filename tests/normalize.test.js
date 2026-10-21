@@ -106,3 +106,7 @@ test('title language', async () => {
   assert.equal(sameTitleLanguage('Backend Engineer', english), true);
   assert.equal(sameTitleLanguage('ソフトウェアエンジニア / Software Engineer', english), true);
 });
+
+test("apostrophes in place names don't split them (O'Fallon = O Fallon)", () => {
+  assert.ok(locationsCompatible("O'Fallon, Missouri, United States", 'O Fallon, United States of America, 63368-7263'));
+});

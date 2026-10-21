@@ -1,145 +1,39 @@
 #!/usr/bin/env node
 /**
- * Exploratory probe of careers-site search APIs (Phenom, amazon.jobs) as
- * they really answer, for building and checking the site-search sources.
- * Prints response shapes; never fails the build.
+ * Live check of the careers-site searches GhostCheck uses (amazon.jobs and
+ * Phenom sites), through the same parsers as the extension. Informational:
+ * prints what each site answers; the workflow does not fail on it.
  */
-const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36';
-const PHENOM_CANDIDATES = [
-  'https://careers.fedex.com/',
-  'https://careers.fedex.com/jobs?keywords=engineer',
-  'https://jobs.thermofisher.com/',
-  'https://jobs.citi.com/',
-  'https://careers.mastercard.com/',
-  'https://jobs.dell.com/',
-  'https://careers.underarmour.com/',
-];
+import { fetchJson, fetchText } from '../core/http.js';
+import { amazonSearchUrl, amazonSite, parseAmazon, parsePhenom, phenomSearchBody, phenomSite } from '../core/sources/site-search.js';
 
-async function get(url, init = {}) {
-  const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(20000), ...init, headers: { 'user-agent': UA, ...(init.headers || {}) } });
-  const text = await res.text();
-  return { status: res.status, url: res.url, text, headers: Object.fromEntries(res.headers) };
+const PHENOM_SITES = ['https://careers.mastercard.com/us/en/', 'https://jobs.thermofisher.com/global/en/'];
+
+async function phenom(url) {
+  const page = await fetchText(url, { timeoutMs: 20000 });
+  const site = phenomSite(page.text, page.url);
+  if (!site) return console.log(`phenom   ${url}: no Phenom config (HTTP ${page.status})`);
+  const first = parsePhenom(await fetchJson(site.endpoint, { method: 'POST', body: phenomSearchBody(site, 'engineer', 5) }), site);
+  if (!first.length) return console.log(`phenom   ${url}: search returned no jobs`);
+  const p = first[0];
+  // Search again for that title and job id: the extension's two queries.
+  const byTitle = parsePhenom(await fetchJson(site.endpoint, { method: 'POST', body: phenomSearchBody(site, p.title) }), site);
+  const byId = parsePhenom(await fetchJson(site.endpoint, { method: 'POST', body: phenomSearchBody(site, p.id) }), site);
+  const job = await fetchText(p.url, { timeoutMs: 20000 });
+  console.log(
+    `phenom   ${url}: "${p.title}" (${p.id}) @ ${p.location}, posted ${p.createdAt?.slice(0, 10)}; ` +
+      `title search ${byTitle.some((x) => x.id === p.id) ? 'finds it' : 'MISSES it'}, id search ${byId.some((x) => x.id === p.id) ? 'finds it' : 'misses it'}; ` +
+      `job page ${p.url} -> HTTP ${job.status}`,
+  );
 }
 
-const snip = (s, n = 1200) => String(s).replace(/\s+/g, ' ').slice(0, n);
-
-function keysDeep(obj, depth = 0) {
-  if (!obj || typeof obj !== 'object' || depth > 3) return typeof obj;
-  if (Array.isArray(obj)) return [obj.length, keysDeep(obj[0], depth + 1)];
-  return Object.fromEntries(Object.entries(obj).slice(0, 40).map(([k, v]) => [k, keysDeep(v, depth + 1)]));
+async function amazon() {
+  const [p] = parseAmazon(await fetchJson(amazonSearchUrl('software development engineer', 5)));
+  if (!p) return console.log('amazon   search returned no jobs');
+  const site = amazonSite(p.url);
+  const byId = parseAmazon(await fetchJson(amazonSearchUrl(site.jobId, 5)));
+  console.log(`amazon   "${p.title}" (${p.id}) @ ${p.location}, posted ${p.createdAt?.slice(0, 10)}; id search ${byId.some((x) => x.id === p.id) ? 'finds it' : 'MISSES it'}`);
 }
 
-async function probePhenom(start) {
-  console.log(`\n=== ${start}`);
-  let page;
-  try {
-    page = await get(start);
-  } catch (err) {
-    return console.log('GET failed', err.message);
-  }
-  console.log('status', page.status, 'final', page.url, 'bytes', page.text.length);
-  const markers = ['phenompeople', 'phApp', 'ddoKey', 'refineSearch', 'widgets', 'jibe', 'Jibe', 'radancy', 'tmpworldwide', 'avature', 'eightfold', 'icims', 'brassring', 'oraclecloud', 'successfactors', 'taleo', 'workday', 'myworkdayjobs', 'smartrecruiters', 'beamery', 'clinch', 'symphonytalent', 'cornerstone', 'paradox'].filter((m) => page.text.includes(m));
-  console.log('markers', markers);
-  for (const k of ['refNum', 'locale', 'country', 'siteType', 'pageId', 'deviceType', 'pageName', 'baseUrl', 'cdnUrl', 'siteLang', 'csrfToken']) {
-    const m = page.text.match(new RegExp(`"${k}"\\s*:\\s*"([^"]{0,120})"`));
-    if (m) console.log(`  ${k} = ${m[1]}`);
-  }
-  const i = page.text.indexOf('phApp');
-  if (i >= 0) console.log('phApp snippet:', snip(page.text.slice(i, i + 1500)));
-  if (!markers.includes('phApp')) {
-    const urls = [...new Set(page.text.match(/https?:\/\/[a-z0-9.-]+\.[a-z]{2,}/gi) || [])].slice(0, 60);
-    console.log('hosts in page', urls.join(' '));
-    for (const path of ['/api/jobs?keywords=engineer&page=1&limit=3', '/api/jobs?page=1&limit=3']) {
-      try {
-        const res = await get(new URL(path, page.url).href);
-        console.log('GET', path, res.status, res.headers['content-type'], snip(res.text, 600));
-      } catch (err) {
-        console.log('GET', path, 'failed', err.message);
-      }
-    }
-    return;
-  }
-
-  const cfg = (k) => page.text.match(new RegExp(`"${k}"\\s*:\\s*"([^"]{0,120})"`))?.[1];
-  const origin = new URL(page.url).origin;
-  const body = {
-    lang: cfg('locale') || 'en_us',
-    deviceType: 'desktop',
-    country: cfg('country') || 'us',
-    pageName: 'search-results',
-    ddoKey: 'refineSearch',
-    sortBy: '',
-    subsearch: '',
-    from: 0,
-    jobs: true,
-    counts: true,
-    all_fields: ['category', 'country', 'state', 'city'],
-    size: 3,
-    clearAll: false,
-    jdsource: 'facets',
-    isSliderEnable: false,
-    pageId: cfg('pageId') || 'page20',
-    siteType: cfg('siteType') || 'external',
-    keywords: 'engineer',
-    global: true,
-    selected_fields: {},
-    locationData: {},
-  };
-  if (cfg('refNum')) body.refNum = cfg('refNum');
-  const csrf = cfg('csrfToken');
-  for (const withCsrf of [false, true]) {
-    if (withCsrf && !csrf) continue;
-    try {
-      const res = await get(`${origin}/widgets`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', ...(withCsrf ? { 'x-csrf-token': csrf } : {}) },
-        body: JSON.stringify(body),
-      });
-      console.log(`POST /widgets (csrf ${withCsrf}) ->`, res.status, snip(res.text, 300));
-      try {
-        const json = JSON.parse(res.text);
-        console.log('shape', JSON.stringify(keysDeep(json)).slice(0, 2500));
-        const job = json?.refineSearch?.data?.jobs?.[0];
-        if (job) {
-          console.log('job keys', Object.keys(job).join(', '));
-          const pick = ['jobId', 'jobSeqNo', 'reqId', 'title', 'postedDate', 'dateCreated', 'location', 'cityStateCountry', 'multi_location', 'applyUrl', 'externalApply', 'descriptionTeaser'];
-          console.log('fields', JSON.stringify(Object.fromEntries(pick.map((k) => [k, job[k]]))).slice(0, 1500));
-        }
-        console.log('hits', json?.refineSearch?.hits, 'totalHits', json?.refineSearch?.totalHits);
-      } catch {
-        // not JSON
-      }
-    } catch (err) {
-      console.log('POST failed', err.message);
-    }
-  }
-}
-
-async function probeAmazon() {
-  console.log('\n=== amazon.jobs');
-  try {
-    const res = await get('https://www.amazon.jobs/en/search.json?base_query=software%20development%20engineer&result_limit=3&offset=0');
-    console.log('search.json', res.status, res.headers['content-type']);
-    const json = JSON.parse(res.text);
-    console.log('shape', JSON.stringify(keysDeep(json)).slice(0, 2500));
-    const job = json.jobs?.[0];
-    if (job) {
-      const short = Object.fromEntries(Object.entries(job).map(([k, v]) => [k, typeof v === 'string' ? v.slice(0, 120) : v]));
-      console.log('first job', JSON.stringify(short).slice(0, 3000));
-      const page = await get(`https://www.amazon.jobs${job.job_path}`);
-      console.log('job page', page.status, page.url, 'JobPosting json-ld:', page.text.includes('"JobPosting"'));
-      const byId = await get(`https://www.amazon.jobs/en/search.json?base_query=${job.id_icims}&result_limit=3`);
-      const ids = JSON.parse(byId.text).jobs?.map((j) => j.id_icims);
-      console.log('search by id', job.id_icims, '->', ids);
-    }
-    const gone = await get('https://www.amazon.jobs/en/jobs/1000001/removed-job');
-    console.log('removed job page', gone.status, gone.url, 'bytes', gone.text.length);
-    const sitemap = await get('https://www.amazon.jobs/robots.txt');
-    console.log('robots', sitemap.status, snip(sitemap.text, 600));
-  } catch (err) {
-    console.log('amazon failed', err.message);
-  }
-}
-
-for (const url of PHENOM_CANDIDATES) await probePhenom(url);
-await probeAmazon();
+for (const url of PHENOM_SITES) await phenom(url).catch((err) => console.log(`phenom   ${url}: ${err.message}`));
+await amazon().catch((err) => console.log(`amazon   ${err.message}`));
