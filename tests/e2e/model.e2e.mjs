@@ -34,7 +34,7 @@ const DATA =
   'You will help teams design experiments and interpret results with statistical rigor. ' +
   'Strong experience with Spark, Airflow and SQL at terabyte scale is expected. ';
 
-const LINKEDIN = `<!doctype html><html><body><main><div class="jobs-search__job-details--container">
+const LINKEDIN = `<!doctype html><html><head><meta charset="utf-8"></head><body><main><div class="jobs-search__job-details--container">
   <div class="job-details-jobs-unified-top-card__job-title"><h1><a href="/jobs/view/4242/">Member of Technical Staff</a></h1></div>
   <div class="job-details-jobs-unified-top-card__company-name"><a href="/company/acme-e2e/">Acme Payments</a></div>
   <div class="job-details-jobs-unified-top-card__primary-description-container"><span class="tvm__text">San Francisco, CA · 1 week ago</span></div>
@@ -64,7 +64,7 @@ const ctx = await chromium.launchPersistentContext('', {
 });
 const failures = [];
 try {
-  await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html', body: LINKEDIN }));
+  await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html; charset=utf-8', body: LINKEDIN }));
   await ctx.route('https://boards-api.greenhouse.io/**', (r) => r.fulfill({ json: BOARD }));
   await ctx.route('https://raw.githubusercontent.com/**', (r) => r.fulfill({ status: 404, body: '' }));
   await ctx.route('https://archive.org/**', (r) => r.fulfill({ json: { archived_snapshots: {} } }));
@@ -141,7 +141,7 @@ try {
     `${ABOUT}${JA_LEDGER}${BENEFITS}`,
   );
   await ctx.unroute('https://www.linkedin.com/**');
-  await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html', body: jaPage }));
+  await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html; charset=utf-8', body: jaPage }));
   const jp = await ctx.newPage();
   // Same job id as the page's title link, so the pane check accepts it; the
   // result is cached per model, so this is a fresh check.
