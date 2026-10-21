@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GhostCheck UI preview</title>
+  <style>
+    body { font: 15px/1.5 system-ui, sans-serif; margin: 32px; }
+    h1 { font-size: 20px; }
+    .row { margin: 18px 0; font-size: 20px; font-weight: 600; }
+    label { font-size: 13px; }
+  </style>
+</head>
+<body>
+  <h1>GhostCheck badge &amp; card preview</h1>
+  <p>Developer page: open it at <code>chrome-extension://&lt;extension id&gt;/dev/preview.html</code>.
+     Click a badge to open its card. Sample data only.</p>
+  <label><input type="checkbox" id="dark"> Dark theme</label>
+  <div id="rows"></div>
+  <script src="../content/ui.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>

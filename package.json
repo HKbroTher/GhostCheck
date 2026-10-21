@@ -1,0 +1,16 @@
+{
+  "name": "ghostcheck",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Developer scripts for GhostCheck. Not needed to use the extension.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "sync": "node scripts/sync.mjs",
+    "check": "node scripts/sync.mjs --check && node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
