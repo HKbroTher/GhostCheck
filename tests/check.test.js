@@ -155,3 +155,44 @@ test('unmatchable title -> unknown', async () => {
   const r = await checkJob(job({ title: '---', applyHref: null, applyType: 'easy' }), deps());
   assert.equal(r.badge, 'unknown');
 });
+
+// ------------------------------------------------------------- stage 3: age
+
+test('snapshot baseline older than 90 days -> long-listed, with refreshed note', async () => {
+  const d = deps({
+    fetchFirstSeen: async () => ({
+      version: 1, ats: 'greenhouse', slug: 'acme', since: '2026-05-01',
+      jobs: { 5551234: { t: 'Senior Software Engineer, Payments', f: '2026-05-01' } },
+    }),
+  });
+  const r = await checkJob(job(), d);
+  const ids = r.reasons.map((x) => x.id);
+  assert.ok(ids.includes('posted_long_ago'));
+  assert.ok(!ids.includes('posted_recently'));
+  assert.match(r.reasons.find((x) => x.id === 'posted_long_ago').text, /at least 173 days, according to GhostCheck's daily snapshots/);
+  assert.ok(r.reasons.some((x) => /re-published/.test(x.text)));
+  // found +3, pay +1, team +1, long-listed -2 = 3
+  assert.equal(r.score, 3);
+});
+
+test('wayback capture of the LinkedIn page counts as evidence', async () => {
+  const asked = [];
+  const d = deps({
+    fetchWayback: async (url) => {
+      asked.push(url);
+      return url.includes('linkedin.com') ? '2026-01-01T00:00:00.000Z' : null;
+    },
+  });
+  const r = await checkJob(job(), d);
+  assert.deepEqual(asked.sort(), ['https://boards.greenhouse.io/acme/jobs/5551234', 'https://www.linkedin.com/jobs/view/1/']);
+  assert.ok(r.reasons.some((x) => x.id === 'posted_long_ago' && /Wayback Machine/.test(x.text)));
+});
+
+test('age lookups failing never hurts the verdict', async () => {
+  const fail = async () => {
+    throw new HttpError('network', 'down');
+  };
+  const r = await checkJob(job(), deps({ fetchFirstSeen: fail, fetchWayback: fail }));
+  assert.equal(r.badge, 'green');
+  assert.ok(r.reasons.some((x) => x.id === 'posted_recently')); // falls back to the ATS date
+});

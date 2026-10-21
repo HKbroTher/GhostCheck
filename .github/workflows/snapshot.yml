@@ -1,0 +1,57 @@
+name: Daily snapshot
+
+# Records when each job on the boards in data/companies.json was first seen.
+# Scheduled runs only happen on the default branch; pushes that touch the
+# snapshot code run a dry run instead (fetch and report, commit nothing).
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/snapshot.mjs
+      - core/snapshot.js
+      - core/wayback.js
+      - .github/workflows/snapshot.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Dry run
+        if: github.event_name == 'push'
+        run: node scripts/snapshot.mjs --dry-run
+
+      - name: Update snapshots
+        if: github.event_name != 'push'
+        run: node scripts/snapshot.mjs
+
+      - name: Commit
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/first-seen
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git commit -m "Daily job snapshot $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+          done
+          exit 1

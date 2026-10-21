@@ -10,9 +10,11 @@ import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
 import { SOURCES } from './sources/index.js';
+import { lookupFirstSeen } from './snapshot.js';
+import { linkedinJobUrl } from './wayback.js';
+import { combineAge, ageSignals, AGE_SOURCE_LABELS } from './age.js';
 
 const ATS_NAMES = { greenhouse: 'Greenhouse', lever: 'Lever', ashby: 'Ashby', workday: 'Workday' };
-const DAY_MS = 86400000;
 
 /**
  * @typedef {object} CheckDeps
@@ -22,6 +24,10 @@ const DAY_MS = 86400000;
  *   throws HttpError on failure
  * @property {(ref: {ats: string, slug: string, region: string | null}) => Promise<string | null>} [fetchBoardName]
  *   Greenhouse board display name, used to verify guessed slugs; null if the board does not exist
+ * @property {(ref: {ats: string, slug: string, region: string | null}) => Promise<object | null>} [fetchFirstSeen]
+ *   GhostCheck's first-seen file for the board; null if the board is not tracked
+ * @property {(url: string) => Promise<string | null>} [fetchWayback]
+ *   ISO date of the earliest Wayback Machine capture of a URL, or null
  * @property {() => Date} [now]
  */
 
@@ -64,10 +70,35 @@ async function resolveBoard(job, applyUrl, deps) {
   return { ref: null, source: null, note: null };
 }
 
-function daysSince(iso, now) {
-  if (!iso) return null;
-  const t = Date.parse(iso);
-  return Number.isNaN(t) ? null : Math.max(0, Math.floor((now.getTime() - t) / DAY_MS));
+/**
+ * Collect first-posted evidence for a matched posting. Every source is
+ * optional and failures are ignored: missing evidence is never negative.
+ * @returns {Promise<import('./age.js').AgeEvidence[]>}
+ */
+async function gatherAgeEvidence(job, ref, posting, deps) {
+  const evidence = [];
+  if (posting.createdAt) evidence.push({ date: posting.createdAt, exact: true, source: 'ats' });
+
+  const tasks = [];
+  if (deps.fetchFirstSeen) {
+    tasks.push(
+      deps.fetchFirstSeen(ref).then((snap) => {
+        const seen = lookupFirstSeen(snap, posting.id);
+        if (seen) evidence.push({ date: `${seen.date}T00:00:00.000Z`, exact: seen.exact, source: 'snapshot' });
+      }),
+    );
+  }
+  if (deps.fetchWayback) {
+    for (const url of [posting.url, linkedinJobUrl(job.jobId)].filter(Boolean)) {
+      tasks.push(
+        deps.fetchWayback(url).then((date) => {
+          if (date) evidence.push({ date, exact: false, source: 'wayback' });
+        }),
+      );
+    }
+  }
+  await Promise.allSettled(tasks);
+  return evidence;
 }
 
 /**
@@ -168,11 +199,19 @@ export async function checkJob(job, deps) {
             vars.salary = official.detail;
           }
         }
-        const days = daysSince(match.posting.createdAt, now);
-        if (days !== null) {
-          vars.days = days;
-          signals.posted_recently = days <= rules.age.recent_days;
-          signals.posted_long_ago = days > rules.age.old_days;
+        const age = combineAge(await gatherAgeEvidence(job, board.ref, match.posting, deps), now);
+        if (age) {
+          const a = ageSignals(age, rules.age);
+          signals.posted_recently = a.posted_recently;
+          signals.posted_long_ago = a.posted_long_ago;
+          vars.days = age.days;
+          vars.ageSource = AGE_SOURCE_LABELS[age.oldest.source];
+          detected.firstSeen = `${age.oldest.date.slice(0, 10)} (${AGE_SOURCE_LABELS[age.oldest.source]})`;
+          if (a.refreshed) {
+            notes.push(
+              `The careers site shows a newer date (${age.atsDays} days ago), so the posting was probably re-published.`,
+            );
+          }
         }
       } else if (match.status === 'id_missing') {
         signals.found_on_official_site = false;

@@ -9,6 +9,8 @@ import { fetchJson, RateLimiter } from '../core/http.js';
 import { parseRules } from '../core/rules.js';
 import { unknownResult } from '../core/result.js';
 import { SOURCES } from '../core/sources/index.js';
+import { snapshotPath } from '../core/snapshot.js';
+import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
 
 const HOUR = 3600000;
@@ -17,6 +19,9 @@ const TTL = {
   boardName: 7 * 24 * HOUR,
   result: 6 * HOUR,
   companies: 24 * HOUR,
+  firstSeen: 12 * HOUR, // snapshots change once a day
+  wayback: 7 * 24 * HOUR, // an earliest capture never changes
+  waybackNone: 24 * HOUR,
 };
 /** Failed board fetches are remembered briefly in memory only, to avoid hammering. */
 const FAILURE_BACKOFF_MS = 10 * 60000;
@@ -125,6 +130,42 @@ async function fetchBoardName(ref) {
   });
 }
 
+/**
+ * GhostCheck's first-seen file for a board, from the repository (data only).
+ * Returns null when the board is not tracked (404).
+ */
+async function fetchFirstSeen(ref) {
+  const path = snapshotPath(ref);
+  const cached = await cacheGet(`firstseen:${path}`);
+  if (cached !== undefined) return cached.snap;
+  return dedupe(`firstseen:${path}`, async () => {
+    try {
+      const snap = await fetchJson(`${RAW_BASE}/${path}`, { timeoutMs: 10000, retries: 1, limiter });
+      await cacheSet(`firstseen:${path}`, { snap }, TTL.firstSeen);
+      return snap;
+    } catch (err) {
+      if (err?.isNotFound) {
+        await cacheSet(`firstseen:${path}`, { snap: null }, TTL.firstSeen);
+        return null;
+      }
+      throw err;
+    }
+  });
+}
+
+/** ISO date of the earliest Wayback Machine capture of `url`, or null. */
+async function fetchWayback(url) {
+  const key = `wayback:${url}`;
+  const cached = await cacheGet(key);
+  if (cached !== undefined) return cached.date;
+  return dedupe(key, async () => {
+    // The Wayback API is slow and sometimes empty; no retries, short timeout.
+    const date = parseWayback(await fetchJson(waybackQueryUrl(url), { timeoutMs: 8000, retries: 0, limiter }));
+    await cacheSet(key, { date }, date ? TTL.wayback : TTL.waybackNone);
+    return date;
+  });
+}
+
 // ---------------------------------------------------------------- messages
 
 /**
@@ -186,6 +227,8 @@ async function handleCheck(rawJob, force) {
     companies,
     fetchPostings: force ? fetchPostingsFresh : fetchPostings,
     fetchBoardName,
+    fetchFirstSeen,
+    fetchWayback,
   };
   const result = await checkJob(job, deps);
   // Do not cache "can't verify" for long: it is often a transient failure.
