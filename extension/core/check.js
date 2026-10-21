@@ -180,6 +180,8 @@ export async function checkJob(job, deps) {
       } else if (match.status === 'similar') {
         const why = { level: 'a different seniority level', location: 'a different location', title: 'a somewhat different title' }[match.mismatch];
         unknownReason = `A similar job is listed ("${match.posting.title}"), but with ${why || 'differences'}, so we can't be sure it's the same one.`;
+      } else if (match.status === 'unmatchable') {
+        unknownReason = "We couldn't compare this job title with the careers site.";
       } else if (board.source === 'guess') {
         // A board found by name might belong to a different company with the
         // same name: never count "not found" against the job in that case.

@@ -150,3 +150,8 @@ test('workday link -> unknown until supported', async () => {
   assert.equal(r.badge, 'unknown');
   assert.match(r.reasons[0].text, /Workday/);
 });
+
+test('unmatchable title -> unknown', async () => {
+  const r = await checkJob(job({ title: '---', applyHref: null, applyType: 'easy' }), deps());
+  assert.equal(r.badge, 'unknown');
+});
