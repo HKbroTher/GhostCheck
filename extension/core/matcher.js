@@ -22,6 +22,20 @@ function sameTrack(a, b) {
   return MANAGER_TOKENS.every((t) => a.tokens.includes(t) === b.tokens.includes(t));
 }
 
+const isBare = (t) => t.core.length === t.tokens.length;
+
+/**
+ * Compare full titles. The suffix-free "core" title is only used when one
+ * side has no suffix ("Software Engineer" vs "Software Engineer, Payments");
+ * when both have one, the suffixes must agree ("..., Startups" is not
+ * "..., Commercial"). The small discount lets an exact full match win ties.
+ */
+function scoreTitles(a, b) {
+  const full = titleSimilarity(a.tokens, b.tokens);
+  const core = isBare(a) || isBare(b) ? 0.95 * titleSimilarity(a.core, b.core) : 0;
+  return Math.max(full, core);
+}
+
 function levelOk(a, b) {
   // Internships never match full-time roles, even when the other title has no level.
   if ((a.level === 'intern') !== (b.level === 'intern')) return false;
@@ -51,7 +65,7 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
 
   for (const posting of postings) {
     const cand = normalizeTitle(posting.title);
-    const score = Math.max(titleSimilarity(target.core, cand.core), titleSimilarity(target.tokens, cand.tokens));
+    const score = scoreTitles(target, cand);
     if (score < t.title_similar) continue;
 
     let mismatch = null;

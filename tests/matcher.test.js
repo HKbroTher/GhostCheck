@@ -64,3 +64,28 @@ test('id gone but job reposted under a new id -> found', () => {
   assert.equal(m.status, 'found');
   assert.equal(m.posting.id, '4');
 });
+
+test('sibling postings with different suffixes are not the same job', () => {
+  // Real pattern from a live board: one title family, many specializations.
+  const board = [
+    P('a', 'Applied AI Architect, Commercial', 'San Francisco, CA'),
+    P('b', 'Applied AI Architect, Startups', 'San Francisco, CA'),
+  ];
+  const m = matchPosting({ title: 'Applied AI Architect, Startups', location: 'San Francisco, CA' }, board);
+  assert.equal(m.posting.id, 'b');
+  const only = matchPosting({ title: 'Applied AI Architect, Startups', location: 'San Francisco, CA' }, [board[0]]);
+  assert.notEqual(only.status, 'found');
+});
+
+test('a title without suffix still matches a suffixed posting', () => {
+  const m = matchPosting({ title: 'Applied AI Architect', location: 'San Francisco, CA' }, [P('a', 'Applied AI Architect, Commercial', 'San Francisco, CA')]);
+  assert.equal(m.status, 'found');
+});
+
+test('parenthesized specializations must agree', () => {
+  const board = [
+    P('s', 'Operations Manager, Mandarin Speaking (Seoul Based)', 'Seoul, Korea'),
+    P('t', 'Operations Manager, Mandarin Speaking (Tokyo Based)', 'Tokyo, Japan'),
+  ];
+  assert.equal(matchPosting({ title: 'Operations Manager, Mandarin Speaking (Tokyo Based)', location: 'Tokyo, Japan' }, board).posting.id, 't');
+});
