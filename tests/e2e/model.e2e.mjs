@@ -113,6 +113,52 @@ try {
   assert.match(card, /Likely real/);
   assert.match(card, /Matched by job description/);
   assert.match(card, /Software Engineer, Payments Ledger/);
+
+  // 3. Multilingual model: Japanese LinkedIn job, English careers site.
+  await ext.evaluate(() =>
+    chrome.storage.local.set({ settings: { semantic: true, semanticModel: 'multilingual', language: 'en' } }),
+  );
+  const multi = ['ソフトウェアエンジニア', 'Software engineer', 'Pastry chef for a busy bakery'];
+  let mres = null;
+  const t1 = Date.now();
+  for (let i = 0; i < 12 && !mres?.vectors; i++) {
+    mres = await ext.evaluate((t) => chrome.runtime.sendMessage({ type: 'ghostcheck:debug-embed', texts: t, model: 'multilingual' }), multi);
+    if (!mres?.vectors) console.log(`  multilingual model not ready (${mres?.error}), retrying...`);
+  }
+  assert.ok(mres?.vectors, `no multilingual embeddings: ${mres?.error}`);
+  const [ja, enEng, chef] = mres.vectors;
+  console.log(`multilingual model ready after ${((Date.now() - t1) / 1000).toFixed(1)} s; dims ${ja.length}`);
+  console.log(`similarity ソフトウェアエンジニア~Software engineer ${dot(ja, enEng).toFixed(3)}, ~Pastry chef ${dot(ja, chef).toFixed(3)}`);
+  assert.ok(dot(ja, enEng) > dot(ja, chef) + 0.2, 'a Japanese title should be close to its English translation');
+
+  const JA_LEDGER =
+    '当社のプラットフォーム上のすべてのお金の動きを記録する複式簿記の元帳サービスを設計・構築していただきます。' +
+    '照合パイプライン、冪等な送金API、夜間の決済バッチ処理を担当していただきます。' +
+    '財務チームやリスクチームと緊密に連携し、高負荷の下でも残高を正確に保ちます。' +
+    '分散トランザクション、Postgres、Kotlinサービスの豊富な経験が求められます。';
+  const jaPage = LINKEDIN.replace('Member of Technical Staff', '決済元帳ソフトウェアエンジニア').replace(
+    `${ABOUT}${LEDGER}${BENEFITS}`,
+    `${ABOUT}${JA_LEDGER}${BENEFITS}`,
+  );
+  await ctx.unroute('https://www.linkedin.com/**');
+  await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html', body: jaPage }));
+  const jp = await ctx.newPage();
+  await jp.goto('https://www.linkedin.com/jobs/view/4243/');
+  await jp.waitForFunction(
+    () => {
+      const b = document.querySelector('ghostcheck-badge')?.shadowRoot.querySelector('.badge')?.dataset.badge;
+      return b && b !== 'loading';
+    },
+    null,
+    { timeout: 90000 },
+  );
+  await jp.evaluate(() => document.querySelector('ghostcheck-badge').shadowRoot.querySelector('.badge').click());
+  await jp.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelector('details').open = true));
+  const jaCard = await jp.evaluate(() => document.querySelector('ghostcheck-card').shadowRoot.querySelector('.card').innerText);
+  console.log(`\n--- Japanese job, multilingual model ---\n${jaCard}\n------------`);
+  // Never "not found" across languages; with the multilingual model it should be confirmed.
+  assert.doesNotMatch(jaCard, /Suspicious/);
+  if (!/Matched by job description/.test(jaCard)) console.log('NOTE: cross-language job not confirmed (stayed unknown); see similarity above.');
 } catch (err) {
   failures.push(err.stack || String(err));
 } finally {

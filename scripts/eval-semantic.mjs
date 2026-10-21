@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Evaluate description matching on live job boards with the real model.
+ *   MODEL=english (default) | multilingual
  * Dev-only: needs `npm install --no-save @huggingface/transformers@3.7.6`
  * (the extension itself bundles its own copy). Run by .github/workflows/semantic.yml.
  *
@@ -17,7 +18,14 @@ import { fetchJson, RateLimiter } from '../core/http.js';
 import { SOURCES } from '../core/sources/index.js';
 import { normalizeTitle } from '../core/normalize.js';
 import { titleSimilarity } from '../core/fuzzy.js';
-import { buildBoilerplate, stripBoilerplate, splitSentences, isLikelyEnglish, cosine, decide, DEFAULT_SEMANTIC } from '../core/semantic.js';
+import { readFileSync } from 'node:fs';
+import { buildBoilerplate, stripBoilerplate, splitSentences, isLikelyEnglish, textWeight, cosine, decide, DEFAULT_SEMANTIC } from '../core/semantic.js';
+import { parseRules } from '../core/rules.js';
+
+const MODEL = process.env.MODEL === 'multilingual' ? 'multilingual' : 'english';
+const MODEL_IDS = { english: 'Xenova/all-MiniLM-L6-v2', multilingual: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2' };
+const rules = parseRules(readFileSync(new URL('../rules.yaml', import.meta.url), 'utf8'));
+const CURRENT = { ...DEFAULT_SEMANTIC, ...rules.semantic, ...rules.semantic.models[MODEL] };
 
 const BOARDS = [
   ['greenhouse', 'stripe'],
@@ -32,7 +40,7 @@ const BOARDS = [
 ];
 const PER_BOARD = 25;
 const SIBLINGS = 7;
-const GRID_SIM = [0.75, 0.8, 0.85, 0.88, 0.9, 0.93];
+const GRID_SIM = MODEL === 'english' ? [0.75, 0.8, 0.85, 0.88, 0.9, 0.93] : [0.8, 0.85, 0.88, 0.9, 0.92, 0.94, 0.96];
 const GRID_MARGIN = [0.02, 0.05, 0.08];
 
 // Small deterministic RNG so runs are comparable.
@@ -40,9 +48,9 @@ let seed = 42;
 const rand = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
 
 const limiter = new RateLimiter({ minIntervalMs: 400, maxConcurrent: 2 });
-console.log('Loading model...');
+console.log(`Loading ${MODEL} model (${MODEL_IDS[MODEL]})...`);
 const t0 = Date.now();
-const extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'q8' });
+const extractor = await pipeline('feature-extraction', MODEL_IDS[MODEL], { dtype: 'q8' });
 console.log(`Model ready in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 const embed = async (texts) => (await extractor(texts, { pooling: 'mean', normalize: true })).tolist();
 
@@ -60,7 +68,9 @@ for (const [ats, slug] of BOARDS) {
   }
   const boilerplate = buildBoilerplate(postings.map((p) => p.text));
   const stripped = new Map(postings.map((p) => [p, stripBoilerplate(p.text, boilerplate)]));
-  const usable = postings.filter((p) => stripped.get(p).length >= DEFAULT_SEMANTIC.min_chars && isLikelyEnglish(stripped.get(p)));
+  const usable = postings.filter(
+    (p) => textWeight(stripped.get(p)) >= DEFAULT_SEMANTIC.min_chars && (MODEL === 'multilingual' || isLikelyEnglish(stripped.get(p))),
+  );
   const titles = new Map(usable.map((p) => [p, normalizeTitle(p.title)]));
   const vectors = new Map();
   const vec = async (p) => {
@@ -108,7 +118,7 @@ console.log(`best wrong sibling:             mean ${avg(bestWrong).toFixed(3)}, 
 console.log('threshold margin | promoted correctly | promoted WRONG (P present) | false found (P absent)');
 for (const sim of GRID_SIM) {
   for (const margin of GRID_MARGIN) {
-    const o = { ...DEFAULT_SEMANTIC, promote_min_similarity: sim, min_margin: margin };
+    const o = { ...CURRENT, promote_min_similarity: sim, min_margin: margin };
     let right = 0;
     let wrong = 0;
     let falseFound = 0;
@@ -119,13 +129,13 @@ for (const sim of GRID_SIM) {
       if (decide(c.negative, 'promote', o).pick) falseFound++;
     }
     const pct = (n) => `${((100 * n) / cases.length).toFixed(1)}%`.padStart(6);
-    const mark = sim === DEFAULT_SEMANTIC.promote_min_similarity && margin === DEFAULT_SEMANTIC.min_margin ? '  <- current' : '';
+    const mark = sim === CURRENT.promote_min_similarity && margin === CURRENT.min_margin ? '  <- current' : '';
     console.log(`  ${sim.toFixed(2)}    ${margin.toFixed(2)}  |   ${pct(right)}           |   ${pct(wrong)}                  |   ${pct(falseFound)}${mark}`);
   }
 }
 
 // Tie-break: two postings, the true one and its closest-titled sibling.
-const o = DEFAULT_SEMANTIC;
+const o = CURRENT;
 let tbRight = 0;
 let tbWrong = 0;
 for (const c of cases) {

@@ -89,7 +89,9 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
     if (!near || score > near.score) near = { posting, score, mismatch };
   }
   pool.sort((a, b) => b.score - a.score);
-  const extra = { pool: pool.slice(0, POOL_SIZE) };
+  // eligible: every rule-passing posting, for cross-language matching where
+  // title scores mean nothing (see core/semantic.js).
+  const extra = { pool: pool.slice(0, POOL_SIZE), eligible: pool };
 
   if (best) return { status: 'found', posting: best.posting, score: round(best.score), via: 'title', mismatch: null, ...extra };
   // Managerial vs individual-contributor titles are different jobs, not "similar".
