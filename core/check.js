@@ -4,13 +4,14 @@
  */
 import { resolveApplyUrl, isLinkedInHost } from './apply-url.js';
 import { detectAts } from './ats.js';
-import { lookupCompany, guessSlugs, normalizeCompanyName } from './companies.js';
+import { lookupCompany, guessSlugs, hostMatchesCompany, normalizeCompanyName } from './companies.js';
 import { matchPosting } from './matcher.js';
 import { sameTitleLanguage } from './normalize.js';
 import { detectJobBoard, jobBoardName } from './job-boards.js';
 import { compareLanguages, detectLanguage, postingLanguage } from './language.js';
 import { isGenericCareersUrl } from './careers-page.js';
 import { parseLinkedInPosted } from './linkedin-date.js';
+import { careersCandidates } from './wikidata.js';
 import { amazonSearchPage, amazonSite, phenomSearchPage } from './sources/site-search.js';
 import { oracleBoardUrl } from './sources/oracle.js';
 import { smartRecruitersBoardUrl } from './sources/smartrecruiters.js';
@@ -59,6 +60,8 @@ const WORKDAY_FULL_LIST_MAX = 100;
  * @property {(url: string) => Promise<{ status: number, ok: boolean, url: string, postings: object[],
  *   discovered?: ReturnType<import('./discover.js').discoverAts> }>} [fetchPageJobs]
  *   a careers page, the schema.org JobPostings in it and the ATS it links to
+ * @property {(company: string) => Promise<{ id: string, url: string } | null>} [findCompanyWebsite]
+ *   the company's official website (Wikidata), or null when unknown
  * @property {(site: object, query: string) => Promise<import('./sources/index.js').Posting[]>} [searchSite]
  *   a careers site's own job search (see sources/site-search.js)
  * @property {(origin: string) => Promise<Set<string> | null>} [fetchSitemapUrls]
@@ -69,6 +72,23 @@ const WORKDAY_FULL_LIST_MAX = 100;
  * @property {'en' | 'zh'} [lang]   language of reasons and notes (default English)
  * @property {() => Date} [now]
  */
+
+/** Boards worth guessing from a company name: their API tells the board's company name. */
+const GUESSES = [
+  { ats: 'greenhouse', slugs: guessSlugs },
+  { ats: 'workable', slugs: guessSlugs },
+  // SmartRecruiters ids are usually the name in PascalCase ("BoschGroup").
+  {
+    ats: 'smartrecruiters',
+    slugs: (name) => {
+      const pascal = normalizeCompanyName(name).split(' ').filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join('');
+      return pascal.length >= 2 ? [pascal, `${pascal}Group`] : [];
+    },
+  },
+];
+
+/** Name comparison for guesses: exact, but "Bosch Group" = "Bosch". */
+const sameNameKey = (name) => normalizeCompanyName(name).replace(/\b(group|holdings?|global)\b/g, '').replace(/\s+/g, ' ').trim();
 
 /**
  * Work out which board to check and how much we trust that it belongs to
@@ -97,21 +117,22 @@ async function resolveBoard(job, applyUrl, deps) {
   }
   if (fromLink) return { ref: null, source: null, note: t(deps.lang, 'ats.notInList', { ats: ATS_NAMES[fromLink.ats] }) };
 
-  // Last resort: guess a Greenhouse board from the company name, and accept it
-  // only if the board's own name is the same company.
+  // Last resort: guess a board from the company name, and accept it only if
+  // the board's own name is the same company.
   if (deps.fetchBoardName && job.company) {
-    const want = normalizeCompanyName(job.company);
-    for (const slug of guessSlugs(job.company)) {
-      let name = null;
-      try {
-        name = await deps.fetchBoardName({ ats: 'greenhouse', slug, region: null });
-      } catch (err) {
-        // Most guesses do not exist; only real failures are worth logging.
-        if (!err?.isNotFound) deps.report?.(`guess Greenhouse board "${slug}"`, err);
-        continue; // failures are not evidence of anything
-      }
-      if (name && normalizeCompanyName(name) === want) {
-        return { ref: { ats: 'greenhouse', slug, region: null, jobId: null }, source: 'guess', note: null };
+    const want = sameNameKey(job.company);
+    for (const { ats, slugs } of GUESSES) {
+      for (const slug of slugs(job.company)) {
+        const ref = { ats, slug, region: null, jobId: null };
+        let name = null;
+        try {
+          name = await deps.fetchBoardName(ref);
+        } catch (err) {
+          // Most guesses do not exist; only real failures are worth logging.
+          if (!err?.isNotFound) deps.report?.(`guess ${ATS_NAMES[ats]} board "${slug}"`, err);
+          continue; // failures are not evidence of anything
+        }
+        if (name && sameNameKey(name) === want) return { ref, source: 'guess', note: null };
       }
     }
   }
@@ -164,6 +185,13 @@ async function gatherAgeEvidence(job, ref, posting, deps) {
  */
 
 const unknown = (reason, extra = {}) => ({ status: 'unknown', reason, ...extra });
+
+/**
+ * Boards found by name (a guessed slug, or the company website from
+ * Wikidata): they can confirm a job, but a missing job is never counted,
+ * because the board might belong to another company with the same name.
+ */
+const WEAK_SOURCES = new Set(['guess', 'website']);
 
 /**
  * Is the board in the job's language? A missing title can only count when it
@@ -263,7 +291,7 @@ async function lookupListAts(job, board, deps, rules) {
   const outcome = outcomeFromMatch(match, {
     siteName,
     boardUrl,
-    canBeMissing: board.source !== 'guess' && language.same,
+    canBeMissing: !WEAK_SOURCES.has(board.source) && language.same,
     missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.guessMissing', { ats: siteName, slug: ref.slug }),
     notes: [
       postings.length === 1
@@ -323,7 +351,7 @@ async function lookupWorkday(job, board, deps, rules) {
   const outcome = outcomeFromMatch(match, {
     ...base,
     boardUrl: base.officialUrl,
-    canBeMissing: result.complete && board.source !== 'guess' && language.same,
+    canBeMissing: result.complete && !WEAK_SOURCES.has(board.source) && language.same,
     missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.workdayIncomplete'),
     notes: [t(deps.lang, result.complete ? 'note.workdayAll' : 'note.workdaySearched', { count: result.total })],
     lang: deps.lang,
@@ -347,6 +375,55 @@ async function lookupWorkday(job, board, deps, rules) {
 const REGION_WORDS =
   /\b(amea|emea|apac|apj|latam|americas|asia pacific|asia|europe|international|global|north america|japan|china|india|uk|usa|us)\b/g;
 const stripRegion = (name) => name.replace(REGION_WORDS, ' ').replace(/\s+/g, ' ').trim();
+
+/**
+ * No usable apply link: find the careers site from the company name.
+ * Wikidata gives the official website; its careers page (careers.X, jobs.X,
+ * X/careers) names the ATS or offers a job search we can ask. Only sites the
+ * user allowed are read.
+ * @returns {Promise<{ outcome?: Outcome, website?: string, blocked?: string | null } | null>}
+ */
+async function lookupByWebsite(job, deps, rules) {
+  if (!deps.findCompanyWebsite || !deps.fetchPageJobs || !deps.hasOriginPermission || !job.company) return null;
+  let site;
+  try {
+    site = await deps.findCompanyWebsite(job.company);
+  } catch (err) {
+    deps.report?.(`company website for "${job.company}" (Wikidata)`, err);
+    return null;
+  }
+  if (!site) return null;
+  let blocked = null;
+  for (const candidate of careersCandidates(site.url)) {
+    const origin = new URL(candidate).origin;
+    if (!(await deps.hasOriginPermission(origin).catch(() => false))) {
+      blocked ??= origin;
+      continue;
+    }
+    let page;
+    try {
+      page = await deps.fetchPageJobs(candidate);
+    } catch {
+      continue; // most of these hosts simply do not exist
+    }
+    if (!page.ok) continue;
+    const host = new URL(page.url).hostname;
+    const ref = page.discovered?.refs?.[0]?.ref;
+    let outcome = null;
+    if (ref) {
+      const board = { ref, source: 'website' };
+      if (ref.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
+      else if (SEARCH_ATS[ref.ats]) outcome = await lookupSearchAts(job, board, deps, rules);
+      else if (SOURCES[ref.ats]) outcome = await lookupListAts(job, board, deps, rules);
+    } else if (page.siteSearch) {
+      outcome = (await searchCareersSite(job, page.siteSearch, host, deps, rules)).outcome;
+    }
+    if (!outcome) return { website: site.url, blocked: null };
+    outcome.notes = [t(deps.lang, 'note.viaWebsite', { host, website: new URL(site.url).hostname }), ...(outcome.notes || [])];
+    return { outcome: { ...outcome, ...(ref ? { ref } : {}), viaPage: host }, website: site.url };
+  }
+  return { website: site.url, blocked };
+}
 
 /** Careers systems GhostCheck searches (no usable full-list call for large boards). */
 const SEARCH_ATS = {
@@ -405,7 +482,7 @@ async function lookupSearchAts(job, board, deps, rules) {
   const outcome = outcomeFromMatch(match, {
     ...base,
     boardUrl: base.officialUrl,
-    canBeMissing: result.complete && board.source !== 'guess' && language.same,
+    canBeMissing: result.complete && !WEAK_SOURCES.has(board.source) && language.same,
     missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.searchIncomplete', { ats: siteName }),
     notes: [t(deps.lang, result.complete ? 'note.checked' : 'note.searched', { count: result.total, ats: siteName })],
     lang: deps.lang,
@@ -431,18 +508,6 @@ export function sameCompany(a, b) {
   return x === y || x.startsWith(`${y} `) || y.startsWith(`${x} `);
 }
 
-/**
- * Does the site's domain carry the company's name? careers.fedex.com is
- * FedEx's own site even when its pages name "Federal Express Corporation".
- */
-export function hostMatchesCompany(host, company) {
-  const name = normalizeCompanyName(company);
-  const names = [name.replace(/ /g, ''), name.split(' ')[0]].filter((n) => n.length >= 3);
-  const labels = String(host || '').toLowerCase().split('.').slice(0, -1); // drop the top-level domain
-  return labels.some((label) =>
-    names.some((n) => label === n || (label.length >= 4 && n.length >= 4 && (n.startsWith(label) || label.startsWith(n)))),
-  );
-}
 
 /**
  * Ask a careers site's own job search (amazon.jobs, Phenom sites). Only a
@@ -706,6 +771,26 @@ export async function checkJob(job, deps) {
       board.note ||
         t(lang, job.applyType === 'easy' ? 'unknown.easyApply' : 'unknown.noSite'),
     );
+  }
+  // Still nothing: look for the careers site from the company name.
+  if (!board.ref && !outcome.viaPage && outcome.status === 'unknown') {
+    const byWebsite = await lookupByWebsite(job, deps, rules);
+    if (byWebsite?.website) detected.website = byWebsite.website;
+    const found = byWebsite?.outcome;
+    if (found && (found.status !== 'unknown' || !outcome.action)) {
+      outcome = found;
+      detected.ats = found.ref ? ATS_NAMES[found.ref.ats] : t(lang, 'ats.careersPage', { host: found.viaPage });
+      if (found.ref) detected.board = found.ref.ats === 'workday' ? found.ref.workday?.publicBase : found.ref.slug;
+      detected.boardSource = t(lang, 'source.website', { host: new URL(byWebsite.website).hostname });
+    } else if (byWebsite?.blocked && !outcome.action) {
+      // The careers site is known but not allowed yet: offer to allow it.
+      const host = new URL(byWebsite.blocked).hostname;
+      outcome = {
+        ...outcome,
+        notes: [...(outcome.notes || []), t(lang, 'note.websiteNeedsPermission', { host })],
+        action: { type: 'grant-origin', origin: byWebsite.blocked, label: t(lang, 'ui.allowSite', { host }), allLabel: t(lang, 'ui.allowAll') },
+      };
+    }
   }
   Object.assign(detected, outcome.detected || {});
   vars.ats = outcome.siteName || t(lang, 'fallback.site');

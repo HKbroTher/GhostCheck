@@ -10,7 +10,7 @@
   /** Fields shown under "What GhostCheck read", in this order (labels in strings.js). */
   const DETECTED_FIELDS = [
     'company', 'title', 'location', 'applyType', 'applyUrl', 'jobBoard', 'salaryText', 'descriptionChars', 'linkedinCompanySlug',
-    'ats', 'board', 'boardSource', 'boardSize', 'matchStatus', 'matchedTitle', 'closestScore', 'descriptionMatch',
+    'website', 'ats', 'board', 'boardSource', 'boardSize', 'matchStatus', 'matchedTitle', 'closestScore', 'descriptionMatch',
     'unsupportedAts', 'firstSeen', 'linkedinPosted',
   ];
 

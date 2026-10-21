@@ -616,3 +616,66 @@ test('SmartRecruiters: apply-link posting found; removed posting -> closed; empt
   assert.equal(empty.badge, 'unknown');
   assert.equal(empty.signals.apply_link_closed, null);
 });
+
+test('no usable link: the careers site is found from the company name (Wikidata -> careers page -> ATS)', async () => {
+  const fetched = [];
+  const d = (over = {}) =>
+    deps({
+      companies: buildCompanyIndex({ companies: [] }),
+      fetchBoardName: async () => null,
+      findCompanyWebsite: async (name) => (name === 'Acme' ? { id: 'Q1', url: 'https://www.acme.com/' } : null),
+      hasOriginPermission: async (origin) => origin === 'https://careers.acme.com',
+      fetchPageJobs: async (url) => {
+        fetched.push(url);
+        return {
+          status: 200,
+          ok: true,
+          url,
+          postings: [],
+          discovered: { refs: [{ ref: { ats: 'greenhouse', slug: 'acme', jobId: null, region: null }, count: 3 }], unsupported: [] },
+        };
+      },
+      ...over,
+    });
+  const easy = job({ applyType: 'easy', applyHref: null, linkedinCompanySlug: null });
+  const r = await checkJob(easy, d());
+  assert.deepEqual(fetched, ['https://careers.acme.com/']);
+  assert.equal(r.badge, 'green');
+  assert.equal(r.detected.website, 'https://www.acme.com/');
+  assert.match(r.detected.boardSource, /Wikidata/);
+  assert.ok(r.reasons.some((x) => /official website/.test(x.text)));
+
+  // Found by name only: a job missing from that board is never counted.
+  const missing = await checkJob({ ...easy, title: 'Chief Llama Officer' }, d());
+  assert.equal(missing.signals.not_found_on_official_site, null);
+
+  // Careers site not allowed yet: offer to allow it.
+  const blocked = await checkJob(easy, d({ hasOriginPermission: async () => false }));
+  assert.equal(blocked.badge, 'unknown');
+  assert.equal(blocked.action.origin, 'https://careers.acme.com');
+});
+
+test('name guesses cover Workable and SmartRecruiters, verified by the board\'s company name', async () => {
+  const tried = [];
+  const easy = job({
+    company: 'Bosch', applyType: 'easy', applyHref: null, linkedinCompanySlug: null,
+    title: 'Analista Financiero y Cuentas Por Pagar', location: 'Aguascalientes, Mexico',
+    description: 'Buscamos un analista para el equipo de cuentas por pagar. Serás responsable de las conciliaciones y de los pagos a proveedores. Tu perfil: licenciatura en finanzas y experiencia con SAP. Ofrecemos un entorno internacional y las herramientas para crecer con nosotros.',
+  });
+  const sr = await import('../core/sources/smartrecruiters.js');
+  const r = await checkJob(
+    easy,
+    deps({
+      companies: buildCompanyIndex({ companies: [] }),
+      fetchBoardName: async (ref) => {
+        tried.push(`${ref.ats}:${ref.slug}`);
+        return ref.ats === 'smartrecruiters' && ref.slug === 'BoschGroup' ? 'Bosch Group' : null;
+      },
+      searchAts: async () => ({ ...sr.parseSmartRecruitersList(readFixture('smartrecruiters-list.json'), 'BoschGroup'), complete: false }),
+      fetchAtsPosting: async () => null,
+    }),
+  );
+  assert.deepEqual(tried, ['greenhouse:bosch', 'workable:bosch', 'smartrecruiters:Bosch', 'smartrecruiters:BoschGroup']);
+  assert.equal(r.detected.ats, 'SmartRecruiters');
+  assert.equal(r.badge, 'green');
+});

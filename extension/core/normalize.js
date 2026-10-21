@@ -322,6 +322,8 @@ function citiesIntersect(a, b) {
       if (x === y) return true;
       const [short, long] = x.length < y.length ? [x, y] : [y, x];
       if (long.startsWith(short) && /[\s-]/.test(long[short.length])) return true;
+      // "Parque Industrial del Valle de Aguascalientes" (an address in the city field) = "Aguascalientes"
+      if (short.length >= 5 && long.endsWith(` ${short}`)) return true;
     }
   }
   return false;
