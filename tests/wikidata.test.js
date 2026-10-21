@@ -48,5 +48,13 @@ test('careers site candidates and the search URL', () => {
     'https://www.fedex.com/careers',
     'https://www.fedex.com/jobs',
   ]);
+  assert.deepEqual(careersCandidates('https://sakana.ai/'), [
+    'https://careers.sakana.ai/',
+    'https://jobs.sakana.ai/',
+    'https://sakana.ai/careers',
+    'https://sakana.ai/jobs',
+    'https://www.sakana.ai/careers',
+    'https://www.sakana.ai/jobs',
+  ]);
   assert.match(wikidataSearchUrl('FedEx'), /action=wbsearchentities&search=FedEx&language=en/);
 });
