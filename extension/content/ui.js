@@ -25,6 +25,7 @@
     matchStatus: 'Match result',
     matchedTitle: 'Matched posting',
     closestScore: 'Closest title score',
+    firstSeen: 'First seen',
   };
 
   const STYLE = `

@@ -10,7 +10,9 @@ const apiBase = (region) => (region === 'eu' ? 'https://boards-api.eu.greenhouse
 export const greenhouse = {
   id: 'greenhouse',
 
-  listUrl: ({ slug, region }) => `${apiBase(region)}/v1/boards/${encodeURIComponent(slug)}/jobs?content=true`,
+  /** @param {{ content?: boolean }} [opts]  content=false skips descriptions (much smaller) */
+  listUrl: ({ slug, region }, { content = true } = {}) =>
+    `${apiBase(region)}/v1/boards/${encodeURIComponent(slug)}/jobs${content ? '?content=true' : ''}`,
 
   /** Board metadata ({ name, content }); used to verify a guessed slug. */
   infoUrl: ({ slug, region }) => `${apiBase(region)}/v1/boards/${encodeURIComponent(slug)}`,
