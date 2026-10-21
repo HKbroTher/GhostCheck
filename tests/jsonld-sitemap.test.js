@@ -61,4 +61,6 @@ test('canonical urls ignore case of host, trailing slash, hash and tracking para
   assert.equal(canonicalUrl('nope'), null);
   // Seen live: apply links carry ?gh_jid=..., sitemaps do not.
   assert.equal(canonicalUrl('https://careers.acme.com/positions/77?gh_jid=77'), canonicalUrl('https://careers.acme.com/positions/77/'));
+  // ...but on a generic page the id is what identifies the job.
+  assert.notEqual(canonicalUrl('https://acme.com/careers/job?gh_jid=77'), canonicalUrl('https://acme.com/careers/job'));
 });
