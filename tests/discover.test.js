@@ -57,3 +57,8 @@ test('workable links: apply page, account subdomain and widget API', () => {
   assert.equal(refs[0].ref.ats, 'workable');
   assert.deepEqual(unsupported, []);
 });
+
+test('a malformed % escape anywhere in the page does not stop discovery', () => {
+  const html = '<a href="https://www.amazon.jobs/en/teams/100%-remote">x</a><a href="https://jobs.lever.co/acme/0e4c8d2a-1b2c-4d3e-8f90-123456789abc">Apply</a>';
+  assert.equal(discoverAts(html).refs[0].ref.slug, 'acme');
+});

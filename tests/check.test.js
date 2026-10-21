@@ -313,12 +313,26 @@ test('self-hosted: JSON-LD JobPosting confirms the job', async () => {
 });
 
 test('self-hosted: JSON-LD from a different company is not proof', async () => {
+  const href = 'https://jobs.staffingpartners.com/123';
   const r = await checkJob(
-    job({ applyHref: PAGE_HREF }),
-    pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [ldPosting({ orgName: 'Staffing Partners LLC' })] }) }),
+    job({ applyHref: href }),
+    pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: href, postings: [ldPosting({ orgName: 'Staffing Partners LLC' })] }) }),
   );
   assert.equal(r.badge, 'unknown');
   assert.match(r.reasons[0].text, /Staffing Partners/);
+});
+
+test("self-hosted: the company's own domain is trusted whatever legal entity it names (FedEx)", async () => {
+  const href = 'https://careers.fedex.com/job/123';
+  const page = async () => ({ status: 200, ok: true, url: href, postings: [ldPosting({ orgName: 'Federal Express Corporation AMEA' })] });
+  const r = await checkJob(job({ company: 'FedEx', applyHref: href }), pageDeps({ fetchPageJobs: page }));
+  assert.equal(r.badge, 'green');
+  // A regional entity of the same company name is the same company on any domain.
+  const r2 = await checkJob(
+    job({ company: 'Federal Express', applyHref: 'https://jobs.example-hr.com/1' }),
+    pageDeps({ fetchPageJobs: async () => ({ ...(await page()), url: 'https://jobs.example-hr.com/1' }) }),
+  );
+  assert.equal(r2.badge, 'green');
 });
 
 test('self-hosted: 404 apply page -> closed; 5xx -> unknown', async () => {
@@ -386,4 +400,52 @@ test('permission prompt offers this site or all careers sites', async () => {
   const r = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ hasOriginPermission: async () => false }));
   assert.equal(r.action.label, 'Allow checking careers.acme.com');
   assert.equal(r.action.allLabel, "Allow all careers sites (don't ask again)");
+});
+
+test('job board apply link: never read as the official site', async () => {
+  const href = 'https://www.liepin.com/job/1970000000.shtml';
+  let fetched = false;
+  const r = await checkJob(
+    job({ company: 'Unlisted Co', linkedinCompanySlug: null, applyHref: href }),
+    pageDeps({
+      fetchPageJobs: async () => {
+        fetched = true;
+        return { status: 200, ok: true, url: href, postings: [ldPosting()] };
+      },
+    }),
+  );
+  assert.equal(fetched, false, 'the job board page is not read');
+  assert.equal(r.badge, 'unknown');
+  assert.equal(r.signals.found_on_official_site, null);
+  assert.match(r.reasons[0].text, /Liepin \(猎聘\), a job board/);
+  assert.equal(r.detected.jobBoard, 'Liepin (猎聘)');
+});
+
+test('job board apply link: the company is still checked through companies.json', async () => {
+  const d = deps();
+  const r = await checkJob(job({ applyHref: 'https://jp.indeed.com/viewjob?jk=1' }), d);
+  assert.equal(d.calls[0].slug, 'acme');
+  assert.equal(r.badge, 'green');
+  assert.ok(r.reasons.some((x) => /Indeed, a job board/.test(x.text)));
+});
+
+test('a malformed % escape in the apply link does not break the check', async () => {
+  const href = 'https://www.amazon.jobs/en/jobs/123/100%-remote-engineer';
+  const r = await checkJob(job({ applyHref: href }), pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: href, postings: [ldPosting()] }) }));
+  assert.equal(r.badge, 'green');
+});
+
+test('failed lookups are reported for the console, and still only give ⚪', async () => {
+  const r = await checkJob(
+    job({ applyHref: PAGE_HREF }),
+    pageDeps({
+      fetchPageJobs: async () => {
+        throw new HttpError('timeout', 'Request timed out after 12000 ms');
+      },
+    }),
+  );
+  assert.equal(r.badge, 'unknown');
+  assert.deepEqual(r.errors, [{ step: `careers page ${PAGE_HREF}`, kind: 'timeout', status: null, message: 'Request timed out after 12000 ms' }]);
+  const ok = await checkJob(job(), deps());
+  assert.equal(ok.errors, undefined);
 });
