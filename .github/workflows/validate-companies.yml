@@ -1,0 +1,29 @@
+name: Validate companies.json
+
+# Checks every board in data/companies.json against the live ATS APIs.
+on:
+  push:
+    paths:
+      - data/companies.json
+      - core/sources/**
+      - core/http.js
+      - scripts/validate-companies.mjs
+  pull_request:
+    paths:
+      - data/companies.json
+      - core/sources/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/validate-companies.mjs

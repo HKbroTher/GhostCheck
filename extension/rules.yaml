@@ -1,0 +1,86 @@
+# GhostCheck scoring rules.
+#
+# Every signal is true, false or unknown for a given job. Only signals that
+# are TRUE add their weight to the score: positive signals add, negative
+# signals subtract. Unknown never counts, so a failed request can never make
+# a job look worse.
+#
+# Edit this file and open a pull request to change how GhostCheck scores jobs.
+# After editing, run `node scripts/sync.mjs` and `node --test`.
+#
+# Reason text placeholders (filled in when available):
+#   {company} {ats} {days} {team} {phrase} {salary} {matchedTitle}
+
+version: 1
+
+# Score thresholds. Anything between red.max_score and green.min_score is yellow.
+badges:
+  green:
+    min_score: 3
+  red:
+    max_score: -3
+
+# The badge is ⚪ "Can't verify" unless at least one of these signals is known
+# (true or false). Description-only signals are too weak to judge a job alone.
+require_any_known:
+  - found_on_official_site
+  - not_found_on_official_site
+  - apply_link_closed
+
+# How many reasons the card shows (3-5 recommended).
+max_reasons: 5
+
+# Title matching thresholds (0-1). See core/matcher.js.
+matching:
+  title_match: 0.8     # at or above: same job (if level and location agree)
+  title_similar: 0.6   # at or above: "a similar job is listed" (neutral, never negative)
+
+# Age thresholds in days.
+age:
+  recent_days: 30
+  old_days: 90
+
+signals:
+  # ---------------------------------------------------------------- positive
+  - id: found_on_official_site
+    type: positive
+    weight: 3
+    reason: "This job is listed on {company}'s own careers site."
+
+  - id: posted_recently
+    type: positive
+    weight: 1
+    reason: "It was first published {days} days ago (within the last 30 days)."
+
+  - id: salary_listed
+    type: positive
+    weight: 1
+    reason: "The posting states a pay range ({salary})."
+
+  - id: specific_team
+    type: positive
+    weight: 1
+    reason: "The description names a specific team or project ({team})."
+
+  # ---------------------------------------------------------------- negative
+  # Only counted when the full list of open jobs was fetched successfully
+  # from a board that is known to belong to this company.
+  - id: not_found_on_official_site
+    type: negative
+    weight: 3
+    reason: "We could not find this job among {company}'s open jobs on {ats}."
+
+  - id: apply_link_closed
+    type: negative
+    weight: 3
+    reason: "The apply link points to a job that is no longer listed on {company}'s careers site."
+
+  - id: posted_long_ago
+    type: negative
+    weight: 2
+    reason: "It has been listed for {days} days (more than 90 days)."
+
+  - id: generic_template
+    type: negative
+    weight: 1
+    reason: "The description reads like a generic or pipeline posting (\"{phrase}\")."
