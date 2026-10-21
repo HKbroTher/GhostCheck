@@ -99,7 +99,20 @@
       }
       await new Promise((r) => setTimeout(r, READY_RETRY_MS));
     }
-    // The page never looked like a job; stay silent rather than guess.
+    // The page never looked like a job: show no badge rather than guess, but
+    // leave a diagnostic so users can report a LinkedIn layout change.
+    if (token === state.token) {
+      const { titleEl, data, method } = extractJob();
+      console.info('[GhostCheck] Could not recognise this job page (LinkedIn layout may have changed).', {
+        jobId,
+        method,
+        tabTitle: document.title,
+        titleFound: !!titleEl,
+        title: data.title,
+        company: data.company,
+        url: window.location.href,
+      });
+    }
   }
 
   /** Called on any URL or DOM change. Cheap when nothing changed. */

@@ -12,6 +12,7 @@ on:
       - extension/offscreen/**
       - extension/vendor/transformers/**
       - extension/background/**
+      - extension/content/**
       - .github/workflows/semantic.yml
   workflow_dispatch:
 
@@ -42,6 +43,11 @@ jobs:
           node-version: 22
       - run: npm install --no-save playwright@1.56.1
       - run: npx playwright install --with-deps chromium
-      - run: node tests/e2e/model.e2e.mjs
+      - name: LinkedIn page reading (mock layouts)
+        run: node tests/e2e/layout.e2e.mjs
+        env:
+          PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS: '1'
+      - name: Description model
+        run: node tests/e2e/model.e2e.mjs
         env:
           PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS: '1'
