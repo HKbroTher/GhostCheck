@@ -143,7 +143,9 @@ try {
   await ctx.unroute('https://www.linkedin.com/**');
   await ctx.route('https://www.linkedin.com/**', (r) => r.fulfill({ contentType: 'text/html', body: jaPage }));
   const jp = await ctx.newPage();
-  await jp.goto('https://www.linkedin.com/jobs/view/4243/');
+  // Same job id as the page's title link, so the pane check accepts it; the
+  // result is cached per model, so this is a fresh check.
+  await jp.goto('https://www.linkedin.com/jobs/view/4242/');
   await jp.waitForFunction(
     () => {
       const b = document.querySelector('ghostcheck-badge')?.shadowRoot.querySelector('.badge')?.dataset.badge;
