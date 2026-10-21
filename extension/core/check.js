@@ -10,6 +10,7 @@ import { sameTitleLanguage } from './normalize.js';
 import { detectJobBoard, jobBoardName } from './job-boards.js';
 import { compareLanguages, detectLanguage, postingLanguage } from './language.js';
 import { isGenericCareersUrl } from './careers-page.js';
+import { parseLinkedInPosted } from './linkedin-date.js';
 import { amazonSearchPage, amazonSite, phenomSearchPage } from './sources/site-search.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
@@ -574,6 +575,7 @@ export async function checkJob(job, deps) {
     specific_team: team.value,
     generic_template: template.value,
     reposted_to_look_new: null,
+    reposted_on_linkedin: null,
   };
   const lang = deps.lang || 'en';
   const vars = {
@@ -652,6 +654,17 @@ export async function checkJob(job, deps) {
       // Only judged when the careers site gives its own date to compare.
       signals.reposted_to_look_new = age.atsDays === null ? null : a.refreshed;
       vars.atsDays = age.atsDays;
+      // LinkedIn shows the old job as new: re-posted there to look fresh.
+      const onLinkedIn = parseLinkedInPosted(job.metaText);
+      if (onLinkedIn) {
+        detected.linkedinPosted = `${onLinkedIn.reposted ? 'reposted ' : ''}${onLinkedIn.days} d`;
+        vars.linkedinDays = onLinkedIn.days;
+        signals.reposted_on_linkedin =
+          signals.reposted_to_look_new !== true &&
+          age.days > rules.age.old_days &&
+          onLinkedIn.days <= rules.age.recent_days &&
+          age.days - onLinkedIn.days >= rules.age.linkedin_gap_days;
+      }
     }
   } else if (outcome.status === 'closed') {
     signals.found_on_official_site = false;

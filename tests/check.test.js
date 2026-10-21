@@ -529,3 +529,23 @@ test('Phenom careers page: found by title through the site search; a miss is nev
   assert.match(missed.reasons[0].text, /job search did not return this job/);
   assert.equal(missed.officialUrl, 'https://careers.mastercard.com/us/en/search-results?keywords=Head+of+Payments+Research');
 });
+
+test('an old job shown as new on LinkedIn: reposted_on_linkedin, never together with reposted_to_look_new', async () => {
+  const old = ghPostings.map((p) => (p.id === '5551234' ? { ...p, createdAt: '2026-03-01T00:00:00Z', createdAtExact: true } : p));
+  const check = (metaText) => checkJob(job({ metaText }), deps({ fetchPostings: async () => old }));
+
+  const reposted = await check('San Francisco, CA · Reposted 3 days ago · 40 applicants');
+  assert.equal(reposted.signals.posted_long_ago, true);
+  assert.equal(reposted.signals.reposted_on_linkedin, true);
+  assert.ok(reposted.reasons.some((x) => /LinkedIn shows it as posted 3 days ago/.test(x.text)));
+  assert.equal(reposted.detected.linkedinPosted, 'reposted 3 d');
+
+  // LinkedIn agrees that it is old: nothing extra.
+  assert.equal((await check('San Francisco, CA · 6 months ago · 40 applicants')).signals.reposted_on_linkedin, false);
+  // No date on the page: unknown.
+  assert.equal((await check('San Francisco, CA')).signals.reposted_on_linkedin, null);
+  // A recent job is never affected.
+  const fresh = ghPostings.map((p) => (p.id === '5551234' ? { ...p, createdAt: '2026-10-10T00:00:00Z', createdAtExact: true } : p));
+  const r = await checkJob(job({ metaText: 'SF · 2 days ago' }), deps({ fetchPostings: async () => fresh }));
+  assert.equal(r.signals.reposted_on_linkedin, false);
+});

@@ -64,6 +64,7 @@ const en = {
   'field.unsupportedAts': 'Job system (not supported yet)',
   'field.jobBoard': 'Apply link goes to (job board)',
   'field.firstSeen': 'First seen',
+  'field.linkedinPosted': 'LinkedIn shows it as posted',
 
   // errors shown by the page script
   'error.reloaded': 'GhostCheck was updated or reloaded. Refresh this page to check again.',
@@ -236,6 +237,7 @@ const zh = {
   'field.unsupportedAts': '招聘系统（暂不支持）',
   'field.jobBoard': '申请链接指向（第三方平台）',
   'field.firstSeen': '首次出现',
+  'field.linkedinPosted': 'LinkedIn 显示的发布时间',
 
   'error.reloaded': 'GhostCheck 已更新或重新加载，请刷新本页面后再检查。',
   'error.failed': 'GhostCheck 未能完成检查。这不代表这个职位有问题。',

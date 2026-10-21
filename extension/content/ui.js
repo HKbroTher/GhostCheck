@@ -11,7 +11,7 @@
   const DETECTED_FIELDS = [
     'company', 'title', 'location', 'applyType', 'applyUrl', 'jobBoard', 'salaryText', 'descriptionChars', 'linkedinCompanySlug',
     'ats', 'board', 'boardSource', 'boardSize', 'matchStatus', 'matchedTitle', 'closestScore', 'descriptionMatch',
-    'unsupportedAts', 'firstSeen',
+    'unsupportedAts', 'firstSeen', 'linkedinPosted',
   ];
 
   /**
