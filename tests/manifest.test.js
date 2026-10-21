@@ -16,6 +16,7 @@ test('manifest grants every host the extension calls', () => {
 test('workday hosts and optional careers-site access are declared', () => {
   assert.ok(manifest.host_permissions.includes('https://*.myworkdayjobs.com/*'));
   assert.ok(manifest.host_permissions.includes('https://*.myworkdaysite.com/*'));
+  assert.ok(manifest.host_permissions.includes('https://*.oraclecloud.com/*'));
   assert.deepEqual(manifest.optional_host_permissions, ['https://*/*']);
 });
 

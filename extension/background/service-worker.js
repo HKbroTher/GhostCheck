@@ -16,6 +16,20 @@ import { workday, WORKDAY_PAGE_SIZE } from '../core/sources/workday.js';
 import { extractJobPostings } from '../core/jsonld.js';
 import { discoverAts } from '../core/discover.js';
 import { amazonSearchUrl, parseAmazon, parsePhenom, phenomSearchBody, phenomSite } from '../core/sources/site-search.js';
+import {
+  ORACLE_FULL_LIST_MAX,
+  oracleBoardUrl,
+  oracleDetailUrl,
+  oracleSearchUrl,
+  parseOracleDetail,
+  parseOracleSearch,
+} from '../core/sources/oracle.js';
+import {
+  parseSmartRecruitersDetail,
+  parseSmartRecruitersList,
+  smartRecruitersDetailUrl,
+  smartRecruitersListUrl,
+} from '../core/sources/smartrecruiters.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
@@ -228,6 +242,93 @@ async function fetchWorkdayDetail(ref, externalPath) {
     if (posting) await cacheSet(key, posting, TTL.workday);
     return posting;
   });
+}
+
+// --------------------------------------------------------- Oracle Recruiting
+
+/**
+ * The API wants the site number (CX_1001); links sometimes carry a site
+ * name instead (/sites/careers). The site's page names its number.
+ */
+async function oracleSite(ref) {
+  const o = ref.oracle;
+  if (/^CX(_\d+)?$/i.test(o.site)) return o;
+  const key = `oraclesite:${o.origin}/${o.site}`;
+  const cached = await cacheGet(key);
+  if (cached) return cached;
+  const page = await fetchText(oracleBoardUrl(o), { timeoutMs: 12000, maxBytes: 2_000_000, limiter });
+  const site = page.text.match(/siteNumber\W{1,6}([A-Za-z0-9_]+)/)?.[1] || o.site;
+  const resolved = { origin: o.origin, site };
+  await cacheSet(key, resolved, TTL.board);
+  return resolved;
+}
+
+/** Small sites: every job; large ones: a title search. */
+async function searchOracle(ref, title) {
+  const o = await oracleSite(ref);
+  const key = `oracle:${o.origin}/${o.site}`;
+  let board = await cacheGet(key);
+  if (!board) {
+    board = parseOracleSearch(await fetchJson(oracleSearchUrl(o, '', ORACLE_FULL_LIST_MAX), { timeoutMs: 15000, retries: 1, limiter }), o);
+    await cacheSet(key, board, TTL.board);
+  }
+  if (board.total <= board.postings.length) return { postings: board.postings, complete: true, total: board.total };
+  const qkey = `oraclesearch:${o.origin}/${o.site}:${title.toLowerCase()}`;
+  let found = await cacheGet(qkey);
+  if (!found) {
+    found = parseOracleSearch(await fetchJson(oracleSearchUrl(o, title, 50), { timeoutMs: 15000, retries: 1, limiter }), o).postings;
+    await cacheSet(qkey, found, TTL.workday);
+  }
+  return { postings: found, complete: false, total: board.total };
+}
+
+/** SmartRecruiters: the first page is the whole board when it is small; otherwise a title search. */
+async function searchSmartRecruiters(ref, title) {
+  const key = `srboard:${ref.slug}`;
+  let board = await cacheGet(key);
+  if (!board) {
+    board = parseSmartRecruitersList(await fetchJson(smartRecruitersListUrl(ref.slug), { timeoutMs: 15000, retries: 1, limiter }), ref.slug);
+    await cacheSet(key, board, TTL.board);
+  }
+  if (board.total <= board.postings.length) return { postings: board.postings, complete: true, total: board.total };
+  const qkey = `srsearch:${ref.slug}:${title.toLowerCase()}`;
+  let found = await cacheGet(qkey);
+  if (!found) {
+    found = parseSmartRecruitersList(await fetchJson(smartRecruitersListUrl(ref.slug, { q: title }), { timeoutMs: 15000, retries: 1, limiter }), ref.slug).postings;
+    await cacheSet(qkey, found, TTL.workday);
+  }
+  return { postings: found, complete: false, total: board.total };
+}
+
+/** One SmartRecruiters posting, or null once removed (404). */
+async function fetchSmartRecruitersPosting(ref, id) {
+  const key = `srposting:${ref.slug}:${id}`;
+  const cached = await cacheGet(key);
+  if (cached !== undefined) return cached.posting;
+  let posting;
+  try {
+    posting = parseSmartRecruitersDetail(await fetchJson(smartRecruitersDetailUrl(ref.slug, id), { timeoutMs: 15000, retries: 1, limiter }), ref.slug);
+  } catch (err) {
+    if (!err?.isNotFound) throw err;
+    posting = null;
+  }
+  await cacheSet(key, { posting }, TTL.workday);
+  return posting;
+}
+
+/** Searchable careers systems (see lookupSearchAts in core/check.js). */
+const searchAts = (ref, title) => (ref.ats === 'oracle' ? searchOracle(ref, title) : searchSmartRecruiters(ref, title));
+const fetchAtsPosting = (ref, id) => (ref.ats === 'oracle' ? fetchOracleDetail(ref, id) : fetchSmartRecruitersPosting(ref, id));
+
+/** One Oracle posting, or null when the site no longer lists it. */
+async function fetchOracleDetail(ref, id) {
+  const o = await oracleSite(ref);
+  const key = `oracledetail:${o.origin}/${o.site}:${id}`;
+  const cached = await cacheGet(key);
+  if (cached !== undefined) return cached.posting;
+  const posting = parseOracleDetail(await fetchJson(oracleDetailUrl(o, id), { timeoutMs: 15000, retries: 1, limiter }), o);
+  await cacheSet(key, { posting }, TTL.workday);
+  return posting;
 }
 
 // ------------------------------------------------------- self-hosted pages
@@ -490,6 +591,8 @@ async function handleCheck(rawJob, force, pageLang) {
     fetchPageJobs,
     fetchSitemapUrls,
     searchSite,
+    searchAts,
+    fetchAtsPosting,
   };
   const result = await checkJob(job, deps);
   if (result.errors) console.warn('[GhostCheck] lookups failed', job.title, result.errors);

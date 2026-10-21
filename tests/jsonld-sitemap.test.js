@@ -64,3 +64,26 @@ test('canonical urls ignore case of host, trailing slash, hash and tracking para
   // ...but on a generic page the id is what identifies the job.
   assert.notEqual(canonicalUrl('https://acme.com/careers/job?gh_jid=77'), canonicalUrl('https://acme.com/careers/job'));
 });
+
+test('microdata JobPosting (SAP SuccessFactors career sites)', () => {
+  // Trimmed from a careers.underarmour.com job page.
+  const html = `<div itemscope itemtype="http://schema.org/JobPosting">
+    <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place"><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+    <meta itemprop="addressLocality" content="Portland"><meta itemprop="addressRegion" content="OR"><meta itemprop="addressCountry" content="US"></span></span>
+    <meta itemprop="datePosted" content="Sat Oct 17 07:00:00 UTC 2026"><meta itemprop="hiringOrganization" content="Under Armour">
+    <h1><span itemprop="title" data-careersite-propertyid="title" class="rtltextaligneligible">Professional, FEA Engineering &amp; Footwear Innovation</span></h1>
+    <span itemprop="description">...</span></div>`;
+  assert.deepEqual(extractJobPostings(html), [
+    {
+      title: 'Professional, FEA Engineering & Footwear Innovation',
+      datePosted: '2026-10-17T07:00:00.000Z',
+      validThrough: null,
+      orgName: 'Under Armour',
+      location: 'Portland, OR, US',
+      url: null,
+      text: '',
+      salary: null,
+    },
+  ]);
+  assert.deepEqual(extractJobPostings('<p itemprop="title">Not a job page</p>'), []);
+});

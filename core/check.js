@@ -12,6 +12,8 @@ import { compareLanguages, detectLanguage, postingLanguage } from './language.js
 import { isGenericCareersUrl } from './careers-page.js';
 import { parseLinkedInPosted } from './linkedin-date.js';
 import { amazonSearchPage, amazonSite, phenomSearchPage } from './sources/site-search.js';
+import { oracleBoardUrl } from './sources/oracle.js';
+import { smartRecruitersBoardUrl } from './sources/smartrecruiters.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
@@ -24,7 +26,15 @@ import { workday } from './sources/workday.js';
 import { canonicalUrl } from './sitemap.js';
 import { refineMatch } from './semantic.js';
 
-const ATS_NAMES = { greenhouse: 'Greenhouse', lever: 'Lever', ashby: 'Ashby', workday: 'Workday', workable: 'Workable' };
+const ATS_NAMES = {
+  greenhouse: 'Greenhouse',
+  lever: 'Lever',
+  ashby: 'Ashby',
+  workday: 'Workday',
+  workable: 'Workable',
+  oracle: 'Oracle Recruiting',
+  smartrecruiters: 'SmartRecruiters',
+};
 /** Workday boards up to this size are paged through completely. */
 const WORKDAY_FULL_LIST_MAX = 100;
 
@@ -79,6 +89,7 @@ async function resolveBoard(job, applyUrl, deps) {
         region: entry.region,
         jobId: fromLink?.jobId ?? null,
         ...(entry.workday ? { workday: entry.workday } : {}),
+        ...(entry.oracle ? { oracle: entry.oracle } : {}),
       },
       source: 'companies',
       note: null,
@@ -337,6 +348,81 @@ const REGION_WORDS =
   /\b(amea|emea|apac|apj|latam|americas|asia pacific|asia|europe|international|global|north america|japan|china|india|uk|usa|us)\b/g;
 const stripRegion = (name) => name.replace(REGION_WORDS, ' ').replace(/\s+/g, ' ').trim();
 
+/** Careers systems GhostCheck searches (no usable full-list call for large boards). */
+const SEARCH_ATS = {
+  oracle: { boardUrl: (ref) => oracleBoardUrl(ref.oracle) },
+  smartrecruiters: { boardUrl: (ref) => smartRecruitersBoardUrl(ref.slug) },
+};
+
+/**
+ * Oracle Recruiting and SmartRecruiters: the posting from the apply link by
+ * id, otherwise a title search. Like Workday, only small boards are listed
+ * completely, so only those can say "not found".
+ */
+async function lookupSearchAts(job, board, deps, rules) {
+  const { ref } = board;
+  const siteName = ATS_NAMES[ref.ats];
+  if (!deps.searchAts) return unknown(t(deps.lang, 'ats.unsupported', { ats: siteName }));
+  const base = { siteName, officialUrl: SEARCH_ATS[ref.ats].boardUrl(ref) };
+
+  // Oracle's own cloud is in the manifest; a company domain needs the user's permission.
+  if (ref.ats === 'oracle' && !/\.oraclecloud\.com$/i.test(new URL(ref.oracle.origin).hostname) && deps.hasOriginPermission) {
+    const { origin } = ref.oracle;
+    const host = new URL(origin).hostname;
+    if (!(await deps.hasOriginPermission(origin).catch(() => false))) {
+      return unknown(t(deps.lang, 'unknown.needPermission', { host }), {
+        ...base,
+        action: { type: 'grant-origin', origin, label: t(deps.lang, 'ui.allowSite', { host }), allLabel: t(deps.lang, 'ui.allowAll') },
+      });
+    }
+  }
+
+  let result;
+  try {
+    result = await deps.searchAts(ref, job.title);
+  } catch (err) {
+    deps.report?.(`${siteName} board ${ref.slug}`, err);
+    return unknown(t(deps.lang, 'unknown.unreachable', { ats: siteName }), base);
+  }
+  // An empty answer may also mean a wrong company id: never evidence.
+  if (!result.total) {
+    return unknown(t(deps.lang, 'unknown.emptyBoard', { company: job.company || t(deps.lang, 'fallback.Company'), ats: siteName }), base);
+  }
+
+  if (ref.jobId && deps.fetchAtsPosting) {
+    try {
+      const posting = await deps.fetchAtsPosting(ref, ref.jobId);
+      if (posting) return { ...base, status: 'found', posting, officialUrl: posting.url, detected: { matchStatus: 'found (apply link)' } };
+      // The board answers (checked above) but no longer has this posting.
+      return { ...base, status: 'closed', detected: { matchStatus: 'apply link removed' } };
+    } catch (err) {
+      deps.report?.(`${siteName} posting`, err);
+    }
+  }
+
+  const match = matchPosting(job, result.postings, {}, rules.matching);
+  const language = languageCheck(job, result.postings, siteName, deps.lang);
+  const outcome = outcomeFromMatch(match, {
+    ...base,
+    boardUrl: base.officialUrl,
+    canBeMissing: result.complete && board.source !== 'guess' && language.same,
+    missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.searchIncomplete', { ats: siteName }),
+    notes: [t(deps.lang, result.complete ? 'note.checked' : 'note.searched', { count: result.total, ats: siteName })],
+    lang: deps.lang,
+  });
+  if (!language.same && outcome.status === 'unknown') outcome.reason = language.reason;
+  // Search results carry a short teaser only: fetch the full posting.
+  if (outcome.status === 'found' && deps.fetchAtsPosting) {
+    try {
+      const detail = await deps.fetchAtsPosting(ref, outcome.posting.id);
+      if (detail) outcome.posting = { ...outcome.posting, ...detail };
+    } catch (err) {
+      deps.report?.(`${siteName} posting details`, err);
+    }
+  }
+  return outcome;
+}
+
 /** Same company, allowing legal suffixes, regional entities and "Acme" vs "Acme Robotics". */
 export function sameCompany(a, b) {
   const x = stripRegion(normalizeCompanyName(a));
@@ -490,6 +576,7 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
     const board = { ref: discovered, source: 'careers_page' };
     let outcome = null;
     if (discovered.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
+    else if (SEARCH_ATS[discovered.ats]) outcome = await lookupSearchAts(job, board, deps, rules);
     else if (SOURCES[discovered.ats]) outcome = await lookupListAts(job, board, deps, rules);
     if (outcome) {
       outcome.notes = [t(deps.lang, 'note.usesAts', { host, ats: ATS_NAMES[discovered.ats] }), ...(outcome.notes || [])];
@@ -599,6 +686,7 @@ export async function checkJob(job, deps) {
     detected.board = board.ref.ats === 'workday' ? board.ref.workday?.publicBase : board.ref.slug;
     detected.boardSource = t(lang, { apply_link: 'source.applyLink', companies: 'source.companies', guess: 'source.guess' }[board.source]);
     if (board.ref.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
+    else if (SEARCH_ATS[board.ref.ats]) outcome = await lookupSearchAts(job, board, deps, rules);
     else if (SOURCES[board.ref.ats]) outcome = await lookupListAts(job, board, deps, rules);
     else outcome = unknown(t(lang, 'ats.unsupported', { ats: ATS_NAMES[board.ref.ats] }));
   } else if (jobBoard) {
