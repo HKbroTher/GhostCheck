@@ -9,8 +9,10 @@
  * @property {string | null} slug     board identifier; null if only the job id is known
  * @property {string | null} jobId    posting id, when the URL points at one posting
  * @property {string | null} region   'eu' for EU-hosted boards, else null
- * @property {object} [workday]       { tenant, host, site } for Workday
+ * @property {ReturnType<typeof workdayRef>} [workday]  Workday site and API URLs
  */
+
+import { workdayRef } from './sources/workday.js';
 
 const SLUG_RE = /^[a-z0-9][a-z0-9._-]*$/i;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -67,17 +69,32 @@ export function detectAts(rawUrl) {
     return { ats: 'ashby', slug, jobId, region: null };
   }
 
-  // Workday: {tenant}.wd{N}.myworkdayjobs.com/[{locale}/]{site}/job/...
-  const wd = host.match(/^([a-z0-9-]+)\.(wd\d+)\.myworkdayjobs\.com$/);
-  if (wd) {
-    const rest = /^[a-z]{2}-[A-Z]{2}$/.test(parts[0] || '') ? parts.slice(1) : parts;
-    const site = rest[0] && rest[0] !== 'job' ? rest[0] : null;
+  // Workday: {tenant}.wd{N}.myworkdayjobs.com/[{locale}/]{site}/job/{...}
+  //          wd{N}.myworkdaysite.com/[{locale}/]recruiting/{tenant}/{site}/job/{...}
+  const wdJobs = host.match(/^([a-z0-9-]+)\.wd\d+\.myworkdayjobs\.com$/);
+  const wdSite = /^wd\d+\.myworkdaysite\.com$/.test(host);
+  if (wdJobs || wdSite) {
+    let rest = /^[a-z]{2}-[a-z]{2}$/i.test(parts[0] || '') ? parts.slice(1) : parts;
+    let tenant = wdJobs ? wdJobs[1] : null;
+    if (wdSite) {
+      if (rest[0] !== 'recruiting' || !rest[1]) return null;
+      tenant = rest[1].toLowerCase();
+      rest = rest.slice(2);
+    }
+    const site = rest[0] && rest[0] !== 'job' && /^[A-Za-z0-9_-]+$/.test(rest[0]) ? rest[0] : null;
+    // The posting path as the API names it: /job/{location}/{title}_{reqId}
+    const jobIdx = rest.indexOf('job');
+    let jobPath = null;
+    if (site && jobIdx === 1 && rest.length >= 4) {
+      const segs = rest.slice(jobIdx, jobIdx + 3);
+      jobPath = `/${segs.map(encodeURIComponent).join('/')}`;
+    }
     return {
       ats: 'workday',
-      slug: wd[1],
-      jobId: null,
+      slug: tenant,
+      jobId: jobPath,
       region: null,
-      workday: { tenant: wd[1], host, site },
+      workday: workdayRef({ tenant, host, site }),
     };
   }
 

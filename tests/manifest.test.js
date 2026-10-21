@@ -13,6 +13,12 @@ test('manifest grants every host the extension calls', () => {
   for (const h of [...SOURCE_HOSTS, new URL(RAW_BASE).host, new URL(waybackQueryUrl('x')).host]) assert.ok(hosts.has(h), `missing host permission: ${h}`);
 });
 
+test('workday hosts and optional careers-site access are declared', () => {
+  assert.ok(manifest.host_permissions.includes('https://*.myworkdayjobs.com/*'));
+  assert.ok(manifest.host_permissions.includes('https://*.myworkdaysite.com/*'));
+  assert.deepEqual(manifest.optional_host_permissions, ['https://*/*']);
+});
+
 test('every file referenced by the manifest exists', () => {
   const files = [
     manifest.background.service_worker,

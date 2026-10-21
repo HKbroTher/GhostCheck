@@ -23,7 +23,21 @@
     lastResult: null,
   };
 
-  const ui = new globalThis.GhostCheckUI({ onRecheck: () => runCheck(state.jobId, { force: true }) });
+  const ui = new globalThis.GhostCheckUI({
+    onRecheck: () => runCheck(state.jobId, { force: true }),
+    onAction: (action) => {
+      if (action.type === 'grant-origin') {
+        chrome.runtime.sendMessage({ type: 'ghostcheck:grant-origin', origin: action.origin }).catch(() => {});
+      }
+    },
+  });
+
+  // The permission page asks us to check again once access was granted.
+  chrome.runtime.onMessage.addListener((message, sender) => {
+    if (sender.id === chrome.runtime.id && message?.type === 'ghostcheck:recheck' && state.jobId) {
+      runCheck(state.jobId, { force: true });
+    }
+  });
 
   /** Ask the service worker; never throws. */
   async function requestCheck(job, force) {

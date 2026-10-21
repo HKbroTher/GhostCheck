@@ -81,6 +81,8 @@
     dd { margin: 0; overflow-wrap: anywhere; }
     .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px;
             border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px; color: var(--muted); }
+    .action { display: block; margin: 0 0 10px; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+              font: 600 13px/18px -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; color: #fff; background: var(--link); border: 0; }
     .recheck { all: unset; cursor: pointer; color: var(--link); font-weight: 600; white-space: nowrap; }
   `;
 
@@ -125,8 +127,9 @@
   const MARKS = { positive: '+', negative: '−', neutral: '•' };
 
   class GhostCheckUI {
-    constructor({ onRecheck } = {}) {
+    constructor({ onRecheck, onAction } = {}) {
       this.onRecheck = onRecheck || (() => {});
+      this.onAction = onAction || (() => {});
       this.state = LOADING;
       this.badge = null; // { host, shadow, button }
       this.card = null; // { host, shadow }
@@ -277,6 +280,13 @@
           );
         }
         card.append(list);
+
+        // Something the user can do to make the check possible.
+        if (s.action?.type === 'grant-origin' && typeof s.action.origin === 'string') {
+          const btn = el('button', { class: 'action', type: 'button' }, s.action.label || 'Allow checking this site');
+          btn.addEventListener('click', () => this.onAction(s.action));
+          card.append(btn);
+        }
 
         if (s.officialUrl && isSafeHttpUrl(s.officialUrl)) {
           card.append(

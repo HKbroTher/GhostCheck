@@ -137,3 +137,45 @@ export async function fetchJson(url, opts = {}) {
   }
   throw lastError;
 }
+
+/**
+ * Fetch a text resource (HTML, XML, robots.txt). Unlike fetchJson, HTTP error
+ * statuses are returned, not thrown, because a 404 is meaningful here.
+ * @param {string} url
+ * @param {object} [opts]
+ * @param {number} [opts.timeoutMs]
+ * @param {number} [opts.maxBytes]     larger bodies are rejected
+ * @param {RateLimiter} [opts.limiter]
+ * @param {typeof fetch} [opts.fetchImpl]
+ * @returns {Promise<{ status: number, ok: boolean, url: string, text: string }>}
+ * @throws {HttpError} on timeout, network failure or oversized bodies
+ */
+export async function fetchText(url, opts = {}) {
+  const { timeoutMs = 12000, maxBytes = 3_000_000, limiter, fetchImpl = globalThis.fetch } = opts;
+  const attempt = async () => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetchImpl(url, {
+        headers: { Accept: 'text/html,application/xhtml+xml,application/xml,text/xml,text/plain;q=0.9,*/*;q=0.5' },
+        signal: controller.signal,
+        credentials: 'omit',
+        cache: 'no-store',
+        redirect: 'follow',
+      });
+      const length = Number(res.headers?.get?.('content-length'));
+      if (length > maxBytes) throw new HttpError('parse', `Response too large (${length} bytes): ${url}`, res.status);
+      const text = res.ok ? await res.text() : '';
+      if (text.length > maxBytes) throw new HttpError('parse', `Response too large: ${url}`, res.status);
+      return { status: res.status, ok: res.ok, url: res.url || url, text };
+    } catch (err) {
+      if (err instanceof HttpError) throw err;
+      throw controller.signal.aborted
+        ? new HttpError('timeout', `Timed out after ${timeoutMs} ms: ${url}`)
+        : new HttpError('network', `Network error: ${err?.message || err}`);
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+  return limiter ? limiter.schedule(new URL(url).host, attempt) : attempt();
+}

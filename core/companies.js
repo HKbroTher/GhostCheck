@@ -5,10 +5,14 @@
  *   "version": 1,
  *   "companies": [
  *     { "name": "Stripe", "aliases": ["Stripe, Inc."], "linkedin": ["stripe"],
- *       "ats": "greenhouse", "slug": "stripe", "region": null }
+ *       "ats": "greenhouse", "slug": "stripe", "region": null },
+ *     { "name": "NVIDIA", "ats": "workday", "slug": "nvidia",
+ *       "workday": { "host": "nvidia.wd5.myworkdayjobs.com", "site": "NVIDIAExternalCareerSite" } }
  *   ]
  * }
  */
+
+import { isWorkdayHost, workdayRef } from './sources/workday.js';
 
 const ATS_IDS = new Set(['greenhouse', 'lever', 'ashby', 'workday']);
 const LEGAL_SUFFIXES =
@@ -36,7 +40,7 @@ export function normalizeCompanyName(name) {
  * @property {'greenhouse' | 'lever' | 'ashby' | 'workday'} ats
  * @property {string} slug
  * @property {string | null} region
- * @property {object} [workday]    { host, site } for Workday
+ * @property {ReturnType<typeof workdayRef>} [workday]  for Workday: built from { host, site }
  */
 
 /**
@@ -59,6 +63,12 @@ export function buildCompanyIndex(json) {
       return errors.push(`${where}: slug is missing or has invalid characters`);
     }
     if (c.region != null && c.region !== 'eu') return errors.push(`${where}: region must be "eu" or omitted`);
+    if (c.ats === 'workday') {
+      const w = c.workday;
+      if (!w || typeof w.host !== 'string' || !isWorkdayHost(w.host) || typeof w.site !== 'string' || !/^[A-Za-z0-9_-]+$/.test(w.site)) {
+        return errors.push(`${where}: workday entries need workday.host (*.myworkdayjobs.com) and workday.site`);
+      }
+    }
     entries.push({
       name: c.name.trim(),
       aliases: Array.isArray(c.aliases) ? c.aliases.filter((a) => typeof a === 'string') : [],
@@ -66,7 +76,7 @@ export function buildCompanyIndex(json) {
       ats: c.ats,
       slug: c.slug,
       region: c.region ?? null,
-      ...(c.workday && typeof c.workday === 'object' ? { workday: c.workday } : {}),
+      ...(c.ats === 'workday' ? { workday: workdayRef({ tenant: c.slug, host: c.workday.host, site: c.workday.site }) } : {}),
     });
   });
 
