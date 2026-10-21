@@ -504,7 +504,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === 'ghostcheck:grant-origin' && isTrustedSender(sender)) {
     if (!validCareersOrigin(message.origin) || !sender.tab?.id) return false;
     const page = chrome.runtime.getURL(
-      `permission/permission.html?origin=${encodeURIComponent(message.origin)}&tab=${sender.tab.id}`,
+      `permission/permission.html?origin=${encodeURIComponent(message.origin)}&tab=${sender.tab.id}${message.all === true ? '&all=1' : ''}`,
     );
     chrome.tabs.create({ url: page, index: sender.tab.index + 1 });
     return false;

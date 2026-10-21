@@ -5,6 +5,9 @@ import { resolveLanguage, t } from '../core/i18n.js';
 const params = new URLSearchParams(location.search);
 const origin = params.get('origin') || '';
 const tabId = Number(params.get('tab'));
+// "Allow all careers sites": one request for every https site.
+const all = params.get('all') === '1';
+const ALL_SITES = 'https://*/*';
 const $ = (id) => document.getElementById(id);
 
 const { settings } = await chrome.storage.local.get('settings').catch(() => ({}));
@@ -22,13 +25,13 @@ try {
 }
 
 document.title = t(lang, 'perm.pageTitle');
-$('heading').textContent = t(lang, 'perm.heading', { host });
-$('body').textContent = t(lang, 'perm.body', { host });
-$('scope').textContent = t(lang, 'perm.scope', { origin: `${origin}/*` });
+$('heading').textContent = all ? t(lang, 'perm.headingAll') : t(lang, 'perm.heading', { host });
+$('body').textContent = all ? t(lang, 'perm.bodyAll') : t(lang, 'perm.body', { host });
+$('scope').textContent = all ? t(lang, 'perm.scopeAll') : t(lang, 'perm.scope', { origin: `${origin}/*` });
 $('privacy').textContent = t(lang, 'perm.privacy');
 $('allow').textContent = t(lang, 'perm.allow');
 $('cancel').textContent = t(lang, 'perm.cancel');
-if (!valid) {
+if (!valid && !all) {
   $('allow').disabled = true;
   $('status').textContent = t(lang, 'perm.invalid');
 }
@@ -47,7 +50,7 @@ $('allow').addEventListener('click', async () => {
   $('allow').disabled = true;
   let granted = false;
   try {
-    granted = await chrome.permissions.request({ origins: [`${origin}/*`] });
+    granted = await chrome.permissions.request({ origins: [all ? ALL_SITES : `${origin}/*`] });
   } catch (err) {
     $('status').textContent = t(lang, 'perm.refused', { error: err?.message || err });
   }

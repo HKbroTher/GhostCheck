@@ -34,7 +34,9 @@
     onRecheck: () => runCheck(state.jobId, { force: true }),
     onAction: (action) => {
       if (action.type === 'grant-origin') {
-        chrome.runtime.sendMessage({ type: 'ghostcheck:grant-origin', origin: action.origin }).catch(() => {});
+        chrome.runtime
+          .sendMessage({ type: 'ghostcheck:grant-origin', origin: action.origin, all: action.scope === 'all' })
+          .catch(() => {});
       }
     },
   });

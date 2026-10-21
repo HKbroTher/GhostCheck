@@ -78,7 +78,12 @@ GhostCheck only counts evidence it actually found. A request that failed, a care
 
 ### Company websites need your permission
 
-GhostCheck does not get access to every website when you install it. When a job's apply link goes to a company's own site, the card shows an **Allow checking &lt;site&gt;** button. It opens a small page where Chrome asks you to allow that one site. You can review and remove allowed sites on GhostCheck's options page.
+GhostCheck does not get access to every website when you install it. When a job's apply link goes to a company's own site, the card offers two buttons:
+
+- **Allow checking &lt;site&gt;**: Chrome asks you to allow that one site.
+- **Allow all careers sites (don't ask again)**: Chrome asks once, and from then on every company site is checked automatically. Chrome's prompt says GhostCheck can "read and change your data on all websites"; GhostCheck still only reads the public job page a LinkedIn apply link points to, and that site's sitemap, and runs no code on other sites.
+
+The same switch is on the options page ("Check every company careers site automatically"), where you can also turn it off and review or remove the sites you allowed one by one.
 
 ### Description matching (local AI model)
 
