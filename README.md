@@ -86,8 +86,26 @@ Companies sometimes title a job differently on LinkedIn and on their careers sit
 
 - Text that all of a company's postings share (about us, benefits) is removed first, so only the role-specific part is compared.
 - The model can only *confirm* a job or choose between near-identical titles. It never makes a job look worse.
-- On 224 postings from 9 live job boards, it confirmed 72% of reworded titles and matched a different job 0 times ([`scripts/eval-semantic.mjs`](scripts/eval-semantic.mjs)).
-- The code ships with the extension. The model weights (~23 MB) are downloaded from Hugging Face the first time they are needed and cached by your browser. You can turn the model off, or delete it, on the options page.
+- On 224 postings from 9 live job boards, the English model confirmed 72% of reworded titles and matched a different job 0 times ([`scripts/eval-semantic.mjs`](scripts/eval-semantic.mjs)).
+- The code ships with the extension. The model weights are downloaded from Hugging Face the first time they are needed and cached by your browser. You can turn description matching off, or delete the downloaded models, on the options page.
+
+Two models are available on the options page:
+
+| Model | Size | Use it when |
+|---|---|---|
+| English (default) | ~23 MB | Job descriptions are in English |
+| Multilingual ([paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/Xenova/paraphrase-multilingual-MiniLM-L12-v2)) | ~120 MB | Descriptions are in other languages, or a job is posted in Japanese/Chinese on LinkedIn and in English on the careers site. Slower, uses more memory. |
+
+## Languages
+
+**Interface:** English and Chinese (中文). GhostCheck follows your browser language; you can switch on the options page. The badge, card, reasons and settings all change language immediately.
+
+**Job descriptions in other languages:**
+
+- Japanese and Chinese titles are understood: seniority words (シニア, 高级, 资深, インターン, 实习), employment-type words (正社員, 全职, リモート, 远程) and place names (東京, 上海, ...) are recognized.
+- Pay ranges in Japanese and Chinese formats are detected (年収600万円〜900万円, 月給, 月薪15k-25k), as are team names (決済基盤チーム, 支付平台团队) and pipeline wording (タレントプール, 人才储备).
+- If the LinkedIn title and the careers-site titles are in different languages, GhostCheck never reports "not found"; it shows ⚪, or confirms the job with the multilingual model.
+- The English model only reads English descriptions; other languages fall back to title matching unless you choose the multilingual model.
 
 ## Privacy
 
@@ -128,6 +146,10 @@ Easy Apply jobs have no link to the careers site, so GhostCheck needs to know wh
 
 When you open the pull request, GitHub Actions checks every board against the live API and confirms the Greenhouse board name matches the company. Once merged, everyone's extension picks up the new list within a day, without an update.
 
+### Translate GhostCheck
+
+Interface text lives in [`core/i18n.js`](core/i18n.js) and reason texts in [`rules.yaml`](rules.yaml) (`reason.en`, `reason.zh`). A test checks that every language has every sentence with the same placeholders. After editing, run `node scripts/sync.mjs`: it also regenerates `extension/content/strings.js` for the page script.
+
 ### Change how jobs are scored
 
 Every signal, weight, threshold and reason text lives in [`rules.yaml`](rules.yaml). Edit it, explain your reasoning in the pull request (real examples help), and run the tests (see below). If you change a weight, update the scoring table in this README too; a test checks they agree.
@@ -165,7 +187,7 @@ To preview every badge state, open `chrome-extension://<extension id>/dev/previe
 - GhostCheck can be wrong. The card says **"Signals, not verdicts"** for a reason: use it as one input, not as proof.
 - Careers sites that render jobs only with JavaScript, block automated reading, or use an ATS other than those above give ⚪. The card names the system when it recognises one (HERP, HRMOS, SmartRecruiters, iCIMS, ...), so you know why.
 - Large Workday sites (over 100 jobs) can confirm a job but never report it missing.
-- The description model understands English only; other languages fall back to title matching.
+- With the default English model, descriptions in other languages are not compared; choose the multilingual model on the options page.
 - LinkedIn changes its pages often. If badges stop appearing, the selectors probably need an update (see [Contributing](#fix-ghostcheck-after-a-linkedin-redesign)).
 
 ## License
