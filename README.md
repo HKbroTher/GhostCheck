@@ -2,7 +2,7 @@
 
 GhostCheck is a Chrome extension that checks whether a LinkedIn job is really hiring. It compares the job with the company's own careers site.
 
-> **Status: early development (stage 4 of 6).** Jobs are checked against the company's own careers site when it runs on Greenhouse, Lever, Ashby or Workday, or publishes standard job data (schema.org JobPosting) on its own pages. GhostCheck also estimates how long each job has been open. Every other job shows ⚪ *Can't verify*.
+> **Status: early development (stage 5 of 6).** Jobs are checked against the company's own careers site when it runs on Greenhouse, Lever, Ashby or Workday, or publishes standard job data (schema.org JobPosting) on its own pages. GhostCheck also estimates how long each job has been open. Every other job shows ⚪ *Can't verify*.
 
 ## Install (no build step)
 
@@ -34,6 +34,16 @@ Then open any LinkedIn job page. A badge appears next to the job title. Click it
 | Company's own site | schema.org `JobPosting` data on the apply page, then the site's `sitemap.xml` | No: it can only confirm a job, or show the apply page is gone (404) |
 
 **Company sites need your permission.** GhostCheck does not get access to every website when you install it. When a job's apply link goes to a company's own site, the card shows an **Allow checking &lt;site&gt;** button. Clicking it opens a small page where Chrome asks you to allow that one site. You can remove access anytime in `chrome://extensions`.
+
+## Description matching (local AI model)
+
+Companies sometimes word a title differently on LinkedIn and on their careers site. When the title alone is not conclusive, GhostCheck compares the job descriptions with a small sentence-embedding model ([all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2)) that runs **on your computer** through [Transformers.js](https://github.com/huggingface/transformers.js).
+
+- The code ships with the extension (`extension/vendor/`). The model weights (~23 MB) are downloaded from Hugging Face the first time they are needed and cached by your browser.
+- Job descriptions never leave your computer.
+- Text shared by all of a company's postings (about us, benefits) is removed first, so only the role-specific part is compared.
+- The model can only *confirm* a job or choose between near-identical titles. It never makes a job look worse.
+- You can turn it off, or delete the downloaded model, on the extension's options page.
 
 ## How job age is estimated
 

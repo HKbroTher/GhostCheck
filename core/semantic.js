@@ -22,7 +22,7 @@ const MAX_CANDIDATES = 8;
 export const DEFAULT_SEMANTIC = {
   enabled: true,
   min_chars: 300, // role-specific text needed on both sides
-  promote_min_similarity: 0.85,
+  promote_min_similarity: 0.88, // see rules.yaml for the measurements
   min_margin: 0.05,
   tie_title_gap: 0.05, // titles this close count as a tie
 };
