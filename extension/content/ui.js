@@ -14,64 +14,110 @@
     'unsupportedAts', 'firstSeen',
   ];
 
+  /**
+   * Amber CRT look, light version: phosphor colours, scanlines and glow, no
+   * curvature or flicker. Verdicts keep distinct colours (plus their emoji).
+   * Motion (cursor blink, result flash) is off for prefers-reduced-motion.
+   */
+  const FONT = `"GhostCheckVT323", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace`;
   const STYLE = `
     :host { all: initial; }
     * { box-sizing: border-box; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      margin-left: 8px; padding: 2px 10px; vertical-align: middle;
-      font: 600 13px/20px -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-      border-radius: 999px; border: 1px solid var(--border); cursor: pointer;
-      background: var(--bg); color: var(--fg); white-space: nowrap;
+    .badge, .card {
+      --amber: #ffb000; --amber-hi: #ffd27a; --amber-dim: #b9822a; --screen: #120b02;
+      --green: #7dff8f; --red: #ff6040; --grey: #c9a86a;
     }
-    .badge:focus-visible { outline: 2px solid #0a66c2; outline-offset: 2px; }
-    .badge[data-badge="green"]   { --bg: #e7f6ec; --fg: #0f5a2a; --border: #a6d9b6; }
-    .badge[data-badge="yellow"]  { --bg: #fff6d6; --fg: #6b4f00; --border: #f0d77a; }
-    .badge[data-badge="red"]     { --bg: #fde8e8; --fg: #8a1c1c; --border: #f2b0b0; }
-    .badge[data-badge="unknown"],
-    .badge[data-badge="loading"] { --bg: #f1f1f1; --fg: #444; --border: #d4d4d4; }
-    :host([data-theme="dark"]) .badge[data-badge="green"]   { --bg: #12351f; --fg: #a8e6bc; --border: #24603a; }
-    :host([data-theme="dark"]) .badge[data-badge="yellow"]  { --bg: #3a3110; --fg: #f5dc8a; --border: #6b5a1c; }
-    :host([data-theme="dark"]) .badge[data-badge="red"]     { --bg: #401818; --fg: #f5b5b5; --border: #7a2c2c; }
-    :host([data-theme="dark"]) .badge[data-badge="unknown"],
-    :host([data-theme="dark"]) .badge[data-badge="loading"] { --bg: #2e2e2e; --fg: #ddd; --border: #4a4a4a; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-left: 10px; padding: 2px 10px 1px; vertical-align: middle;
+      font: 400 19px/22px ${FONT}; letter-spacing: .3px; white-space: nowrap;
+      color: var(--c); background: var(--screen);
+      border: 1px solid var(--c); border-radius: 4px; cursor: pointer;
+      text-shadow: 0 0 6px var(--c);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--c) 45%, transparent), inset 0 0 8px color-mix(in srgb, var(--c) 25%, transparent);
+      background-image: repeating-linear-gradient(rgba(0,0,0,.35) 0 1px, transparent 1px 3px);
+    }
+    .badge:hover { filter: brightness(1.2); }
+    .badge:focus-visible { outline: 2px solid var(--amber-hi); outline-offset: 2px; }
+    .badge[data-badge="green"]   { --c: var(--green); }
+    .badge[data-badge="yellow"]  { --c: var(--amber); }
+    .badge[data-badge="red"]     { --c: var(--red); }
+    .badge[data-badge="unknown"] { --c: var(--grey); }
+    .badge[data-badge="loading"] { --c: var(--amber); }
+    .badge[data-badge="loading"]::after { content: "▌"; animation: blink 1s steps(1) infinite; }
 
     .card {
-      --card-bg: #fff; --card-fg: #1d1d1d; --muted: #666; --line: #e3e3e3; --link: #0a66c2;
-      position: fixed; z-index: 2147483000; width: 360px; max-width: calc(100vw - 16px);
-      max-height: min(520px, calc(100vh - 16px)); overflow: auto;
-      background: var(--card-bg); color: var(--card-fg);
-      border: 1px solid var(--line); border-radius: 12px;
-      box-shadow: 0 8px 28px rgba(0,0,0,.18);
-      font: 14px/1.45 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-      padding: 14px 16px;
+      position: fixed; z-index: 2147483000; width: 380px; max-width: calc(100vw - 16px);
+      max-height: min(560px, calc(100vh - 16px)); overflow: auto;
+      color: var(--amber-hi);
+      background:
+        repeating-linear-gradient(rgba(0,0,0,.28) 0 1px, transparent 1px 3px),
+        radial-gradient(ellipse at 50% 40%, #241805 0%, #120b02 70%, #080501 100%);
+      background-attachment: local, local;
+      border: 1px solid color-mix(in srgb, var(--amber) 55%, transparent); border-radius: 8px;
+      box-shadow: 0 0 0 1px #000, 0 0 26px rgba(255,176,0,.28), 0 12px 32px rgba(0,0,0,.55);
+      font: 14px/1.5 -apple-system, system-ui, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      text-shadow: 0 0 3px rgba(255,176,0,.45);
+      padding: 0 16px 12px;
     }
-    :host([data-theme="dark"]) .card {
-      --card-bg: #1f1f1f; --card-fg: #eee; --muted: #aaa; --line: #3a3a3a; --link: #70b5f9;
+    .card.fresh { animation: power-on .5s ease-out; }
+    .bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 0 -16px 10px; padding: 4px 12px;
+      font: 16px/20px ${FONT}; letter-spacing: 1px; color: var(--amber-dim);
+      border-bottom: 1px solid color-mix(in srgb, var(--amber) 30%, transparent);
     }
-    .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-    .verdict { font-weight: 700; font-size: 15px; }
-    .close { all: unset; cursor: pointer; padding: 0 4px; font-size: 18px; color: var(--muted); }
-    ul.reasons { list-style: none; margin: 0 0 10px; padding: 0; }
-    ul.reasons li { display: flex; gap: 8px; padding: 4px 0; }
-    ul.reasons .mark { flex: none; width: 16px; text-align: center; font-weight: 700; }
-    li[data-polarity="positive"] .mark { color: #1a7f37; }
-    li[data-polarity="negative"] .mark { color: #c62828; }
-    li[data-polarity="neutral"] .mark  { color: var(--muted); }
-    a.official { display: inline-block; margin-bottom: 10px; color: var(--link); font-weight: 600; text-decoration: none; }
-    a.official:hover { text-decoration: underline; }
-    details { border-top: 1px solid var(--line); padding-top: 8px; margin-bottom: 8px; }
-    summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+    .bar .cursor { animation: blink 1s steps(1) infinite; }
+    .close { all: unset; cursor: pointer; padding: 0 4px; font: 20px/20px ${FONT}; color: var(--amber); }
+    .close:hover { color: #fff; }
+    .verdict { font: 28px/30px ${FONT}; margin-bottom: 8px; color: var(--c); text-shadow: 0 0 8px var(--c); }
+    .verdict[data-badge="green"]   { --c: var(--green); }
+    .verdict[data-badge="yellow"]  { --c: var(--amber); }
+    .verdict[data-badge="red"]     { --c: var(--red); }
+    .verdict[data-badge="unknown"] { --c: var(--grey); }
+    .verdict[data-badge="loading"] { --c: var(--amber); }
+    .verdict .score { font-size: 20px; opacity: .8; white-space: nowrap; }
+    ul.reasons { list-style: none; margin: 0 0 12px; padding: 0; }
+    ul.reasons li { display: flex; gap: 8px; padding: 3px 0; }
+    ul.reasons .mark { flex: none; width: 14px; text-align: center; font: 20px/21px ${FONT}; }
+    li[data-polarity="positive"] .mark { color: var(--green); text-shadow: 0 0 6px var(--green); }
+    li[data-polarity="negative"] .mark { color: var(--red); text-shadow: 0 0 6px var(--red); }
+    li[data-polarity="neutral"] .mark  { color: var(--amber-dim); }
+    a.official { display: inline-block; margin-bottom: 10px; color: var(--amber); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--amber); }
+    a.official:hover { color: #fff; border-bottom-color: #fff; }
+    details { border-top: 1px dashed color-mix(in srgb, var(--amber) 35%, transparent); padding-top: 8px; margin-bottom: 8px; }
+    summary { cursor: pointer; color: var(--amber-dim); font: 17px/20px ${FONT}; letter-spacing: .5px; }
     dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 10px; margin: 8px 0 0; font-size: 12px; }
-    dt { color: var(--muted); }
+    dt { color: var(--amber-dim); }
     dd { margin: 0; overflow-wrap: anywhere; }
-    .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px;
-            border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px; color: var(--muted); }
-    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; }
-    .action.secondary { color: var(--link); background: transparent; box-shadow: inset 0 0 0 1px var(--link); }
-    .action { display: block; margin: 0; padding: 6px 14px; border-radius: 999px; cursor: pointer;
-              font: 600 13px/18px -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; color: #fff; background: var(--link); border: 0; }
-    .recheck { all: unset; cursor: pointer; color: var(--link); font-weight: 600; white-space: nowrap; }
+    .foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--amber) 35%, transparent); padding-top: 8px;
+      font-size: 12px; color: var(--amber-dim);
+    }
+    .foot .when { font: 16px/18px ${FONT}; white-space: nowrap; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .action {
+      display: block; margin: 0; padding: 4px 12px; border-radius: 4px; cursor: pointer;
+      font: 18px/22px ${FONT}; color: #120b02; background: var(--amber); border: 1px solid var(--amber);
+      box-shadow: 0 0 10px rgba(255,176,0,.45); text-shadow: none;
+    }
+    .action.secondary { color: var(--amber); background: transparent; }
+    .action:hover { filter: brightness(1.15); }
+    .recheck {
+      all: unset; cursor: pointer; white-space: nowrap; padding: 1px 8px;
+      font: 17px/20px ${FONT}; color: var(--amber); border: 1px solid var(--amber); border-radius: 3px;
+    }
+    .recheck:hover { background: var(--amber); color: #120b02; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes power-on {
+      0% { filter: brightness(2.2) saturate(.4); transform: scaleY(.96); }
+      100% { filter: none; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .badge[data-badge="loading"]::after, .bar .cursor { animation: none; }
+      .card.fresh { animation: none; }
+    }
   `;
 
   /** Small DOM helper: el('div', {class: 'x'}, child, 'text'). */
@@ -112,13 +158,55 @@
     return { host, shadow };
   }
 
+  /**
+   * Register the pixel font once per page. The bytes come from the service
+   * worker, because a web_accessible_resource would let LinkedIn detect the
+   * extension. Until (or unless) it loads, the monospace fallback is used.
+   */
+  let fontRequested = false;
+  function loadFont() {
+    if (fontRequested || !globalThis.chrome?.runtime?.sendMessage || !globalThis.FontFace) return;
+    fontRequested = true;
+    chrome.runtime
+      .sendMessage({ type: 'ghostcheck:font' })
+      .then((base64) => {
+        if (typeof base64 !== 'string') return;
+        const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+        const face = new FontFace('GhostCheckVT323', bytes.buffer);
+        document.fonts.add(face);
+        return face.load();
+      })
+      .catch(() => {});
+  }
+
+  function extensionVersion() {
+    try {
+      return chrome.runtime.getManifest().version;
+    } catch {
+      return '';
+    }
+  }
+
+  /** "14:05" today, otherwise a short date and time, in the interface language. */
+  function formatTime(iso, lang) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    const locale = lang === 'zh' ? 'zh-CN' : 'en';
+    const sameDay = d.toDateString() === new Date().toDateString();
+    return sameDay
+      ? d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+      : d.toLocaleString(locale, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
   const MARKS = { positive: '+', negative: '−', neutral: '•' };
 
   class GhostCheckUI {
-    constructor({ onRecheck, onAction, strings } = {}) {
+    constructor({ onRecheck, onAction, onDismiss, strings } = {}) {
       this.strings = strings || globalThis.GhostCheckStrings?.en || {};
       this.onRecheck = onRecheck || (() => {});
       this.onAction = onAction || (() => {});
+      this.onDismiss = onDismiss || (() => {}); // the user closed the card
+      loadFont();
       this.state = this._loading();
       this.badge = null; // { host, shadow, button }
       this.card = null; // { host, shadow }
@@ -164,6 +252,10 @@
       if (this.card) this._renderCard();
     }
 
+    _lang() {
+      return this.strings === globalThis.GhostCheckStrings?.zh ? 'zh' : 'en';
+    }
+
     _loading() {
       return { badge: 'loading', emoji: '⏳', label: this.t('badge.loading') };
     }
@@ -174,11 +266,21 @@
       if (this.card) this._renderCard();
     }
 
-    /** @param {object} result  CheckResult from the service worker */
-    setResult(result) {
+    /**
+     * @param {object} result  CheckResult from the service worker
+     * @param {{fresh?: boolean}} [opts]  fresh: a new result, flash an open card
+     */
+    setResult(result, { fresh = false } = {}) {
       this.state = result;
       this._renderBadge();
-      if (this.card) this._renderCard();
+      if (this.card) {
+        this._fresh = fresh;
+        this._renderCard();
+      }
+    }
+
+    isCardOpen() {
+      return !!this.card;
     }
 
     remove() {
@@ -188,12 +290,21 @@
     }
 
     toggleCard() {
-      if (this.card) this.closeCard();
+      if (this.card) this.dismissCard();
       else this.openCard();
     }
 
-    openCard() {
+    /** Close because the user asked to (close button, Escape, click outside, badge). */
+    dismissCard() {
+      if (!this.card) return;
+      this.closeCard();
+      this.onDismiss();
+    }
+
+    /** @param {{fresh?: boolean}} [opts]  fresh: play the power-on flash */
+    openCard({ fresh = false } = {}) {
       if (this.card || !this.badge) return;
+      this._fresh = fresh;
       const { host, shadow } = makeHost(CARD_TAG);
       host.dataset.theme = currentTheme();
       document.body.append(host);
@@ -221,11 +332,11 @@
     _onDocPointer(e) {
       const path = e.composedPath();
       if (path.includes(this.card?.host) || path.includes(this.badge?.host)) return;
-      this.closeCard();
+      this.dismissCard();
     }
 
     _onKey(e) {
-      if (e.key === 'Escape') this.closeCard();
+      if (e.key === 'Escape') this.dismissCard();
     }
 
     _reposition() {
@@ -233,6 +344,10 @@
       if (!this.badge.host.isConnected) return this.closeCard();
       const card = this.card.shadow.querySelector('.card');
       const anchor = this.badge.button.getBoundingClientRect();
+      // LinkedIn scrolls the details pane, not the window: while the badge is
+      // scrolled out of sight, hide the card instead of leaving it floating.
+      const offscreen = anchor.bottom < 0 || anchor.top > window.innerHeight || (!anchor.width && !anchor.height);
+      card.style.visibility = offscreen ? 'hidden' : '';
       const margin = 8;
       const width = card.offsetWidth;
       const height = card.offsetHeight;
@@ -263,14 +378,22 @@
       const s = this.state;
 
       const closeBtn = el('button', { class: 'close', type: 'button', 'aria-label': this.t('ui.close') }, '×');
-      closeBtn.addEventListener('click', () => this.closeCard());
+      closeBtn.addEventListener('click', () => this.dismissCard());
 
+      const version = extensionVersion();
       const scoreText = typeof s.score === 'number' ? ` · ${this.t('ui.score', { score: s.score })}` : '';
       const card = el(
         'div',
-        { class: 'card', role: 'dialog', 'aria-label': this.t('ui.cardAria') },
-        el('div', { class: 'head' }, el('span', { class: 'verdict' }, `${s.emoji} ${s.label}${scoreText}`), closeBtn),
+        { class: this._fresh ? 'card fresh' : 'card', role: 'dialog', 'aria-label': this.t('ui.cardAria') },
+        el(
+          'div',
+          { class: 'bar' },
+          el('span', {}, `GHOSTCHECK${version ? ` v${version}` : ''} `, el('span', { class: 'cursor', 'aria-hidden': 'true' }, '▌')),
+          closeBtn,
+        ),
+        el('div', { class: 'verdict', 'data-badge': s.badge }, `${s.emoji} ${s.label}`, el('span', { class: 'score' }, scoreText)),
       );
+      this._fresh = false;
 
       if (s.badge === 'loading') {
         card.append(el('p', {}, this.t('ui.checking')));
@@ -320,7 +443,15 @@
 
       const recheck = el('button', { class: 'recheck', type: 'button' }, this.t('ui.recheck'));
       recheck.addEventListener('click', () => this.onRecheck());
-      card.append(el('div', { class: 'foot' }, el('span', {}, this.t('ui.footer')), recheck));
+      const when = s.checkedAt ? formatTime(s.checkedAt, this._lang()) : '';
+      card.append(
+        el(
+          'div',
+          { class: 'foot' },
+          el('span', {}, this.t('ui.footer'), when ? el('br') : null, when ? el('span', { class: 'when' }, this.t('ui.checkedAt', { time: when })) : null),
+          recheck,
+        ),
+      );
 
       shadow.append(card);
       this._reposition();

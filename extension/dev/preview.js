@@ -37,7 +37,7 @@ for (const sample of SAMPLES) {
   document.getElementById('rows').append(row);
   const ui = new globalThis.GhostCheckUI({ onRecheck: () => alert('Recheck clicked') });
   ui.attach(row);
-  ui.setResult({ officialUrl: null, detected: {}, ...sample });
+  ui.setResult({ officialUrl: null, detected: {}, checkedAt: new Date().toISOString(), ...sample });
   uis.push({ ui, row, sample });
 }
 
@@ -51,3 +51,6 @@ document.getElementById('dark').addEventListener('change', (e) => {
     ui.setResult({ officialUrl: null, detected: {}, ...sample });
   }
 });
+
+// Results open their card on arrival on LinkedIn; show that for the first one.
+uis[0].ui.openCard({ fresh: true });

@@ -423,10 +423,11 @@ function resultKey(job, lang, model) {
   return `result:${lang}:${model}:${job.jobId || 'nojob'}:${(h >>> 0).toString(36)}`;
 }
 
-async function handleCheck(rawJob, force) {
+/** @param {string} [pageLang]  the language the card is shown in, so card and reasons match */
+async function handleCheck(rawJob, force, pageLang) {
   const job = sanitizeJob(rawJob);
   const settings = await getSettings();
-  const lang = languageOf(settings);
+  const lang = pageLang === 'en' || pageLang === 'zh' ? pageLang : languageOf(settings);
   if (!job.title || !job.company) {
     return unknownResult(t(lang, 'error.unreadable'), lang);
   }
@@ -482,6 +483,18 @@ async function fetchPostingsFresh(ref) {
   return fetchPostings(ref);
 }
 
+let fontData = null;
+/** VT323 as base64 (messages are JSON, so no ArrayBuffer). ~18 KB, loaded once. */
+async function loadFont() {
+  if (!fontData) {
+    const bytes = new Uint8Array(await (await fetch(chrome.runtime.getURL('vendor/fonts/vt323.woff2'))).arrayBuffer());
+    let binary = '';
+    for (const b of bytes) binary += String.fromCharCode(b);
+    fontData = btoa(binary);
+  }
+  return fontData;
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Diagnostics from the extension's own pages (options page, tests): run
   // the description model through the real service worker -> offscreen path.
@@ -509,13 +522,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.tabs.create({ url: page, index: sender.tab.index + 1 });
     return false;
   }
+  // The card's pixel font. Not a web_accessible_resource (LinkedIn could
+  // use that to detect the extension), so hand the bytes to the content script.
+  if (message?.type === 'ghostcheck:font' && isTrustedSender(sender)) {
+    loadFont().then(sendResponse, () => sendResponse(null));
+    return true;
+  }
   if (message?.type !== 'ghostcheck:check' || !isTrustedSender(sender)) return false;
-  handleCheck(message.job, message.force === true)
+  handleCheck(message.job, message.force === true, message.lang)
     .then(sendResponse)
     .catch((err) => {
       console.warn('[GhostCheck] check failed', err);
       getSettings().then((settings) => {
-        const lang = languageOf(settings);
+        const lang = message.lang === 'en' || message.lang === 'zh' ? message.lang : languageOf(settings);
         sendResponse(unknownResult(t(lang, 'error.internal'), lang));
       });
     });

@@ -70,7 +70,8 @@ flowchart LR
 
    A total of **+3 or more is 🟢**, **−3 or less is 🔴**, anything in between is 🟡. If the careers site could not be checked at all, the badge is ⚪, whatever the other signals say.
 
-7. **Cache the result** in your browser for a few hours, so revisiting a job is instant. Click **Recheck** on the card to refresh.
+7. **Show it.** The badge appears next to the job title and the details card opens by itself as soon as the result is ready. Close it and it stays closed for that job; click the badge to open it again. Prefer clicking? Turn off "Open the details card automatically" on the options page.
+8. **Cache the result** in your browser for a few hours, so revisiting a job is instant. Click **Recheck** on the card to refresh.
 
 ### Why ⚪ "Can't verify" is not bad news
 

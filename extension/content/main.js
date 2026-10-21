@@ -21,7 +21,11 @@
     lastKey: null, // "title|company" of the job we last checked
     lastJob: null,
     lastResult: null,
+    dismissed: null, // job id whose card the user closed: don't pop it open again
   };
+  let autoOpen = true; // settings.autoOpen; on unless switched off in options
+
+  const shouldAutoOpen = () => autoOpen && state.jobId && state.dismissed !== state.jobId;
 
   // Interface language: the options-page setting, else the browser language
   // (same rule as resolveLanguage() in core/i18n.js).
@@ -32,6 +36,9 @@
   const ui = new globalThis.GhostCheckUI({
     strings: stringsFor(lang),
     onRecheck: () => runCheck(state.jobId, { force: true }),
+    onDismiss: () => {
+      state.dismissed = state.jobId;
+    },
     onAction: (action) => {
       if (action.type === 'grant-origin') {
         chrome.runtime
@@ -41,9 +48,11 @@
     },
   });
 
-  async function loadLanguage() {
+  /** Read options-page settings; resolves true when the language changed. */
+  async function loadSettings() {
     try {
       const { settings } = await chrome.storage.local.get('settings');
+      autoOpen = settings?.autoOpen !== false;
       const setting = settings?.language;
       const next = setting === 'en' || setting === 'zh' ? setting : /^zh\b/i.test(chrome.i18n.getUILanguage()) ? 'zh' : 'en';
       if (next !== lang) {
@@ -56,13 +65,13 @@
     }
     return false;
   }
-  const languageReady = loadLanguage();
+  const settingsReady = loadSettings();
 
-  // Language switched on the options page: re-render and re-check (reasons
-  // come from the service worker in the chosen language).
+  // Settings changed on the options page. A language switch re-renders and
+  // re-checks (reasons come from the service worker in the chosen language).
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local' || !changes.settings) return;
-    loadLanguage().then((changed) => {
+    loadSettings().then((changed) => {
       if (changed && state.jobId) runCheck(state.jobId);
     });
   });
@@ -77,7 +86,7 @@
   /** Ask the service worker; never throws. */
   async function requestCheck(job, force) {
     try {
-      const response = await chrome.runtime.sendMessage({ type: 'ghostcheck:check', job, force });
+      const response = await chrome.runtime.sendMessage({ type: 'ghostcheck:check', job, force, lang });
       if (response && response.badge) return response;
       throw new Error('empty response');
     } catch (err) {
@@ -107,7 +116,7 @@
    */
   async function runCheck(jobId, { force = false } = {}) {
     const token = ++state.token;
-    await languageReady;
+    await settingsReady;
     for (let attempt = 0; attempt < READY_MAX_TRIES; attempt++) {
       if (token !== state.token) return;
       const { titleEl, data } = extractJob();
@@ -128,7 +137,8 @@
         const result = await requestCheck({ ...data, jobId }, force);
         if (token !== state.token) return; // user moved on to another job
         state.lastResult = result;
-        ui.setResult(result);
+        ui.setResult(result, { fresh: true });
+        if (shouldAutoOpen()) ui.openCard({ fresh: true });
         return;
       }
       await new Promise((r) => setTimeout(r, READY_RETRY_MS));
@@ -173,6 +183,7 @@
       if (titleEl) {
         ui.attach(titleEl);
         ui.setResult(state.lastResult);
+        if (shouldAutoOpen()) ui.openCard();
       }
     }
   }
