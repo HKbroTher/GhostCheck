@@ -1,0 +1,15 @@
+[
+  {
+    "id": "0a1b2c3d-1111-2222-3333-444455556666",
+    "text": "Backend Engineer",
+    "categories": { "commitment": "Full-time", "department": "Engineering", "location": "London", "team": "Core API", "allLocations": ["London", "Remote - UK"] },
+    "createdAt": 1758000000000,
+    "descriptionPlain": "You will work on our Billing API.",
+    "lists": [{ "text": "Requirements", "content": "<li>Go</li><li>Postgres</li>" }],
+    "additionalPlain": "",
+    "hostedUrl": "https://jobs.lever.co/acme/0a1b2c3d-1111-2222-3333-444455556666",
+    "applyUrl": "https://jobs.lever.co/acme/0a1b2c3d-1111-2222-3333-444455556666/apply",
+    "salaryRange": { "currency": "GBP", "interval": "per-year-salary", "min": 70000, "max": 90000 },
+    "workplaceType": "hybrid"
+  }
+]

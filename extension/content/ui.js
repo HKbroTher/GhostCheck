@@ -18,6 +18,13 @@
     salaryText: 'Pay shown',
     descriptionChars: 'Description length',
     linkedinCompanySlug: 'LinkedIn company id',
+    ats: 'Careers site',
+    board: 'Board id',
+    boardSource: 'Board found via',
+    boardSize: 'Open jobs on board',
+    matchStatus: 'Match result',
+    matchedTitle: 'Matched posting',
+    closestScore: 'Closest title score',
   };
 
   const STYLE = `
@@ -275,7 +282,7 @@
             el(
               'a',
               { class: 'official', href: s.officialUrl, target: '_blank', rel: 'noopener noreferrer' },
-              'View on company careers site ↗',
+              s.officialLabel || 'View on company careers site ↗',
             ),
           );
         }

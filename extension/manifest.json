@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GhostCheck",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Checks whether a LinkedIn job is really open by comparing it with the company's own careers site.",
   "minimum_chrome_version": "116",
   "icons": {
@@ -9,6 +9,15 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
+  "permissions": ["storage", "unlimitedStorage"],
+  "host_permissions": [
+    "https://boards-api.greenhouse.io/*",
+    "https://boards-api.eu.greenhouse.io/*",
+    "https://api.lever.co/*",
+    "https://api.eu.lever.co/*",
+    "https://api.ashbyhq.com/*",
+    "https://raw.githubusercontent.com/*"
+  ],
   "background": {
     "service_worker": "background/service-worker.js",
     "type": "module"

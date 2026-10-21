@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "companies": [
+    { "name": "Airbnb", "linkedin": ["airbnb"], "ats": "greenhouse", "slug": "airbnb" },
+    { "name": "Airtable", "ats": "greenhouse", "slug": "airtable" },
+    { "name": "Anthropic", "linkedin": ["anthropicresearch"], "ats": "greenhouse", "slug": "anthropic" },
+    { "name": "Asana", "ats": "greenhouse", "slug": "asana" },
+    { "name": "Cloudflare", "linkedin": ["cloudflare"], "ats": "greenhouse", "slug": "cloudflare" },
+    { "name": "Coinbase", "linkedin": ["coinbase"], "ats": "greenhouse", "slug": "coinbase" },
+    { "name": "Databricks", "linkedin": ["databricks"], "ats": "greenhouse", "slug": "databricks" },
+    { "name": "Discord", "ats": "greenhouse", "slug": "discord" },
+    { "name": "Dropbox", "linkedin": ["dropbox"], "ats": "greenhouse", "slug": "dropbox" },
+    { "name": "Duolingo", "linkedin": ["duolingo"], "ats": "greenhouse", "slug": "duolingo" },
+    { "name": "Figma", "linkedin": ["figma"], "ats": "greenhouse", "slug": "figma" },
+    { "name": "GitLab", "linkedin": ["gitlab-com"], "ats": "greenhouse", "slug": "gitlab" },
+    { "name": "Instacart", "ats": "greenhouse", "slug": "instacart" },
+    { "name": "Lyft", "linkedin": ["lyft"], "ats": "greenhouse", "slug": "lyft" },
+    { "name": "Pinterest", "linkedin": ["pinterest"], "ats": "greenhouse", "slug": "pinterest" },
+    { "name": "Reddit", "aliases": ["Reddit, Inc."], "ats": "greenhouse", "slug": "reddit" },
+    { "name": "Robinhood", "linkedin": ["robinhood"], "ats": "greenhouse", "slug": "robinhood" },
+    { "name": "Stripe", "linkedin": ["stripe"], "ats": "greenhouse", "slug": "stripe" },
+    { "name": "Vercel", "linkedin": ["vercel"], "ats": "greenhouse", "slug": "vercel" },
+    { "name": "Palantir Technologies", "aliases": ["Palantir"], "linkedin": ["palantir-technologies"], "ats": "lever", "slug": "palantir" },
+    { "name": "Plaid", "linkedin": ["plaid-"], "ats": "lever", "slug": "plaid" },
+    { "name": "Spotify", "linkedin": ["spotify"], "ats": "lever", "slug": "spotify" },
+    { "name": "Linear", "ats": "ashby", "slug": "linear" },
+    { "name": "Notion", "linkedin": ["notionhq"], "ats": "ashby", "slug": "notion" },
+    { "name": "OpenAI", "linkedin": ["openai"], "ats": "ashby", "slug": "openai" },
+    { "name": "Ramp", "ats": "ashby", "slug": "ramp" },
+    { "name": "Supabase", "linkedin": ["supabase"], "ats": "ashby", "slug": "supabase" }
+  ]
+}

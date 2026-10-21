@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * Copy the shared sources into extension/ so the folder can be loaded as-is.
- * Chrome cannot read files outside the folder you load, so core/ and
- * rules.yaml are copied (not symlinked: symlinks break on Windows and in
+ * Chrome cannot read files outside the folder you load, so core/,
+ * rules.yaml and data/companies.json are copied (not symlinked: symlinks break on Windows and in
  * GitHub ZIP downloads).
  *
- *   node scripts/sync.mjs          copy core/ and rules.yaml into extension/
+ *   node scripts/sync.mjs          copy core/, rules.yaml, data/companies.json into extension/
  *   node scripts/sync.mjs --check  exit 1 if extension/ is out of date (CI)
  *
  * Zero dependencies; Node 18+.
@@ -17,13 +17,25 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
 
+/** All files under `dir` (relative to the repo root), recursively. */
+function walk(dir) {
+  const out = [];
+  if (!existsSync(join(ROOT, dir))) return out;
+  for (const entry of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+    const rel = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walk(rel));
+    else out.push(rel);
+  }
+  return out;
+}
+
 /** [source, destination] pairs, relative to the repo root. */
 function plannedCopies() {
-  const pairs = [];
-  for (const name of readdirSync(join(ROOT, 'core'))) {
-    if (name.endsWith('.js')) pairs.push([join('core', name), join('extension', 'core', name)]);
-  }
+  const pairs = walk('core').map((src) => [src, join('extension', src)]);
   if (existsSync(join(ROOT, 'rules.yaml'))) pairs.push(['rules.yaml', join('extension', 'rules.yaml')]);
+  // Bundled fallback; the extension refreshes it from GitHub at runtime.
+  const companies = join('data', 'companies.json');
+  if (existsSync(join(ROOT, companies))) pairs.push([companies, join('extension', companies)]);
   return pairs;
 }
 
@@ -32,14 +44,10 @@ const expected = new Set(pairs.map(([, dest]) => dest));
 const problems = [];
 
 // Files in extension/core that no longer exist in core/.
-const destCore = join(ROOT, 'extension', 'core');
-if (existsSync(destCore)) {
-  for (const name of readdirSync(destCore)) {
-    const rel = join('extension', 'core', name);
-    if (!expected.has(rel)) {
-      if (CHECK) problems.push(`stale file: ${rel}`);
-      else rmSync(join(ROOT, rel));
-    }
+for (const rel of walk(join('extension', 'core'))) {
+  if (!expected.has(rel)) {
+    if (CHECK) problems.push(`stale file: ${rel}`);
+    else rmSync(join(ROOT, rel));
   }
 }
 
