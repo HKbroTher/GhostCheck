@@ -124,7 +124,8 @@ function tokenizeTitle(text) {
   for (const [re, rep] of PHRASES) s = s.replace(re, rep);
   // "m/f/d", "w/m/d", "h/f" gender notes
   s = s.replace(/\b[mfwdhx](?:\s*\/\s*[mfwdhx]){1,2}\b/g, ' ');
-  const raw = s.split(/[^a-z0-9+#]+/).filter(Boolean);
+  // Keep letters of every script (CJK, Cyrillic, ...) and their combining marks.
+  const raw = s.split(/[^\p{L}\p{M}\p{N}+#]+/u).filter(Boolean);
 
   const tokens = [];
   let level = null;

@@ -9,6 +9,7 @@
  *   similar     a close title exists but level/location/title differ enough
  *               that we cannot say it is the same job (never negative evidence)
  *   not_found   nothing resembling this title is listed
+ *   unmatchable the title has no comparable words (treated as unknown)
  */
 import { normalizeTitle, levelsCompatible, locationsCompatible } from './normalize.js';
 import { titleSimilarity } from './fuzzy.js';
@@ -47,7 +48,7 @@ function levelOk(a, b) {
  * @param {import('./sources/index.js').Posting[]} postings
  * @param {{ jobId?: string | null }} [ref]               ATS posting id from the apply link
  * @param {{ title_match?: number, title_similar?: number }} [thresholds]
- * @returns {{ status: 'found' | 'id_missing' | 'similar' | 'not_found',
+ * @returns {{ status: 'found' | 'id_missing' | 'similar' | 'not_found' | 'unmatchable',
  *             posting: import('./sources/index.js').Posting | null,
  *             score: number, via: string | null, mismatch: string | null }}
  */
@@ -60,6 +61,8 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
   }
 
   const target = normalizeTitle(job.title);
+  // A title with no comparable words must never turn into "not found".
+  if (!target.tokens.length) return { status: 'unmatchable', posting: null, score: 0, via: null, mismatch: null };
   let best = null; // best acceptable match
   let near = null; // best title-similar candidate, regardless of filters
 

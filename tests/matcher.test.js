@@ -89,3 +89,13 @@ test('parenthesized specializations must agree', () => {
   ];
   assert.equal(matchPosting({ title: 'Operations Manager, Mandarin Speaking (Tokyo Based)', location: 'Tokyo, Japan' }, board).posting.id, 't');
 });
+
+test('non-Latin titles are compared, not dropped', () => {
+  const board = [P('j', 'デリバリーソリューションアーキテクト', 'Tokyo, Japan'), P('c', '高级软件工程师', '上海')];
+  assert.equal(matchPosting({ title: 'デリバリーソリューションアーキテクト', location: 'Tokyo, Japan' }, board).posting.id, 'j');
+  assert.equal(matchPosting({ title: '高级软件工程师', location: '' }, board).posting.id, 'c');
+});
+
+test('a title with no words is unmatchable, never not_found', () => {
+  assert.equal(matchPosting({ title: '—' }, [P('1', 'Engineer')]).status, 'unmatchable');
+});
