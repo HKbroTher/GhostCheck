@@ -1,4 +1,4 @@
-// GhostCheck options: language, description model, allowed careers sites.
+// GhostCheck options: language, card behaviour, description model, allowed careers sites.
 import { resolveLanguage, t } from '../core/i18n.js';
 
 const MODEL_CACHE = 'transformers-cache'; // Transformers.js browser cache name
@@ -83,6 +83,11 @@ $('language').addEventListener('change', async (e) => {
   say('options.languageChanged');
 });
 
+$('auto-open').addEventListener('change', async (e) => {
+  await saveSettings({ autoOpen: e.target.checked });
+  say(e.target.checked ? 'options.autoOpenOn' : 'options.autoOpenOff');
+});
+
 $('semantic').addEventListener('change', async (e) => {
   await saveSettings({ semantic: e.target.checked });
   $('models').disabled = !e.target.checked;
@@ -119,6 +124,7 @@ $('delete-model').addEventListener('click', async () => {
   const settings = await getSettings();
   lang = resolveLanguage(settings.language, chrome.i18n.getUILanguage());
   $('language').value = settings.language || 'auto';
+  $('auto-open').checked = settings.autoOpen !== false;
   $('semantic').checked = settings.semantic !== false;
   $('models').disabled = settings.semantic === false;
   const model = settings.semanticModel === 'multilingual' ? 'multilingual' : 'english';

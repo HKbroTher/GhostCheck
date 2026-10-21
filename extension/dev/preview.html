@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <title>GhostCheck UI preview</title>
   <style>
+    /* On LinkedIn the service worker hands the font over; here load it directly. */
+    @font-face { font-family: "GhostCheckVT323"; src: url("../vendor/fonts/vt323.woff2") format("woff2"); }
     body { font: 15px/1.5 system-ui, sans-serif; margin: 32px; }
     h1 { font-size: 20px; }
     .row { margin: 18px 0; font-size: 20px; font-weight: 600; }
