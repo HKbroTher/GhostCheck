@@ -2,7 +2,7 @@
  * Identify the applicant tracking system (ATS) and company identifier from an
  * apply URL.
  *
- * @typedef {'greenhouse' | 'lever' | 'ashby' | 'workday'} AtsId
+ * @typedef {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable'} AtsId
  *
  * @typedef {object} AtsRef
  * @property {AtsId} ats
@@ -113,6 +113,25 @@ export function detectAts(rawUrl) {
       region: null,
       workday: workdayRef({ tenant, host, site }),
     };
+  }
+
+  // Workable: apply.workable.com/{account}/j/{SHORTCODE}[/apply],
+  //           apply.workable.com/api/v1/widget/accounts/{account}, {account}.workable.com/j/{SHORTCODE}
+  if (host === 'apply.workable.com') {
+    if (parts[0] === 'api') {
+      const i = parts.indexOf('accounts');
+      const slug = i >= 0 ? safeSlug(parts[i + 1]) : null;
+      return slug ? { ats: 'workable', slug, jobId: null, region: null } : null;
+    }
+    const slug = safeSlug(parts[0]);
+    if (!slug || slug === 'j') return null;
+    const jobId = parts[1] === 'j' && /^[A-Za-z0-9]{6,}$/.test(parts[2] || '') ? parts[2].toUpperCase() : null;
+    return { ats: 'workable', slug, jobId, region: null };
+  }
+  const wk = host.match(/^([a-z0-9-]+)\.workable\.com$/);
+  if (wk && !['www', 'apply', 'jobs', 'help', 'resources'].includes(wk[1])) {
+    const jobId = parts[0] === 'j' && /^[A-Za-z0-9]{6,}$/.test(parts[1] || '') ? parts[1].toUpperCase() : null;
+    return { ats: 'workable', slug: wk[1], jobId, region: null };
   }
 
   // Company careers pages that embed an ATS: the job id is in a query param,

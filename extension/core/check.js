@@ -17,7 +17,7 @@ import { workday } from './sources/workday.js';
 import { canonicalUrl } from './sitemap.js';
 import { refineMatch } from './semantic.js';
 
-const ATS_NAMES = { greenhouse: 'Greenhouse', lever: 'Lever', ashby: 'Ashby', workday: 'Workday' };
+const ATS_NAMES = { greenhouse: 'Greenhouse', lever: 'Lever', ashby: 'Ashby', workday: 'Workday', workable: 'Workable' };
 /** Workday boards up to this size are paged through completely. */
 const WORKDAY_FULL_LIST_MAX = 100;
 

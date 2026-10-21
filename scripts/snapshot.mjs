@@ -23,7 +23,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DRY_RUN = process.argv.includes('--dry-run');
 const onlyIdx = process.argv.indexOf('--only');
 const ONLY = onlyIdx > 0 ? (process.argv[onlyIdx + 1] || '').toLowerCase() : '';
-const SNAPSHOT_ATS = new Set(['greenhouse', 'lever', 'ashby']);
+const SNAPSHOT_ATS = new Set(['greenhouse', 'lever', 'ashby', 'workable']);
 
 const today = new Date().toISOString().slice(0, 10);
 const limiter = new RateLimiter({ minIntervalMs: 500, maxConcurrent: 2 });

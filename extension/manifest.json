@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GhostCheck",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Checks whether a LinkedIn job is really open by comparing it with the company's own careers site.",
   "minimum_chrome_version": "116",
   "icons": {
@@ -20,6 +20,7 @@
     "https://api.lever.co/*",
     "https://api.eu.lever.co/*",
     "https://api.ashbyhq.com/*",
+    "https://apply.workable.com/*",
     "https://raw.githubusercontent.com/*",
     "https://archive.org/*",
     "https://*.myworkdayjobs.com/*",

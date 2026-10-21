@@ -57,3 +57,25 @@ test('parsers tolerate malformed responses', () => {
     assert.deepEqual(source.parse({ jobs: [null, { id: 1 }] }), []);
   }
 });
+
+test('workable parse', () => {
+  const json = {
+    name: 'Acme',
+    jobs: [
+      {
+        title: 'Software Engineer (Finance)', shortcode: 'ab12cd34ef', telecommuting: false, department: 'Engineering',
+        url: 'https://apply.workable.com/j/AB12CD34EF', published_on: '2026-09-30', created_at: '2026-09-29',
+        city: 'Tokyo', state: 'Tokyo', country: 'Japan', description: '<p>Build <b>finance</b> systems.</p>',
+        locations: [{ country: 'Japan', countryCode: 'JP', city: 'Tokyo', region: 'Tokyo', hidden: false }],
+      },
+      { title: 'No code' },
+    ],
+  };
+  const [p, ...rest] = SOURCES.workable.parse(json);
+  assert.equal(rest.length, 0);
+  assert.equal(p.id, 'AB12CD34EF');
+  assert.equal(p.location, 'Tokyo, Japan');
+  assert.equal(p.createdAt, '2026-09-30T00:00:00.000Z');
+  assert.equal(p.text, 'Build finance systems.');
+  assert.equal(SOURCES.workable.listUrl({ slug: 'acme' }), 'https://apply.workable.com/api/v1/widget/accounts/acme?details=true');
+});

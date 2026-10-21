@@ -14,7 +14,7 @@
 
 import { isWorkdayHost, workdayRef } from './sources/workday.js';
 
-const ATS_IDS = new Set(['greenhouse', 'lever', 'ashby', 'workday']);
+const ATS_IDS = new Set(['greenhouse', 'lever', 'ashby', 'workday', 'workable']);
 const LEGAL_SUFFIXES =
   /\b(inc|incorporated|llc|ltd|limited|corp|corporation|co|company|gmbh|ag|plc|sa|sas|bv|nv|pty|pte|oy|ab|as|srl|spa|kk)\b/g;
 
@@ -37,7 +37,7 @@ export function normalizeCompanyName(name) {
  * @property {string} name
  * @property {string[]} aliases
  * @property {string[]} linkedin   LinkedIn company page ids (linkedin.com/company/{id})
- * @property {'greenhouse' | 'lever' | 'ashby' | 'workday'} ats
+ * @property {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable'} ats
  * @property {string} slug
  * @property {string | null} region
  * @property {ReturnType<typeof workdayRef>} [workday]  for Workday: built from { host, site }
