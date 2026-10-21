@@ -27,6 +27,7 @@
     { "name": "Mastercard", "linkedin": ["mastercard"], "ats": "workday", "slug": "mastercard", "workday": { "host": "mastercard.wd1.myworkdayjobs.com", "site": "CorporateCareers" } },
     { "name": "NVIDIA", "linkedin": ["nvidia"], "ats": "workday", "slug": "nvidia", "workday": { "host": "nvidia.wd5.myworkdayjobs.com", "site": "NVIDIAExternalCareerSite" } },
     { "name": "Salesforce", "linkedin": ["salesforce"], "ats": "workday", "slug": "salesforce", "workday": { "host": "salesforce.wd12.myworkdayjobs.com", "site": "External_Career_Site" } },
+    { "name": "Sakana AI", "linkedin": ["sakana-ai"], "ats": "workable", "slug": "sakana-ai" },
     { "name": "Linear", "ats": "ashby", "slug": "linear" },
     { "name": "Notion", "linkedin": ["notionhq"], "ats": "ashby", "slug": "notion" },
     { "name": "OpenAI", "linkedin": ["openai"], "ats": "ashby", "slug": "openai" },

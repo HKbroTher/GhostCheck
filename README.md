@@ -33,7 +33,7 @@ Works in Chrome 116+ and other Chromium browsers (Edge, Brave, Arc).
 flowchart LR
   A[LinkedIn job page] -->|title, company, location,<br>description, apply link| B[Find the official source]
   B --> C{Careers site}
-  C -->|Greenhouse / Lever / Ashby| D[All open jobs]
+  C -->|Greenhouse / Lever / Ashby / Workable| D[All open jobs]
   C -->|Workday| E[The posting or a title search]
   C -->|Company's own site| F[JobPosting data / sitemap]
   D & E & F --> G[Match the job]
@@ -48,9 +48,9 @@ flowchart LR
 
    | Careers site | How GhostCheck checks | Can it say "not found"? |
    |---|---|---|
-   | Greenhouse, Lever, Ashby | Full list of open jobs from the public API | Yes |
+   | Greenhouse, Lever, Ashby, Workable | Full list of open jobs from the public API | Yes |
    | Workday | The exact posting from the apply link, otherwise a title search | Only for boards small enough (≤ 100 jobs) to list completely |
-   | Company's own site | schema.org `JobPosting` data on the apply page, then the site's `sitemap.xml` | No: it can only confirm a job, or show the apply page is gone |
+   | Company's own site | The ATS the page links to or embeds (checked as above); otherwise schema.org `JobPosting` data on the page, then the site's `sitemap.xml` | Only through a linked ATS; the page itself can only confirm a job, or show it is gone |
 
 4. **Match the job.** Titles are normalized (`Sr.` → `Senior`, `SWE` → `Software Engineer`, noise like `(m/w/d)` or `Remote` removed), then compared with fuzzy matching. Seniority level, location and manager vs. individual-contributor roles must agree. When titles are worded differently, a small AI model that runs on your computer compares the job descriptions (see [below](#description-matching-local-ai-model)).
 5. **Estimate the job's age** from the oldest of: the careers site's own publish date, GhostCheck's daily snapshots (`data/first-seen/`), and the earliest [Wayback Machine](https://web.archive.org/) capture. Snapshots and captures prove a job existed *by* a date, so they can show a job is old but never that it is new.
@@ -95,7 +95,7 @@ GhostCheck reads **only the public job details** on the LinkedIn page you are vi
 
 | GhostCheck contacts | What it sends | Why |
 |---|---|---|
-| Greenhouse, Lever, Ashby, Workday public APIs | The company's board id; for Workday, the job title as a search term | Get the company's open jobs |
+| Greenhouse, Lever, Ashby, Workable, Workday public APIs | The company's board id; for Workday, the job title as a search term | Get the company's open jobs |
 | A company's own careers site (only after you allow it) | A request for the public apply page and sitemap | Confirm the job is listed |
 | archive.org | The public URLs of the job (careers page and `linkedin.com/jobs/view/<id>`) | Find the earliest archived copy |
 | raw.githubusercontent.com (this repository) | Nothing but the file request | Latest company list and daily snapshots |
@@ -122,7 +122,7 @@ Easy Apply jobs have no link to the careers site, so GhostCheck needs to know wh
 |---|---|
 | `name`, `aliases` | The company name as LinkedIn shows it, and other spellings |
 | `linkedin` | The id in the company's LinkedIn URL: `linkedin.com/company/`**`acme-corp`**`/` (optional, but more reliable than the name) |
-| `ats` + `slug` | From the company's job pages:<br>• Greenhouse: `boards.greenhouse.io/`**`acme`** or `job-boards.greenhouse.io/`**`acme`**<br>• Lever: `jobs.lever.co/`**`acme`**<br>• Ashby: `jobs.ashbyhq.com/`**`acme`** |
+| `ats` + `slug` | From the company's job pages:<br>• Greenhouse: `boards.greenhouse.io/`**`acme`** or `job-boards.greenhouse.io/`**`acme`**<br>• Lever: `jobs.lever.co/`**`acme`**<br>• Ashby: `jobs.ashbyhq.com/`**`acme`**<br>• Workable: `apply.workable.com/`**`acme`** |
 | Workday | `"ats": "workday", "slug": "<tenant>", "workday": { "host": "<tenant>.wd5.myworkdayjobs.com", "site": "<site>" }` from a URL like `https://`**`acme`**`.wd5.myworkdayjobs.com/en-US/`**`AcmeCareers`**`/job/...` |
 | `region` | `"eu"` only for EU-hosted Greenhouse or Lever boards (`job-boards.eu.greenhouse.io`, `jobs.eu.lever.co`) |
 
@@ -163,7 +163,7 @@ To preview every badge state, open `chrome-extension://<extension id>/dev/previe
 ## Limitations
 
 - GhostCheck can be wrong. The card says **"Signals, not verdicts"** for a reason: use it as one input, not as proof.
-- Careers sites that render jobs only with JavaScript, block automated reading, or use an ATS other than those above give ⚪.
+- Careers sites that render jobs only with JavaScript, block automated reading, or use an ATS other than those above give ⚪. The card names the system when it recognises one (HERP, HRMOS, SmartRecruiters, iCIMS, ...), so you know why.
 - Large Workday sites (over 100 jobs) can confirm a job but never report it missing.
 - The description model understands English only; other languages fall back to title matching.
 - LinkedIn changes its pages often. If badges stop appearing, the selectors probably need an update (see [Contributing](#fix-ghostcheck-after-a-linkedin-redesign)).
