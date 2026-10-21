@@ -110,3 +110,8 @@ test('title language', async () => {
 test("apostrophes in place names don't split them (O'Fallon = O Fallon)", () => {
   assert.ok(locationsCompatible("O'Fallon, Missouri, United States", 'O Fallon, United States of America, 63368-7263'));
 });
+
+test('a city written with its district or park still matches the city', () => {
+  assert.ok(locationsCompatible('Aguascalientes, Mexico', 'Parque Industrial del Valle de Aguascalientes, Ags., Mexico'));
+  assert.ok(!locationsCompatible('Aguascalientes, Mexico', 'Monterrey, Mexico'));
+});

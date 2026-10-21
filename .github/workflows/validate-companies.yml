@@ -39,6 +39,6 @@ jobs:
       - name: Probe careers-site search APIs (informational)
         run: node scripts/probe-sites.mjs
         continue-on-error: true
-      - name: Probe more careers systems and Wikidata (informational)
+      - name: Find careers sites from company names (informational)
         run: node scripts/probe-ats.mjs
         continue-on-error: true

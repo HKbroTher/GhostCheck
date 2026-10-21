@@ -1,59 +1,39 @@
 #!/usr/bin/env node
 /**
- * Exploratory probe of more careers systems, to build their sources from
- * real responses. Prints shapes; never fails the build.
+ * Live check of finding a careers site from a company name, through the same
+ * code as the extension: Wikidata -> official website -> careers page -> ATS.
+ * Informational: prints what each step finds; the workflow does not fail on it.
  */
-const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36';
-const snip = (s, n = 800) => String(s).replace(/\s+/g, ' ').slice(0, n);
+import { fetchJson, fetchText } from '../core/http.js';
+import { careersCandidates, pickCompanyWebsite, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
+import { discoverAts } from '../core/discover.js';
+import { phenomSite } from '../core/sources/site-search.js';
 
-async function get(url, init = {}) {
-  const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(20000), ...init, headers: { 'user-agent': UA, accept: 'application/json, text/html;q=0.9', ...(init.headers || {}) } });
-  return { status: res.status, url: res.url, text: await res.text(), type: res.headers.get('content-type') };
-}
+const COMPANIES = ['FedEx', 'Stripe', 'Mastercard', 'Sakana AI', 'Notion', 'Cyient', 'Thermo Fisher Scientific'];
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function step(name, fn) {
-  console.log(`\n=== ${name}`);
+for (const company of COMPANIES) {
   try {
-    await fn();
+    const search = await fetchJson(wikidataSearchUrl(company));
+    await sleep(1200); // Wikidata rate limit
+    const ids = (search?.search || []).map((h) => h.id);
+    const site = ids.length ? pickCompanyWebsite(company, search, await fetchJson(wikidataEntitiesUrl(ids))) : null;
+    await sleep(1200);
+    if (!site) {
+      console.log(`website  ${company}: none found (${ids.length} Wikidata hits)`);
+      continue;
+    }
+    let found = 'no careers page';
+    for (const url of careersCandidates(site.url)) {
+      const page = await fetchText(url, { timeoutMs: 15000 }).catch(() => null);
+      if (!page?.ok) continue;
+      const ref = discoverAts(page.text).refs[0]?.ref;
+      const phenom = phenomSite(page.text, page.url);
+      found = `${url} -> ${page.url}: ${ref ? `${ref.ats}/${ref.slug}` : phenom ? 'Phenom job search' : 'no ATS found'}`;
+      break;
+    }
+    console.log(`website  ${company}: ${site.url} (${site.id}); careers ${found}`);
   } catch (err) {
-    console.log('failed', err.message);
+    console.log(`website  ${company}: ${err.message}`);
   }
 }
-
-await step('SmartRecruiters', async () => {
-  for (const company of ['BoschGroup', 'Ubisoft2', 'IKEA', 'ServiceNow', 'Visa', 'LVMH', 'Equinox', 'WesternDigital', 'Sodexo', 'Avature']) {
-    const r = await get(`https://api.smartrecruiters.com/v1/companies/${company}/postings?limit=2`);
-    const json = JSON.parse(r.text);
-    console.log(company, r.status, 'totalFound', json.totalFound);
-    const p = json.content?.[0];
-    if (!p) continue;
-    console.log('first', JSON.stringify(p).slice(0, 1500));
-    const d = await get(`https://api.smartrecruiters.com/v1/companies/${company}/postings/${p.id}`);
-    const dj = JSON.parse(d.text);
-    console.log('detail', d.status, 'keys', Object.keys(dj).join(', '));
-    console.log('detail urls', dj.postingUrl, dj.applyUrl, 'company', JSON.stringify(dj.company), 'released', dj.releasedDate);
-    console.log('jobAd sections', Object.keys(dj.jobAd?.sections || {}).join(', '));
-    const gone = await get(`https://api.smartrecruiters.com/v1/companies/${company}/postings/999999999999`);
-    console.log('removed posting ->', gone.status, snip(gone.text, 150));
-    const q = await get(`https://api.smartrecruiters.com/v1/companies/${company}/postings?limit=3&q=${encodeURIComponent(p.name)}`);
-    console.log('q search', q.status, JSON.parse(q.text).content?.map((x) => x.name).join(' | '));
-    const page = await get(dj.postingUrl || `https://jobs.smartrecruiters.com/${company}/${p.id}`);
-    console.log('job page', page.status, page.url);
-    break;
-  }
-});
-
-await step('Workable widget name', async () => {
-  const r = await get('https://apply.workable.com/api/v1/widget/accounts/sakana-ai');
-  const j = JSON.parse(r.text);
-  console.log('keys', Object.keys(j).join(', '), 'name', j.name);
-});
-
-await step('SuccessFactors job page markup', async () => {
-  const page = await get('https://careers.underarmour.com/search/?q=engineer');
-  const job = page.text.match(/href="(\/job\/[^"]+)"/)?.[1];
-  const jp = await get(`https://careers.underarmour.com${job}`);
-  const props = [...jp.text.matchAll(/itemprop="([a-zA-Z]+)"[^>]{0,200}/g)].map((m) => snip(m[0], 160));
-  console.log('itemprops', props.slice(0, 25).join('\n  '));
-  console.log('itemtype', jp.text.match(/itemtype="[^"]+"/g)?.slice(0, 5));
-});

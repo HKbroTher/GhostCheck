@@ -130,3 +130,16 @@ export function guessSlugs(name) {
   const out = [words.join(''), words.join('-')];
   return [...new Set(out)].filter((s) => s.length >= 2);
 }
+
+/**
+ * Does the site's domain carry the company's name? careers.fedex.com is
+ * FedEx's own site even when its pages name "Federal Express Corporation".
+ */
+export function hostMatchesCompany(host, company) {
+  const name = normalizeCompanyName(company);
+  const names = [name.replace(/ /g, ''), name.split(' ')[0]].filter((n) => n.length >= 3);
+  const labels = String(host || '').toLowerCase().split('.').slice(0, -1); // drop the top-level domain
+  return labels.some((label) =>
+    names.some((n) => label === n || (label.length >= 4 && n.length >= 4 && (n.startsWith(label) || label.startsWith(n)))),
+  );
+}

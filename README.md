@@ -43,15 +43,22 @@ flowchart LR
 ```
 
 1. **Read the job.** The extension reads the public job details on the page: title, company, location, description, pay shown by LinkedIn, and the apply link. LinkedIn wraps apply links in redirects; GhostCheck unwraps them.
-2. **Find the official source.** The apply link usually reveals the company's applicant tracking system (ATS). Easy Apply jobs have no apply link, so GhostCheck looks the company up in [`data/companies.json`](data/companies.json).
+2. **Find the official source.** The apply link usually reveals the company's applicant tracking system (ATS). Without a usable link (Easy Apply, a job board, a page with no job data) GhostCheck tries, in order:
+   - [`data/companies.json`](data/companies.json), the community list;
+   - a board named after the company on Greenhouse, Workable or SmartRecruiters, used only if the board's own company name matches;
+   - the company's official website from [Wikidata](https://www.wikidata.org/) (free, no account), then its careers site (`careers.<domain>`, `jobs.<domain>`, `<domain>/careers`) and the ATS that page links to. The domain must carry the company's name, and GhostCheck only reads careers sites you allowed.
+
+   Boards found by name can confirm a job but never count it as missing, since a namesake company could own them.
 3. **Ask the careers site** through its public API or public pages:
 
    | Careers site | How GhostCheck checks | Can it say "not found"? |
    |---|---|---|
    | Greenhouse, Lever, Ashby, Workable | Full list of open jobs from the public API | Yes |
    | Workday | The exact posting from the apply link, otherwise a title search | Only for boards small enough (≤ 100 jobs) to list completely |
+   | Oracle Recruiting (e.g. JPMorgan Chase, Dell) | The exact posting from the apply link, otherwise a title search | Only for sites with ≤ 200 jobs |
+   | SmartRecruiters (e.g. Bosch) | The exact posting from the apply link, otherwise a title search | Only for boards with ≤ 100 jobs |
    | amazon.jobs and Phenom careers sites (e.g. careers.mastercard.com) | The site's own job search, by job id or title | No: a search can miss jobs, so it only confirms |
-   | Company's own site | The ATS the page links to or embeds (checked as above); otherwise schema.org `JobPosting` data on the page, then the site's `sitemap.xml` | Only through a linked ATS; the page itself can only confirm a job, or show it is gone |
+   | Company's own site | The ATS the page links to or embeds (checked as above); otherwise schema.org `JobPosting` data on the page (JSON-LD or microdata, as SAP SuccessFactors sites publish it), then the site's `sitemap.xml` | Only through a linked ATS; the page itself can only confirm a job, or show it is gone |
    | Job boards and recruiters (Indeed, Liepin 猎聘, BOSS 直聘, Michael Page, ...) | Never treated as the company's site; GhostCheck checks the company through `data/companies.json` instead | No |
 
    When the apply link opens a careers site's home or search page instead of the job's own page, the job is simply not on that page: the card says so and links to the site's search, and never counts it as "not found".
@@ -124,8 +131,9 @@ GhostCheck reads **only the public job details** on the LinkedIn page you are vi
 
 | GhostCheck contacts | What it sends | Why |
 |---|---|---|
-| Greenhouse, Lever, Ashby, Workable, Workday public APIs | The company's board id; for Workday, the job title as a search term | Get the company's open jobs |
-| A company's own careers site (only after you allow it) | A request for the public apply page and sitemap | Confirm the job is listed |
+| Greenhouse, Lever, Ashby, Workable, Workday, SmartRecruiters, Oracle Recruiting public APIs | The company's board id; for searches, the job title | Get the company's open jobs |
+| wikidata.org | The company name as LinkedIn shows it | Find the company's official website when the job has no usable link |
+| A company's own careers site (only after you allow it) | A request for the public apply page, its sitemap, and its job search (the job title or id) | Confirm the job is listed |
 | archive.org | The public URLs of the job (careers page and `linkedin.com/jobs/view/<id>`) | Find the earliest archived copy |
 | raw.githubusercontent.com (this repository) | Nothing but the file request | Latest company list and daily snapshots |
 | huggingface.co | Nothing but the file request (once) | Download the description model |

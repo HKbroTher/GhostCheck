@@ -30,6 +30,7 @@ import {
   smartRecruitersDetailUrl,
   smartRecruitersListUrl,
 } from '../core/sources/smartrecruiters.js';
+import { pickCompanyWebsite, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
@@ -46,6 +47,7 @@ const TTL = {
   workday: 6 * HOUR,
   page: 1 * HOUR,
   sitemap: 6 * HOUR,
+  website: 30 * 24 * HOUR, // official websites rarely change
 };
 /** Workday boards up to this many jobs are listed completely (5 requests). */
 const WORKDAY_FULL_LIST_MAX = 100;
@@ -137,15 +139,25 @@ async function fetchPostings(ref) {
   });
 }
 
-/** Greenhouse board display name, or null if the board does not exist. */
+/** A board's company name (Greenhouse, Workable, SmartRecruiters), or null if there is no such board. */
 async function fetchBoardName(ref) {
   const key = `boardname:${ref.ats}:${String(ref.slug).toLowerCase()}`;
   const cached = await cacheGet(key);
   if (cached !== undefined) return cached.name;
   return dedupe(key, async () => {
+    const opts = { timeoutMs: 8000, retries: 0, limiter };
     try {
-      const json = await fetchJson(SOURCES.greenhouse.infoUrl(ref), { timeoutMs: 8000, retries: 0, limiter });
-      const name = typeof json?.name === 'string' ? json.name : null;
+      let name = null;
+      if (ref.ats === 'greenhouse') {
+        const json = await fetchJson(SOURCES.greenhouse.infoUrl(ref), opts);
+        name = typeof json?.name === 'string' ? json.name : null;
+      } else if (ref.ats === 'workable') {
+        const json = await fetchJson(SOURCES.workable.listUrl(ref).replace('?details=true', ''), opts);
+        name = typeof json?.name === 'string' ? json.name : null;
+      } else if (ref.ats === 'smartrecruiters') {
+        // Unknown ids answer with 0 jobs and no company name.
+        name = parseSmartRecruitersList(await fetchJson(smartRecruitersListUrl(ref.slug), opts), ref.slug).companyName;
+      }
       await cacheSet(key, { name }, TTL.boardName);
       return name;
     } catch (err) {
@@ -329,6 +341,28 @@ async function fetchOracleDetail(ref, id) {
   const posting = parseOracleDetail(await fetchJson(oracleDetailUrl(o, id), { timeoutMs: 15000, retries: 1, limiter }), o);
   await cacheSet(key, { posting }, TTL.workday);
   return posting;
+}
+
+// --------------------------------------------------------------- Wikidata
+
+/** Wikidata asks API users to go slowly: one request at a time, 1 s apart. */
+const wikidataLimiter = new RateLimiter({ minIntervalMs: 1000, maxConcurrent: 1 });
+
+/** The company's official website from Wikidata, or null. Cached per name, misses too. */
+async function findCompanyWebsite(company) {
+  const key = `website:${company.toLowerCase()}`;
+  const cached = await cacheGet(key);
+  if (cached !== undefined) return cached.site;
+  return dedupe(key, async () => {
+    // Search in the language the name is written in.
+    const language = /[\u3040-\u30ff]/.test(company) ? 'ja' : /[\u4e00-\u9fff]/.test(company) ? 'zh' : /[\uac00-\ud7af]/.test(company) ? 'ko' : 'en';
+    const opts = { timeoutMs: 10000, retries: 1, limiter: wikidataLimiter };
+    const search = await fetchJson(wikidataSearchUrl(company, language), opts);
+    const ids = (search?.search || []).map((h) => h.id).filter((id) => /^Q\d+$/.test(id));
+    const site = ids.length ? pickCompanyWebsite(company, search, await fetchJson(wikidataEntitiesUrl(ids), opts)) : null;
+    await cacheSet(key, { site }, TTL.website);
+    return site;
+  });
 }
 
 // ------------------------------------------------------- self-hosted pages
@@ -593,6 +627,7 @@ async function handleCheck(rawJob, force, pageLang) {
     searchSite,
     searchAts,
     fetchAtsPosting,
+    findCompanyWebsite,
   };
   const result = await checkJob(job, deps);
   if (result.errors) console.warn('[GhostCheck] lookups failed', job.title, result.errors);
