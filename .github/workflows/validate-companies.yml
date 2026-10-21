@@ -11,6 +11,8 @@ on:
       - core/sitemap.js
       - core/matcher.js
       - core/normalize.js
+      - core/discover.js
+      - tests/careers-pages.txt
       - scripts/validate-companies.mjs
       - .github/workflows/validate-companies.yml
   pull_request:

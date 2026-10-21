@@ -50,7 +50,9 @@ try {
   const first = await readCard('Software Application Engineer');
   assert.equal(first.anchorFont, '24px', 'badge must sit on the details heading, not the list entry');
   for (const field of ['Cyient', 'Tokyo, Japan', 'easy', 'cyient']) assert.ok(first.card.includes(field), `card is missing ${field}`);
-  assert.match(first.card, /Description length\s+\d{3,}/);
+  // The description, not the Premium, hiring-team or company boxes around it.
+  const descLength = Number(first.card.match(/Description length\s+(\d+)/)?.[1]);
+  assert.ok(descLength > 850 && descLength < 1100, `description length ${descLength} should be the job text (~960 chars)`);
 
   // Switch job: the pane re-renders after 0.5 s, the tab title after 1.2 s.
   await page.click('a[data-id="4471790000"]');
