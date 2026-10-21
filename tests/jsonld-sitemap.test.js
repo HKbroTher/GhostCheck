@@ -59,4 +59,6 @@ test('canonical urls ignore case of host, trailing slash, hash and tracking para
   assert.equal(canonicalUrl('https://A.com/jobs/1/?utm_source=li#apply'), canonicalUrl('https://a.com/jobs/1'));
   assert.notEqual(canonicalUrl('https://a.com/jobs/1?id=2'), canonicalUrl('https://a.com/jobs/1?id=3'));
   assert.equal(canonicalUrl('nope'), null);
+  // Seen live: apply links carry ?gh_jid=..., sitemaps do not.
+  assert.equal(canonicalUrl('https://careers.acme.com/positions/77?gh_jid=77'), canonicalUrl('https://careers.acme.com/positions/77/'));
 });
