@@ -7,6 +7,7 @@
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36';
 const PHENOM_CANDIDATES = [
   'https://careers.fedex.com/',
+  'https://careers.fedex.com/jobs?keywords=engineer',
   'https://jobs.thermofisher.com/',
   'https://jobs.citi.com/',
   'https://careers.mastercard.com/',
@@ -37,7 +38,7 @@ async function probePhenom(start) {
     return console.log('GET failed', err.message);
   }
   console.log('status', page.status, 'final', page.url, 'bytes', page.text.length);
-  const markers = ['phenompeople', 'phApp', 'ddoKey', 'refineSearch', 'widgets'].filter((m) => page.text.includes(m));
+  const markers = ['phenompeople', 'phApp', 'ddoKey', 'refineSearch', 'widgets', 'jibe', 'Jibe', 'radancy', 'tmpworldwide', 'avature', 'eightfold', 'icims', 'brassring', 'oraclecloud', 'successfactors', 'taleo', 'workday', 'myworkdayjobs', 'smartrecruiters', 'beamery', 'clinch', 'symphonytalent', 'cornerstone', 'paradox'].filter((m) => page.text.includes(m));
   console.log('markers', markers);
   for (const k of ['refNum', 'locale', 'country', 'siteType', 'pageId', 'deviceType', 'pageName', 'baseUrl', 'cdnUrl', 'siteLang', 'csrfToken']) {
     const m = page.text.match(new RegExp(`"${k}"\\s*:\\s*"([^"]{0,120})"`));
@@ -45,7 +46,19 @@ async function probePhenom(start) {
   }
   const i = page.text.indexOf('phApp');
   if (i >= 0) console.log('phApp snippet:', snip(page.text.slice(i, i + 1500)));
-  if (!markers.includes('phApp')) return;
+  if (!markers.includes('phApp')) {
+    const urls = [...new Set(page.text.match(/https?:\/\/[a-z0-9.-]+\.[a-z]{2,}/gi) || [])].slice(0, 60);
+    console.log('hosts in page', urls.join(' '));
+    for (const path of ['/api/jobs?keywords=engineer&page=1&limit=3', '/api/jobs?page=1&limit=3']) {
+      try {
+        const res = await get(new URL(path, page.url).href);
+        console.log('GET', path, res.status, res.headers['content-type'], snip(res.text, 600));
+      } catch (err) {
+        console.log('GET', path, 'failed', err.message);
+      }
+    }
+    return;
+  }
 
   const cfg = (k) => page.text.match(new RegExp(`"${k}"\\s*:\\s*"([^"]{0,120})"`))?.[1];
   const origin = new URL(page.url).origin;
@@ -87,7 +100,11 @@ async function probePhenom(start) {
         const json = JSON.parse(res.text);
         console.log('shape', JSON.stringify(keysDeep(json)).slice(0, 2500));
         const job = json?.refineSearch?.data?.jobs?.[0];
-        if (job) console.log('first job', JSON.stringify(job).slice(0, 2500));
+        if (job) {
+          console.log('job keys', Object.keys(job).join(', '));
+          const pick = ['jobId', 'jobSeqNo', 'reqId', 'title', 'postedDate', 'dateCreated', 'location', 'cityStateCountry', 'multi_location', 'applyUrl', 'externalApply', 'descriptionTeaser'];
+          console.log('fields', JSON.stringify(Object.fromEntries(pick.map((k) => [k, job[k]]))).slice(0, 1500));
+        }
         console.log('hits', json?.refineSearch?.hits, 'totalHits', json?.refineSearch?.totalHits);
       } catch {
         // not JSON
