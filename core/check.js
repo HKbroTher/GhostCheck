@@ -8,6 +8,7 @@ import { lookupCompany, guessSlugs, normalizeCompanyName } from './companies.js'
 import { matchPosting } from './matcher.js';
 import { sameTitleLanguage } from './normalize.js';
 import { detectJobBoard, jobBoardName } from './job-boards.js';
+import { compareLanguages, detectLanguage, postingLanguage } from './language.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
@@ -149,6 +150,20 @@ async function gatherAgeEvidence(job, ref, posting, deps) {
 const unknown = (reason, extra = {}) => ({ status: 'unknown', reason, ...extra });
 
 /**
+ * Is the board in the job's language? A missing title can only count when it
+ * is; otherwise the job may simply be listed under a translated title.
+ * @returns {{ same: boolean, reason: string }}  reason: why "not found" can't count
+ */
+function languageCheck(job, postings, siteName, lang) {
+  const { different, boardLang } = compareLanguages(job, postings);
+  const same = different === null ? sameTitleLanguage(job.title, postings) : !different;
+  const reason = boardLang && different
+    ? t(lang, 'unknown.languageDiff', { ats: siteName, language: t(lang, `lang.${boardLang}`) })
+    : t(lang, 'unknown.language', { ats: siteName });
+  return { same, reason };
+}
+
+/**
  * A failure worth logging: GhostCheck shows ⚪ for it, and the page console
  * gets the technical details so users can report what went wrong.
  * @returns {{ step: string, kind: string, status: number | null, message: string }}
@@ -228,14 +243,12 @@ async function lookupListAts(job, board, deps, rules) {
   // A board found by name might belong to another company with the same
   // name, and a title in another language may simply be a translation:
   // never count "not found" against the job in those cases.
-  const sameLanguage = sameTitleLanguage(job.title, postings);
+  const language = languageCheck(job, postings, siteName, deps.lang);
   const outcome = outcomeFromMatch(match, {
     siteName,
     boardUrl,
-    canBeMissing: board.source !== 'guess' && sameLanguage,
-    missingReason: !sameLanguage
-      ? t(deps.lang, 'unknown.language', { ats: siteName })
-      : t(deps.lang, 'unknown.guessMissing', { ats: siteName, slug: ref.slug }),
+    canBeMissing: board.source !== 'guess' && language.same,
+    missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.guessMissing', { ats: siteName, slug: ref.slug }),
     notes: [
       postings.length === 1
         ? t(deps.lang, 'note.checkedOne', { ats: siteName })
@@ -243,6 +256,8 @@ async function lookupListAts(job, board, deps, rules) {
     ],
     lang: deps.lang,
   });
+  // Across languages a "similar" title means little: the language is the point.
+  if (!language.same && outcome.status === 'unknown') outcome.reason = language.reason;
   if (semantic) {
     const decision = t(deps.lang, `semantic.${semantic.decision}`);
     outcome.detected.descriptionMatch =
@@ -288,16 +303,17 @@ async function lookupWorkday(job, board, deps, rules) {
   // The apply-link id is deliberately not passed: a search result missing it
   // does not mean the posting was removed.
   const match = matchPosting(job, result.postings, {}, rules.matching);
+  const language = languageCheck(job, result.postings, 'Workday', deps.lang);
   const outcome = outcomeFromMatch(match, {
     ...base,
     boardUrl: base.officialUrl,
-    canBeMissing: result.complete && board.source !== 'guess' && sameTitleLanguage(job.title, result.postings),
-    missingReason: !sameTitleLanguage(job.title, result.postings)
-      ? t(deps.lang, 'unknown.language', { ats: 'Workday' })
-      : t(deps.lang, 'unknown.workdayIncomplete'),
+    canBeMissing: result.complete && board.source !== 'guess' && language.same,
+    missingReason: !language.same ? language.reason : t(deps.lang, 'unknown.workdayIncomplete'),
     notes: [t(deps.lang, result.complete ? 'note.workdayAll' : 'note.workdaySearched', { count: result.total })],
     lang: deps.lang,
   });
+
+  if (!language.same && outcome.status === 'unknown') outcome.reason = language.reason;
 
   // Search results carry only a rough date and no description: fetch details.
   if (outcome.status === 'found' && deps.fetchWorkdayDetail) {
@@ -557,6 +573,10 @@ export async function checkJob(job, deps) {
     signals.not_found_on_official_site = false;
     signals.apply_link_closed = false;
     vars.matchedTitle = posting.title;
+    // Found, but published in another language: worth telling the user.
+    const jobLang = detectLanguage(`${job.title}\n${String(job.description || '').slice(0, 4000)}`);
+    const postLang = postingLanguage(posting);
+    if (jobLang && postLang && jobLang !== postLang) notes.unshift(t(lang, 'note.languageDiff', { language: t(lang, `lang.${postLang}`) }));
     if (!salary.value) {
       // The official posting may state pay even when LinkedIn does not.
       const official = posting.salary ? { value: true, detail: posting.salary } : detectSalary(posting.text);

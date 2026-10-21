@@ -449,3 +449,29 @@ test('failed lookups are reported for the console, and still only give ⚪', asy
   const ok = await checkJob(job(), deps());
   assert.equal(ok.errors, undefined);
 });
+
+test('English LinkedIn job, German-only board: ask about the working language, never "not found"', async () => {
+  const DE = 'Wir suchen dich für unser Team in Berlin. Du arbeitest mit Produktmanagern zusammen und entwickelst die Systeme, die für unsere Kunden Geld bewegen. Das bringst du mit: Erfahrung mit Java und eine strukturierte Arbeitsweise und Spaß an der Arbeit im Team.';
+  const board = ['Softwareentwickler (m/w/d)', 'Vertriebsmitarbeiter (m/w/d)', 'Teamleiter Kundenservice (m/w/d)'].map((title, i) => ({
+    id: String(i), title, location: 'Berlin', url: `https://boards.greenhouse.io/acme/jobs/${i}`, createdAt: '2026-10-01T00:00:00Z', text: DE,
+  }));
+  for (const lang of ['en', 'zh']) {
+    const r = await checkJob(
+      job({ applyHref: 'https://boards.greenhouse.io/acme', description: LONG_JD.repeat(2) }),
+      deps({ fetchPostings: async () => board, lang }),
+    );
+    assert.equal(r.badge, 'unknown');
+    assert.equal(r.signals.not_found_on_official_site, null);
+    assert.match(r.reasons[0].text, lang === 'en' ? /published in German.*working language/ : /用德语发布.*工作语言/);
+  }
+});
+
+test('found, but the official posting is in another language: say so', async () => {
+  const DE = 'Wir suchen dich für unser Payments Team. Du arbeitest mit Produktmanagern zusammen und entwickelst die Systeme, die für unsere Kunden Geld bewegen. Das bringst du mit: Erfahrung mit Java und eine strukturierte Arbeitsweise und Spaß an der Arbeit im Team.';
+  const r = await checkJob(
+    job({ description: LONG_JD.repeat(2) }),
+    deps({ fetchPostings: async () => ghPostings.map((p) => (p.id === '5551234' ? { ...p, text: DE } : p)) }),
+  );
+  assert.equal(r.badge, 'green');
+  assert.ok(r.reasons.some((x) => /official posting is in German/.test(x.text)));
+});
