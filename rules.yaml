@@ -10,7 +10,7 @@
 #
 # Each reason has an English (en) and a Chinese (zh) version; the card shows
 # the user's language. Reason text placeholders (filled in when available):
-#   {company} {ats} {days} {atsDays} {ageSource} {team} {phrase} {salary} {matchedTitle}
+#   {company} {ats} {days} {atsDays} {linkedinDays} {ageSource} {team} {phrase} {salary} {matchedTitle}
 
 version: 1
 
@@ -67,6 +67,10 @@ semantic:
 age:
   recent_days: 30
   old_days: 90
+  # reposted_on_linkedin: LinkedIn must date the job at least this many days
+  # after its first appearance (companies often post on LinkedIn a little
+  # later, so small gaps are normal).
+  linkedin_gap_days: 60
 
 signals:
   # ---------------------------------------------------------------- positive
@@ -138,3 +142,15 @@ signals:
     reason:
       en: "The careers site dates it {atsDays} days ago, but it existed long before, so it was probably re-posted to look new."
       zh: "官网显示的发布日期是 {atsDays} 天前，但这个职位早已存在，可能是为了显得新而重新发布。"
+
+  # The job has been open for more than old_days, but LinkedIn shows it as
+  # posted or reposted within recent_days (and at least linkedin_gap_days
+  # after it first appeared): it was re-posted on LinkedIn to look fresh.
+  # Overlaps with posted_long_ago, hence the low weight; never counted
+  # together with reposted_to_look_new.
+  - id: reposted_on_linkedin
+    type: negative
+    weight: 1
+    reason:
+      en: "LinkedIn shows it as posted {linkedinDays} days ago, but it first appeared {days} days ago, so it was probably re-posted on LinkedIn to look new."
+      zh: "LinkedIn 显示发布于 {linkedinDays} 天前，但这个职位 {days} 天前就已出现，可能是在 LinkedIn 上重新发布以显得新。"

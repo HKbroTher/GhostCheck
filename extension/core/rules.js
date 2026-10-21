@@ -16,7 +16,7 @@ import { DEFAULT_SEMANTIC } from './semantic.js';
  * @property {string[]} require_any_known
  * @property {number} max_reasons
  * @property {{ title_match: number, title_similar: number }} matching
- * @property {{ recent_days: number, old_days: number }} age
+ * @property {{ recent_days: number, old_days: number, linkedin_gap_days: number }} age
  * @property {typeof DEFAULT_SEMANTIC} semantic
  * @property {SignalRule[]} signals
  */
@@ -66,6 +66,7 @@ export function parseRules(yamlText) {
     age: {
       recent_days: num(raw.age?.recent_days ?? 30, 'age.recent_days'),
       old_days: num(raw.age?.old_days ?? 90, 'age.old_days'),
+      linkedin_gap_days: num(raw.age?.linkedin_gap_days ?? 60, 'age.linkedin_gap_days'),
     },
     semantic: {
       enabled: raw.semantic?.enabled !== false,

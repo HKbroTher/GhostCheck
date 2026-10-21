@@ -71,6 +71,7 @@ flowchart LR
    | `posted_long_ago` | −2 | Listed for more than 90 days |
    | `generic_template` | −1 | The description reads like a pipeline posting ("talent pool", "future opportunities") |
    | `reposted_to_look_new` | −1 | The careers site shows a much newer date than the job really has |
+   | `reposted_on_linkedin` | −1 | Open for over 90 days, but LinkedIn shows it as posted or "Reposted" in the last 30 days |
 
    A total of **+3 or more is 🟢**, **−3 or less is 🔴**, anything in between is 🟡. If the careers site could not be checked at all, the badge is ⚪, whatever the other signals say.
 
