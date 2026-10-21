@@ -470,10 +470,11 @@ async function handleCheck(rawJob, force, pageLang) {
     fetchSitemapUrls,
   };
   const result = await checkJob(job, deps);
-  // Do not cache "can't verify" for long: it is often a transient failure.
-  // Same while the description model is still downloading, so the next look
-  // gets the benefit of it.
-  const shortLived = result.badge === 'unknown' || modelPending;
+  if (result.errors) console.warn('[GhostCheck] lookups failed', job.title, result.errors);
+  // Do not cache "can't verify" or failed lookups for long: they are often
+  // transient. Same while the description model is still downloading, so
+  // the next look gets the benefit of it.
+  const shortLived = result.badge === 'unknown' || !!result.errors || modelPending;
   await cacheSet(key, result, shortLived ? (modelPending ? 10 : 15) * 60000 : TTL.result);
   return result;
 }

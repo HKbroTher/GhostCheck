@@ -20,6 +20,15 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 /** @param {string} s */
 const safeSlug = (s) => (s && SLUG_RE.test(s) ? s.toLowerCase() : null);
 
+/** decodeURIComponent that keeps a malformed segment ("100%-remote") as is. */
+function safeDecode(s) {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
+  }
+}
+
 /**
  * @param {string | null | undefined} rawUrl
  * @returns {AtsRef | null}
@@ -33,7 +42,7 @@ export function detectAts(rawUrl) {
     return null;
   }
   const host = url.hostname.toLowerCase();
-  const parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  const parts = url.pathname.split('/').filter(Boolean).map(safeDecode);
 
   // Public API addresses, as careers pages embed them in scripts.
   const ghApi = host.match(/^boards-api(\.eu)?\.greenhouse\.io$/);

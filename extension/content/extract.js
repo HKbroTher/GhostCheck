@@ -7,6 +7,15 @@
   const MAX_DESCRIPTION_CHARS = 20000;
   const CURRENCY_RE = /[$€£¥₹]|\b(?:USD|EUR|GBP|CAD|AUD|CHF|SGD|INR|JPY)\b/i;
 
+  /** decodeURIComponent that keeps a malformed value as is instead of throwing. */
+  function safeDecode(s) {
+    try {
+      return decodeURIComponent(s);
+    } catch {
+      return s;
+    }
+  }
+
   /** Collapse whitespace and trim. */
   function clean(text) {
     return (text || '').replace(/\s+/g, ' ').trim();
@@ -114,7 +123,7 @@
     const link = queryFirst(root, S.companyLink, { needText: false });
     const href = link && link.getAttribute('href');
     const m = href && href.match(/\/company\/([^/?#]+)/);
-    return m ? decodeURIComponent(m[1]).toLowerCase() : null;
+    return m ? safeDecode(m[1]).toLowerCase() : null;
   }
 
   // ------------------------------------------------------------------
@@ -268,7 +277,7 @@
       data: {
         title: doc.title,
         company: doc.company || clean(companyLink?.textContent),
-        linkedinCompanySlug: slug ? decodeURIComponent(slug).toLowerCase() : null,
+        linkedinCompanySlug: slug ? safeDecode(slug).toLowerCase() : null,
         location: meta ? clean(meta.split('·')[0]) : '',
         metaText: meta,
         salaryText: findSalaryLoose(pane),

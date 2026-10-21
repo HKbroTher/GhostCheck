@@ -7,6 +7,7 @@ import { detectAts } from './ats.js';
 import { lookupCompany, guessSlugs, normalizeCompanyName } from './companies.js';
 import { matchPosting } from './matcher.js';
 import { sameTitleLanguage } from './normalize.js';
+import { detectJobBoard, jobBoardName } from './job-boards.js';
 import { detectSalary, detectSpecificTeam, detectGenericTemplate } from './jd.js';
 import { evaluate } from './rules.js';
 import { makeResult } from './result.js';
@@ -87,7 +88,9 @@ async function resolveBoard(job, applyUrl, deps) {
       let name = null;
       try {
         name = await deps.fetchBoardName({ ats: 'greenhouse', slug, region: null });
-      } catch {
+      } catch (err) {
+        // Most guesses do not exist; only real failures are worth logging.
+        if (!err?.isNotFound) deps.report?.(`guess Greenhouse board "${slug}"`, err);
         continue; // failures are not evidence of anything
       }
       if (name && normalizeCompanyName(name) === want) {
@@ -125,7 +128,9 @@ async function gatherAgeEvidence(job, ref, posting, deps) {
       );
     }
   }
-  await Promise.allSettled(tasks);
+  for (const r of await Promise.allSettled(tasks)) {
+    if (r.status === 'rejected') deps.report?.('job age lookup', r.reason);
+  }
   return evidence;
 }
 
@@ -142,6 +147,20 @@ async function gatherAgeEvidence(job, ref, posting, deps) {
  */
 
 const unknown = (reason, extra = {}) => ({ status: 'unknown', reason, ...extra });
+
+/**
+ * A failure worth logging: GhostCheck shows ⚪ for it, and the page console
+ * gets the technical details so users can report what went wrong.
+ * @returns {{ step: string, kind: string, status: number | null, message: string }}
+ */
+export function describeError(step, err) {
+  return {
+    step,
+    kind: err?.kind || err?.name || 'Error',
+    status: err?.status ?? null,
+    message: String(err?.message || err).slice(0, 300),
+  };
+}
 
 function similarReason(match, lang) {
   const why = t(lang, ['level', 'location', 'title'].includes(match.mismatch) ? `why.${match.mismatch}` : 'why.other');
@@ -185,6 +204,7 @@ async function lookupListAts(job, board, deps, rules) {
   try {
     postings = await deps.fetchPostings(ref);
   } catch (err) {
+    if (!err?.isNotFound) deps.report?.(`${siteName} board "${ref.slug}"`, err);
     return unknown(
       err?.isNotFound
         ? t(deps.lang, 'unknown.boardMissing', { ats: siteName, slug: ref.slug })
@@ -254,13 +274,15 @@ async function lookupWorkday(job, board, deps, rules) {
     } catch (err) {
       if (err?.isNotFound) return { ...base, status: 'closed', detected: { matchStatus: 'apply link removed' } };
       // Other failures: fall back to searching.
+      deps.report?.('Workday posting', err);
     }
   }
 
   let result;
   try {
     result = await deps.searchWorkday(ref, job.title);
-  } catch {
+  } catch (err) {
+    deps.report?.('Workday search', err);
     return unknown(t(deps.lang, 'unknown.workdayUnreachable'), base);
   }
   // The apply-link id is deliberately not passed: a search result missing it
@@ -282,19 +304,37 @@ async function lookupWorkday(job, board, deps, rules) {
     try {
       const detail = await deps.fetchWorkdayDetail(ref, outcome.posting.id);
       if (detail) outcome.posting = { ...outcome.posting, ...detail, url: outcome.posting.url };
-    } catch {
-      // keep the search result
+    } catch (err) {
+      deps.report?.('Workday posting details', err); // keep the search result
     }
   }
   return outcome;
 }
 
-/** Same company, allowing legal suffixes and "Acme" vs "Acme Robotics". */
-function sameCompany(a, b) {
-  const x = normalizeCompanyName(a);
-  const y = normalizeCompanyName(b);
+/** Regional entity words: "Federal Express Corporation AMEA", "Acme Asia Pacific". */
+const REGION_WORDS =
+  /\b(amea|emea|apac|apj|latam|americas|asia pacific|asia|europe|international|global|north america|japan|china|india|uk|usa|us)\b/g;
+const stripRegion = (name) => name.replace(REGION_WORDS, ' ').replace(/\s+/g, ' ').trim();
+
+/** Same company, allowing legal suffixes, regional entities and "Acme" vs "Acme Robotics". */
+export function sameCompany(a, b) {
+  const x = stripRegion(normalizeCompanyName(a));
+  const y = stripRegion(normalizeCompanyName(b));
   if (!x || !y) return true; // unknown organisation: do not reject
   return x === y || x.startsWith(`${y} `) || y.startsWith(`${x} `);
+}
+
+/**
+ * Does the site's domain carry the company's name? careers.fedex.com is
+ * FedEx's own site even when its pages name "Federal Express Corporation".
+ */
+export function hostMatchesCompany(host, company) {
+  const name = normalizeCompanyName(company);
+  const names = [name.replace(/ /g, ''), name.split(' ')[0]].filter((n) => n.length >= 3);
+  const labels = String(host || '').toLowerCase().split('.').slice(0, -1); // drop the top-level domain
+  return labels.some((label) =>
+    names.some((n) => label === n || (label.length >= 4 && n.length >= 4 && (n.startsWith(label) || label.startsWith(n)))),
+  );
 }
 
 /**
@@ -313,7 +353,11 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   const host = url.hostname;
   const base = { siteName: host, officialUrl: url.origin };
 
-  if (!(await deps.hasOriginPermission(url.origin).catch(() => false))) {
+  const allowed = await deps.hasOriginPermission(url.origin).catch((err) => {
+    deps.report?.(`permission check for ${url.origin}`, err);
+    return false;
+  });
+  if (!allowed) {
     return unknown(t(deps.lang, 'unknown.needPermission', { host }), {
       ...base,
       action: {
@@ -328,7 +372,8 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
   let page;
   try {
     page = await deps.fetchPageJobs(applyUrl);
-  } catch {
+  } catch (err) {
+    deps.report?.(`careers page ${applyUrl}`, err);
     return unknown(t(deps.lang, 'unknown.pageUnreachable', { host }), base);
   }
   if (page.status === 404 || page.status === 410) {
@@ -364,7 +409,8 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
     });
     if (outcome.status === 'found') {
       const p = outcome.posting;
-      if (p.orgName && !sameCompany(p.orgName, job.company)) {
+      // The company's own domain is trusted whatever legal entity its pages name.
+      if (p.orgName && !sameCompany(p.orgName, job.company) && !hostMatchesCompany(host, job.company)) {
         return unknown(t(deps.lang, 'unknown.otherOrg', { host, org: p.orgName, company: job.company }), base);
       }
       if (p.validThrough && Date.parse(p.validThrough) < now.getTime()) {
@@ -390,7 +436,10 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
 
   // No structured data: is the page at least listed in the site's sitemap?
   if (deps.fetchSitemapUrls) {
-    const listed = await deps.fetchSitemapUrls(url.origin).catch(() => null);
+    const listed = await deps.fetchSitemapUrls(url.origin).catch((err) => {
+      deps.report?.(`sitemap of ${url.origin}`, err);
+      return null;
+    });
     const candidates = [applyUrl, page.url].map(canonicalUrl).filter(Boolean);
     if (listed && candidates.some((c) => listed.has(c))) {
       return {
@@ -420,6 +469,8 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
  * @returns {Promise<import('./result.js').CheckResult>}
  */
 export async function checkJob(job, deps) {
+  const errors = [];
+  deps = { ...deps, report: (step, err) => errors.push(describeError(step, err)) };
   const { rules } = deps;
   const now = deps.now ? deps.now() : new Date();
   const applyUrl = resolveApplyUrl(job.applyHref);
@@ -460,6 +511,11 @@ export async function checkJob(job, deps) {
     phrase: template.detail,
   };
 
+  // A job board or agency is not the company's careers site: never read it
+  // as one. The company may still be found through data/companies.json.
+  const jobBoard = applyUrl ? detectJobBoard(applyUrl, job.company) : null;
+  if (jobBoard) detected.jobBoard = jobBoardName(jobBoard, lang);
+
   // 1. Find the official source and ask it about this job.
   const board = await resolveBoard(job, applyUrl, deps);
   /** @type {Outcome | null} */
@@ -471,6 +527,8 @@ export async function checkJob(job, deps) {
     if (board.ref.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
     else if (SOURCES[board.ref.ats]) outcome = await lookupListAts(job, board, deps, rules);
     else outcome = unknown(t(lang, 'ats.unsupported', { ats: ATS_NAMES[board.ref.ats] }));
+  } else if (jobBoard) {
+    outcome = unknown(t(lang, 'unknown.jobBoard', { site: detected.jobBoard, company: vars.company }));
   } else if (applyUrl) {
     outcome = await lookupSelfHosted(job, applyUrl, deps, rules, now);
     if (outcome?.viaPage) {
@@ -490,6 +548,7 @@ export async function checkJob(job, deps) {
   Object.assign(detected, outcome.detected || {});
   vars.ats = outcome.siteName || t(lang, 'fallback.site');
   const notes = [...(outcome.notes || [])];
+  if (jobBoard && board.ref) notes.unshift(t(lang, 'note.jobBoard', { site: detected.jobBoard, company: vars.company }));
 
   // 2. Turn the outcome into signals.
   if (outcome.status === 'found') {
@@ -537,5 +596,6 @@ export async function checkJob(job, deps) {
     action: outcome.action ?? null,
     detected,
     signals,
+    ...(errors.length ? { errors } : {}),
   });
 }

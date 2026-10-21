@@ -42,8 +42,13 @@ export function canonicalUrl(raw) {
       // is the only thing that tells jobs apart, so it must stay.
       else if (/^(gh_jid|ashby_jid)$/i.test(k) && u.pathname.includes(u.searchParams.get(k))) u.searchParams.delete(k);
     }
-    const path = u.pathname.replace(/\/+$/, '') || '/';
-    return `${u.protocol}//${u.host.toLowerCase()}${decodeURI(path)}${u.search}`;
+    let path = u.pathname.replace(/\/+$/, '') || '/';
+    try {
+      path = decodeURI(path);
+    } catch {
+      // malformed escape ("100%-remote"): compare the path as written
+    }
+    return `${u.protocol}//${u.host.toLowerCase()}${path}${u.search}`;
   } catch {
     return null;
   }

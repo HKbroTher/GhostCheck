@@ -61,6 +61,7 @@ const en = {
   'field.closestScore': 'Closest title score',
   'field.descriptionMatch': 'Description match',
   'field.unsupportedAts': 'Job system (not supported yet)',
+  'field.jobBoard': 'Apply link goes to (job board)',
   'field.firstSeen': 'First seen',
 
   // errors shown by the page script
@@ -82,6 +83,7 @@ const en = {
   'ats.unsupported': '{ats} careers sites are not supported yet.',
   'unknown.easyApply': "This is an Easy Apply job and we don't know which careers site this company uses.",
   'unknown.noSite': "We couldn't identify the company's careers site from the apply link.",
+  'unknown.jobBoard': "The apply link goes to {site}, a job board or recruiter, not {company}'s own careers site. A listing there doesn't show the company is hiring, so this job can't be confirmed.",
   'unknown.similar': 'A similar job is listed ("{title}"), but with {why}, so we can\'t be sure it\'s the same one.',
   'why.level': 'a different seniority level',
   'why.location': 'a different location',
@@ -114,6 +116,7 @@ const en = {
   'note.usesAts': '{host} uses {ats} for its job listings.',
   'note.inSitemap': "The apply page is listed in {host}'s sitemap.",
   'note.noPay': 'No pay range is stated (common, and not counted against the job).',
+  'note.jobBoard': "The apply link goes to {site}, a job board; GhostCheck checked {company}'s own careers site instead.",
   'age.ats': "the company's careers site",
   'age.snapshot': "GhostCheck's daily snapshots",
   'age.wayback': 'the Wayback Machine',
@@ -214,6 +217,7 @@ const zh = {
   'field.closestScore': '最接近的职位名相似度',
   'field.descriptionMatch': '职位描述匹配',
   'field.unsupportedAts': '招聘系统（暂不支持）',
+  'field.jobBoard': '申请链接指向（第三方平台）',
   'field.firstSeen': '首次出现',
 
   'error.reloaded': 'GhostCheck 已更新或重新加载，请刷新本页面后再检查。',
@@ -233,6 +237,7 @@ const zh = {
   'ats.unsupported': '暂不支持 {ats} 招聘网站。',
   'unknown.easyApply': '这是 Easy Apply 职位，我们不知道这家公司用的是哪个招聘网站。',
   'unknown.noSite': '无法从申请链接判断公司的招聘网站。',
+  'unknown.jobBoard': '申请链接指向{site}（第三方招聘平台或猎头），不是{company}的官网。第三方平台上有这个职位，不代表公司真的在招，所以无法确认。',
   'unknown.similar': '官网上有一个相似的职位（"{title}"），但{why}，无法确定是同一个职位。',
   'why.level': '级别不同',
   'why.location': '地点不同',
@@ -265,6 +270,7 @@ const zh = {
   'note.usesAts': '{host} 使用 {ats} 发布职位。',
   'note.inSitemap': '申请页面在 {host} 的网站地图（sitemap）里。',
   'note.noPay': '未写明薪资范围（很常见，不计为负面证据）。',
+  'note.jobBoard': '申请链接指向{site}（第三方招聘平台），GhostCheck 改为核对{company}的官网。',
   'age.ats': '公司官网',
   'age.snapshot': 'GhostCheck 每日快照',
   'age.wayback': 'Wayback Machine 存档',

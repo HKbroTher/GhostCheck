@@ -21,6 +21,8 @@
  * @property {string | null} officialUrl
  * @property {string} checkedAt   ISO timestamp
  * @property {Record<string, unknown>} detected  what GhostCheck read / derived
+ * @property {{ step: string, kind: string, status: number | null, message: string }[]} [errors]
+ *   failed requests behind a ⚪, logged to the page console for bug reports
  */
 
 import { t } from './i18n.js';

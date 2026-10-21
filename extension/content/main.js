@@ -91,6 +91,7 @@
       throw new Error('empty response');
     } catch (err) {
       const invalidated = !chrome.runtime?.id;
+      console.warn('[GhostCheck] Could not reach the extension background:', err);
       return {
         badge: 'unknown',
         emoji: '⚪',
@@ -137,6 +138,10 @@
         const result = await requestCheck({ ...data, jobId }, force);
         if (token !== state.token) return; // user moved on to another job
         state.lastResult = result;
+        if (result.errors?.length) {
+          // Shown as ⚪ on the card; the details are for bug reports.
+          console.warn('[GhostCheck] Some lookups failed for this job:', result.errors);
+        }
         ui.setResult(result, { fresh: true });
         if (shouldAutoOpen()) ui.openCard({ fresh: true });
         return;
