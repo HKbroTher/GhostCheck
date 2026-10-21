@@ -15,6 +15,7 @@ on:
       - tests/careers-pages.txt
       - scripts/validate-companies.mjs
       - scripts/probe-sites.mjs
+      - scripts/probe-ats.mjs
       - .github/workflows/validate-companies.yml
   pull_request:
     paths:
@@ -37,4 +38,7 @@ jobs:
       - run: node scripts/validate-companies.mjs
       - name: Probe careers-site search APIs (informational)
         run: node scripts/probe-sites.mjs
+        continue-on-error: true
+      - name: Probe more careers systems and Wikidata (informational)
+        run: node scripts/probe-ats.mjs
         continue-on-error: true
