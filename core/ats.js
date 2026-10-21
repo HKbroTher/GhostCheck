@@ -2,7 +2,7 @@
  * Identify the applicant tracking system (ATS) and company identifier from an
  * apply URL.
  *
- * @typedef {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable'} AtsId
+ * @typedef {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable' | 'oracle' | 'smartrecruiters'} AtsId
  *
  * @typedef {object} AtsRef
  * @property {AtsId} ats
@@ -10,6 +10,7 @@
  * @property {string | null} jobId    posting id, when the URL points at one posting
  * @property {string | null} region   'eu' for EU-hosted boards, else null
  * @property {ReturnType<typeof workdayRef>} [workday]  Workday site and API URLs
+ * @property {{ origin: string, site: string }} [oracle]  Oracle Recruiting site
  */
 
 import { workdayRef } from './sources/workday.js';
@@ -141,6 +142,30 @@ export function detectAts(rawUrl) {
   if (wk && !['www', 'apply', 'jobs', 'help', 'resources'].includes(wk[1])) {
     const jobId = parts[0] === 'j' && /^[A-Za-z0-9]{6,}$/.test(parts[1] || '') ? parts[1].toUpperCase() : null;
     return { ats: 'workable', slug: wk[1], jobId, region: null };
+  }
+
+  // SmartRecruiters: jobs.smartrecruiters.com/{Company}/{id}[-slug], careers.smartrecruiters.com/{Company},
+  //                  api.smartrecruiters.com/v1/companies/{Company}/postings[/{id}]
+  if (/^(jobs|careers|api)\.smartrecruiters\.com$/.test(host)) {
+    const p = host.startsWith('api.') ? (parts[0] === 'v1' && parts[1] === 'companies' ? parts.slice(2) : []) : parts;
+    const company = /^[A-Za-z0-9_-]+$/.test(p[0] || '') && !/^(oneclick-ui|app|sr-jobs|static)$/i.test(p[0]) ? p[0] : null;
+    if (!company) return null;
+    const rest = host.startsWith('api.') ? p.slice(2) : p.slice(1);
+    const jobId = rest[0]?.match(/^(\d{6,})/)?.[1] ?? null;
+    // Company identifiers keep their case ("BoschGroup").
+    return { ats: 'smartrecruiters', slug: company, jobId, region: null };
+  }
+
+  // Oracle Recruiting Cloud: {host}/hcmUI/CandidateExperience/{lang}/sites/{site}[/job/{id}]
+  // (*.oraclecloud.com or a company domain such as enterpriseplatform.dell.com)
+  if (parts[0] === 'hcmUI' && parts[1] === 'CandidateExperience') {
+    const i = parts.indexOf('sites');
+    const site = i >= 0 && /^[A-Za-z0-9_-]+$/.test(parts[i + 1] || '') ? parts[i + 1] : null;
+    if (!site) return null;
+    const rest = parts.slice(i + 2);
+    const j = rest.findIndex((p) => p === 'job' || p === 'preview');
+    const jobId = j >= 0 && /^\d+$/.test(rest[j + 1] || '') ? rest[j + 1] : null;
+    return { ats: 'oracle', slug: `${host}/${site}`, jobId, region: null, oracle: { origin: url.origin, site } };
   }
 
   // Company careers pages that embed an ATS: the job id is in a query param,

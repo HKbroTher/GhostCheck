@@ -32,6 +32,11 @@
     { "name": "Notion", "linkedin": ["notionhq"], "ats": "ashby", "slug": "notion" },
     { "name": "OpenAI", "linkedin": ["openai"], "ats": "ashby", "slug": "openai" },
     { "name": "Ramp", "ats": "ashby", "slug": "ramp" },
-    { "name": "Supabase", "linkedin": ["supabase"], "ats": "ashby", "slug": "supabase" }
+    { "name": "Supabase", "linkedin": ["supabase"], "ats": "ashby", "slug": "supabase" },
+    { "name": "Bosch", "aliases": ["Bosch Group", "Robert Bosch", "Robert Bosch GmbH"], "linkedin": ["bosch"], "ats": "smartrecruiters", "slug": "BoschGroup" },
+    {
+      "name": "JPMorgan Chase", "aliases": ["JPMorgan Chase & Co.", "J.P. Morgan", "JPMorganChase"], "linkedin": ["jpmorganchase", "jpmorgan"],
+      "ats": "oracle", "slug": "jpmc", "oracle": { "url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001" }
+    }
   ]
 }

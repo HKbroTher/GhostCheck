@@ -24,7 +24,10 @@
     "https://raw.githubusercontent.com/*",
     "https://archive.org/*",
     "https://*.myworkdayjobs.com/*",
-    "https://*.myworkdaysite.com/*"
+    "https://*.myworkdaysite.com/*",
+    "https://*.oraclecloud.com/*",
+    "https://api.smartrecruiters.com/*",
+    "https://www.wikidata.org/*"
   ],
   "optional_host_permissions": [
     "https://*/*"

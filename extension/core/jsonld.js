@@ -1,5 +1,7 @@
 /**
- * schema.org JobPosting from JSON-LD blocks in a careers page.
+ * schema.org JobPosting from JSON-LD blocks in a careers page, or from
+ * microdata (itemprop="...") when there is no JSON-LD, as SAP
+ * SuccessFactors career sites publish it.
  * Regex-based on purpose: service workers have no DOMParser.
  */
 import { decodeEntities, htmlToText } from './text.js';
@@ -86,5 +88,35 @@ export function extractJobPostings(html) {
       });
     }
   }
-  return out;
+  return out.length ? out : extractMicrodata(String(html || ''));
+}
+
+/** The first itemprop value: its content attribute, else its text. */
+function itemprop(html, name) {
+  const re = new RegExp(`<([a-z0-9]+)\\b[^>]*\\bitemprop=["']${name}["'][^>]*>`, 'i');
+  const m = html.match(re);
+  if (!m) return '';
+  const content = m[0].match(/\bcontent=["']([^"']*)["']/i);
+  if (content) return text(content[1]);
+  const after = html.slice(m.index + m[0].length, m.index + m[0].length + 2000);
+  return text(htmlToText(after.split(new RegExp(`</${m[1]}>`, 'i'))[0], 300));
+}
+
+/** One JobPosting described with microdata (a job page lists one job). */
+function extractMicrodata(html) {
+  if (!/itemtype=["']https?:\/\/schema\.org\/JobPosting["']/i.test(html)) return [];
+  const title = itemprop(html, 'title');
+  if (!title) return [];
+  return [
+    {
+      title,
+      datePosted: isoOrNull(itemprop(html, 'datePosted')),
+      validThrough: isoOrNull(itemprop(html, 'validThrough')),
+      orgName: itemprop(html, 'hiringOrganization'),
+      location: ['addressLocality', 'addressRegion', 'addressCountry'].map((k) => itemprop(html, k)).filter(Boolean).join(', '),
+      url: null,
+      text: '',
+      salary: null,
+    },
+  ];
 }

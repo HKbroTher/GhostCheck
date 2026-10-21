@@ -15,7 +15,6 @@ const UNSUPPORTED = [
   [/(^|\.)hrmos\.co$/, 'HRMOS'],
   [/(^|\.)talentio\.com$/, 'Talentio'],
   [/(^|\.)wantedly\.com$/, 'Wantedly'],
-  [/(^|\.)smartrecruiters\.com$/, 'SmartRecruiters'],
   [/(^|\.)recruitee\.com$/, 'Recruitee'],
   [/(^|\.)jobs\.personio\.(de|com)$/, 'Personio'],
   [/(^|\.)bamboohr\.com$/, 'BambooHR'],
@@ -59,6 +58,8 @@ export function discoverAts(html) {
     }
     const ref = detectAts(url);
     if (ref?.slug && (ref.ats !== 'workday' || ref.workday?.apiBase)) {
+      // Oracle sites are found by path; only on Oracle's own cloud may we call them without asking.
+      if (ref.ats === 'oracle' && !/\.oraclecloud\.com$/.test(host)) continue;
       const key = `${ref.ats}:${ref.region || ''}:${String(ref.slug).toLowerCase()}`;
       const entry = boards.get(key) || { ref: { ...ref, jobId: null }, count: 0, jobIds: new Set() };
       entry.count++;

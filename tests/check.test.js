@@ -549,3 +549,70 @@ test('an old job shown as new on LinkedIn: reposted_on_linkedin, never together 
   const r = await checkJob(job({ metaText: 'SF · 2 days ago' }), deps({ fetchPostings: async () => fresh }));
   assert.equal(r.signals.reposted_on_linkedin, false);
 });
+
+const oracle = await import('../core/sources/oracle.js');
+const ORACLE_HREF = 'https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210788451';
+const oracleJob = (over = {}) =>
+  job({ company: 'JPMorgan Chase', title: 'Senior Lead Software Engineer - AI/ML Engineering, GPU ML Serving', location: 'Seattle, WA', applyHref: ORACLE_HREF, ...over });
+const O = { origin: 'https://jpmc.fa.oraclecloud.com', site: 'CX_1001' };
+const oracleDeps = (over = {}) =>
+  deps({
+    companies: buildCompanyIndex({ companies: [] }),
+    searchAts: async () => ({ ...oracle.parseOracleSearch(readFixture('oracle-search.json'), O), complete: false }),
+    fetchAtsPosting: async () => oracle.parseOracleDetail(readFixture('oracle-detail.json'), O),
+    ...over,
+  });
+
+test('Oracle Recruiting: the apply-link posting is found by id; removed -> closed', async () => {
+  const r = await checkJob(oracleJob(), oracleDeps());
+  assert.equal(r.badge, 'green');
+  assert.equal(r.detected.ats, 'Oracle Recruiting');
+  assert.equal(r.officialUrl, ORACLE_HREF);
+
+  const gone = await checkJob(oracleJob(), oracleDeps({ fetchAtsPosting: async () => null }));
+  assert.equal(gone.signals.apply_link_closed, true);
+  // An empty answer from a site that answers nothing is not "removed".
+  const dead = await checkJob(oracleJob(), oracleDeps({ fetchAtsPosting: async () => null, searchAts: async () => ({ postings: [], total: 0, complete: true }) }));
+  assert.equal(dead.signals.apply_link_closed, null);
+});
+
+test('Oracle Recruiting: a large site searched by title never says "not found"; a small complete one can', async () => {
+  const href = 'https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001';
+  const missing = await checkJob(oracleJob({ title: 'Head of Treasury Operations', applyHref: href }), oracleDeps());
+  assert.equal(missing.badge, 'unknown');
+  assert.equal(missing.signals.not_found_on_official_site, null);
+  assert.match(missing.reasons[0].text, /Oracle Recruiting's search didn't return this job/);
+
+  const small = await checkJob(
+    oracleJob({ title: 'Head of Treasury Operations', applyHref: href }),
+    oracleDeps({ searchAts: async () => ({ ...oracle.parseOracleSearch(readFixture('oracle-search.json'), O), total: 1, complete: true }) }),
+  );
+  assert.equal(small.signals.not_found_on_official_site, true);
+});
+
+test('Oracle Recruiting on a company domain asks for permission first', async () => {
+  const href = 'https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/295484';
+  const r = await checkJob(oracleJob({ company: 'Dell Technologies', applyHref: href }), oracleDeps({ hasOriginPermission: async () => false }));
+  assert.equal(r.badge, 'unknown');
+  assert.equal(r.action.origin, 'https://enterpriseplatform.dell.com');
+});
+
+test('SmartRecruiters: apply-link posting found; removed posting -> closed; empty board never counts', async () => {
+  const sr = await import('../core/sources/smartrecruiters.js');
+  const href = 'https://jobs.smartrecruiters.com/BoschGroup/744000156836731-analista-financiero';
+  const j = job({ company: 'Bosch', title: 'Analista Financiero y Cuentas Por Pagar', location: 'Aguascalientes, Mexico', applyHref: href });
+  const d = (over) =>
+    deps({
+      companies: buildCompanyIndex({ companies: [] }),
+      searchAts: async () => ({ ...sr.parseSmartRecruitersList(readFixture('smartrecruiters-list.json'), 'BoschGroup'), complete: false }),
+      fetchAtsPosting: async () => sr.parseSmartRecruitersDetail(readFixture('smartrecruiters-detail.json'), 'BoschGroup'),
+      ...over,
+    });
+  const r = await checkJob(j, d());
+  assert.equal(r.badge, 'green');
+  assert.equal(r.detected.ats, 'SmartRecruiters');
+  assert.equal((await checkJob(j, d({ fetchAtsPosting: async () => null }))).signals.apply_link_closed, true);
+  const empty = await checkJob(j, d({ searchAts: async () => ({ postings: [], total: 0, complete: true }) }));
+  assert.equal(empty.badge, 'unknown');
+  assert.equal(empty.signals.apply_link_closed, null);
+});

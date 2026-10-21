@@ -13,8 +13,9 @@
  */
 
 import { isWorkdayHost, workdayRef } from './sources/workday.js';
+import { detectAts } from './ats.js';
 
-const ATS_IDS = new Set(['greenhouse', 'lever', 'ashby', 'workday', 'workable']);
+const ATS_IDS = new Set(['greenhouse', 'lever', 'ashby', 'workday', 'workable', 'smartrecruiters', 'oracle']);
 const LEGAL_SUFFIXES =
   /\b(inc|incorporated|llc|ltd|limited|corp|corporation|co|company|gmbh|ag|plc|sa|sas|bv|nv|pty|pte|oy|ab|as|srl|spa|kk)\b/g;
 
@@ -37,10 +38,11 @@ export function normalizeCompanyName(name) {
  * @property {string} name
  * @property {string[]} aliases
  * @property {string[]} linkedin   LinkedIn company page ids (linkedin.com/company/{id})
- * @property {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable'} ats
+ * @property {'greenhouse' | 'lever' | 'ashby' | 'workday' | 'workable' | 'smartrecruiters' | 'oracle'} ats
  * @property {string} slug
  * @property {string | null} region
  * @property {ReturnType<typeof workdayRef>} [workday]  for Workday: built from { host, site }
+ * @property {{ origin: string, site: string }} [oracle]  for Oracle Recruiting: from oracle.url
  */
 
 /**
@@ -69,6 +71,11 @@ export function buildCompanyIndex(json) {
         return errors.push(`${where}: workday entries need workday.host (*.myworkdayjobs.com) and workday.site`);
       }
     }
+    let oracle = null;
+    if (c.ats === 'oracle') {
+      oracle = typeof c.oracle?.url === 'string' ? detectAts(c.oracle.url)?.oracle : null;
+      if (!oracle) return errors.push(`${where}: oracle entries need oracle.url (https://.../hcmUI/CandidateExperience/en/sites/<site>)`);
+    }
     entries.push({
       name: c.name.trim(),
       aliases: Array.isArray(c.aliases) ? c.aliases.filter((a) => typeof a === 'string') : [],
@@ -77,6 +84,7 @@ export function buildCompanyIndex(json) {
       slug: c.slug,
       region: c.region ?? null,
       ...(c.ats === 'workday' ? { workday: workdayRef({ tenant: c.slug, host: c.workday.host, site: c.workday.site }) } : {}),
+      ...(oracle ? { oracle } : {}),
     });
   });
 

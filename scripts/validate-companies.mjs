@@ -19,6 +19,13 @@ import { fetchText } from '../core/http.js';
 import { extractJobPostings } from '../core/jsonld.js';
 import { discoverAts } from '../core/discover.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
+import { oracleDetailUrl, oracleSearchUrl, parseOracleDetail, parseOracleSearch } from '../core/sources/oracle.js';
+import {
+  parseSmartRecruitersDetail,
+  parseSmartRecruitersList,
+  smartRecruitersDetailUrl,
+  smartRecruitersListUrl,
+} from '../core/sources/smartrecruiters.js';
 
 const filter = (process.argv[2] || '').toLowerCase();
 const index = buildCompanyIndex(JSON.parse(readFileSync(new URL('../data/companies.json', import.meta.url), 'utf8')));
@@ -149,11 +156,51 @@ async function validateWorkday(c, label) {
   }
 }
 
+/**
+ * Oracle Recruiting and SmartRecruiters: the board answers, has jobs (an
+ * unknown SmartRecruiters company also answers, with 0 jobs), belongs to the
+ * company, and one posting can be fetched by id.
+ */
+async function validateSearchAts(c, label) {
+  try {
+    const oracle = c.ats === 'oracle';
+    const list = oracle
+      ? parseOracleSearch(await fetchJson(oracleSearchUrl(c.oracle, '', 50), { timeoutMs: 30000, retries: 2, limiter }), c.oracle)
+      : parseSmartRecruitersList(await fetchJson(smartRecruitersListUrl(c.slug), { timeoutMs: 30000, retries: 2, limiter }), c.slug);
+    if (!list.total) {
+      console.log(`FAIL  ${label}  no open jobs: wrong ${oracle ? 'site' : 'company id'}?`);
+      return failures.push(`${c.name}: ${c.ats} board "${c.slug}" has no jobs`);
+    }
+    let nameNote = '';
+    if (!oracle) {
+      const same = [c.name, ...c.aliases].some((n) => normalizeCompanyName(n) === normalizeCompanyName(list.companyName));
+      nameNote = ` company "${list.companyName}"`;
+      if (!same) failures.push(`${c.name}: SmartRecruiters company "${c.slug}" is "${list.companyName}" (add it to aliases if correct)`);
+    }
+    const first = list.postings[0];
+    const detail = oracle
+      ? parseOracleDetail(await fetchJson(oracleDetailUrl(c.oracle, first.id), { timeoutMs: 30000, retries: 2, limiter }), c.oracle)
+      : parseSmartRecruitersDetail(await fetchJson(smartRecruitersDetailUrl(c.slug, first.id), { timeoutMs: 30000, retries: 2, limiter }), c.slug);
+    selfMatchCheck(c.name, list.postings);
+    console.log(
+      `OK    ${label}  ${list.total} jobs.${nameNote} detail ${detail ? `ok (${detail.text.length} chars)` : 'MISSING'} e.g. "${first.title}" @ ${first.location || '?'} (${first.createdAt?.slice(0, 10)})`,
+    );
+    if (!detail) failures.push(`${c.name}: posting ${first.id} could not be fetched by id`);
+  } catch (err) {
+    console.log(`WARN  ${label}  ${err?.message || err}`);
+    warnings.push(`${c.name}: ${err?.message || err}`);
+  }
+}
+
 for (const c of index.entries) {
   if (filter && !c.name.toLowerCase().includes(filter) && !c.slug.toLowerCase().includes(filter)) continue;
   const label = `${c.name.padEnd(24)} ${c.ats.padEnd(10)} ${c.slug}`;
   if (c.ats === 'workday') {
     await validateWorkday(c, label);
+    continue;
+  }
+  if (c.ats === 'oracle' || c.ats === 'smartrecruiters') {
+    await validateSearchAts(c, label);
     continue;
   }
   const source = SOURCES[c.ats];
