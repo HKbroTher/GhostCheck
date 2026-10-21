@@ -21,7 +21,6 @@
     { "name": "Stripe", "linkedin": ["stripe"], "ats": "greenhouse", "slug": "stripe" },
     { "name": "Vercel", "linkedin": ["vercel"], "ats": "greenhouse", "slug": "vercel" },
     { "name": "Palantir Technologies", "aliases": ["Palantir"], "linkedin": ["palantir-technologies"], "ats": "lever", "slug": "palantir" },
-    { "name": "Plaid", "linkedin": ["plaid-"], "ats": "lever", "slug": "plaid" },
     { "name": "Spotify", "linkedin": ["spotify"], "ats": "lever", "slug": "spotify" },
     { "name": "Linear", "ats": "ashby", "slug": "linear" },
     { "name": "Notion", "linkedin": ["notionhq"], "ats": "ashby", "slug": "notion" },

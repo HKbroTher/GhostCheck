@@ -60,6 +60,16 @@ test('compatible locations', () => {
   assert.ok(locationsCompatible('Berlin, Germany', 'EMEA'));
 });
 
+test('real-world multi-location formats', () => {
+  // Formats observed on live Greenhouse boards.
+  assert.ok(locationsCompatible('San Francisco, CA', 'Seattle, San Francisco, New York City; US'));
+  assert.ok(locationsCompatible('New York, NY', 'San Francisco, CA • New York, NY • United States; US'));
+  assert.ok(locationsCompatible('New York, NY', 'New York City, NY; New York, NY, United States'));
+  assert.ok(locationsCompatible('Austin, TX', 'US - Remote Zone 1 (Job Requisitions Only)'));
+  assert.ok(locationsCompatible('Miami, FL', 'New York, NY (HQ); Remote (Canada); Remote (US); Miami, FL; Remote'));
+  assert.ok(!locationsCompatible('Tokyo, Japan', 'San Francisco, CA | Seattle, WA; San Francisco, California, United States'));
+});
+
 test('incompatible locations', () => {
   assert.ok(!locationsCompatible('London, England, United Kingdom', 'New York, NY'));
   assert.ok(!locationsCompatible('Austin, TX', 'Seattle, WA'));
