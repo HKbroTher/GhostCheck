@@ -12,6 +12,12 @@ import { hostMatchesCompany, normalizeCompanyName } from './companies.js';
 
 const API = 'https://www.wikidata.org/w/api.php';
 
+/**
+ * Wikimedia refuses anonymous clients (HTTP 429); browsers identify
+ * themselves with this header (https://meta.wikimedia.org/wiki/User-Agent_policy).
+ */
+export const WIKIDATA_HEADERS = { 'Api-User-Agent': 'GhostCheck (https://github.com/HKbroTher/Job-Detector)' };
+
 /** Item types that are companies (business, enterprise, public company, ...). */
 const COMPANY_TYPES = new Set([
   'Q4830453', 'Q6881511', 'Q891723', 'Q783794', 'Q43229', 'Q1589009', 'Q167037', 'Q18388277', 'Q210167',

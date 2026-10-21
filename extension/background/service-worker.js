@@ -30,7 +30,7 @@ import {
   smartRecruitersDetailUrl,
   smartRecruitersListUrl,
 } from '../core/sources/smartrecruiters.js';
-import { pickCompanyWebsite, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
+import { pickCompanyWebsite, WIKIDATA_HEADERS, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
@@ -356,7 +356,7 @@ async function findCompanyWebsite(company) {
   return dedupe(key, async () => {
     // Search in the language the name is written in.
     const language = /[\u3040-\u30ff]/.test(company) ? 'ja' : /[\u4e00-\u9fff]/.test(company) ? 'zh' : /[\uac00-\ud7af]/.test(company) ? 'ko' : 'en';
-    const opts = { timeoutMs: 10000, retries: 1, limiter: wikidataLimiter };
+    const opts = { timeoutMs: 10000, retries: 1, limiter: wikidataLimiter, headers: WIKIDATA_HEADERS };
     const search = await fetchJson(wikidataSearchUrl(company, language), opts);
     const ids = (search?.search || []).map((h) => h.id).filter((id) => /^Q\d+$/.test(id));
     const site = ids.length ? pickCompanyWebsite(company, search, await fetchJson(wikidataEntitiesUrl(ids), opts)) : null;

@@ -80,6 +80,7 @@ const RETRYABLE_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
  * @param {object} [opts]
  * @param {'GET' | 'POST'} [opts.method]
  * @param {unknown} [opts.body]          JSON-serialized when provided
+ * @param {Record<string, string>} [opts.headers]  extra request headers
  * @param {number} [opts.timeoutMs]
  * @param {number} [opts.retries]       extra attempts for timeouts, network errors, 429 and 5xx
  * @param {RateLimiter} [opts.limiter]
@@ -88,7 +89,7 @@ const RETRYABLE_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
  * @throws {HttpError}
  */
 export async function fetchJson(url, opts = {}) {
-  const { method = 'GET', body, timeoutMs = 12000, retries = 1, limiter, fetchImpl = globalThis.fetch } = opts;
+  const { method = 'GET', body, headers = {}, timeoutMs = 12000, retries = 1, limiter, fetchImpl = globalThis.fetch } = opts;
   const host = new URL(url).host;
 
   const attempt = async () => {
@@ -98,7 +99,7 @@ export async function fetchJson(url, opts = {}) {
     try {
       res = await fetchImpl(url, {
         method,
-        headers: { Accept: 'application/json', ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}) },
+        headers: { Accept: 'application/json', ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...headers },
         body: body !== undefined ? JSON.stringify(body) : undefined,
         signal: controller.signal,
         credentials: 'omit',
