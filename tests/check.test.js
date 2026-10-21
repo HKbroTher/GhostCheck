@@ -334,3 +334,31 @@ test('self-hosted: no JSON-LD but listed in sitemap -> found; not listed -> unkn
   assert.equal(missing.badge, 'unknown');
   assert.equal(missing.signals.not_found_on_official_site, null);
 });
+
+// ------------------------------------------- careers page linking to an ATS
+
+test('careers page without job data, but its Apply button goes to Greenhouse -> checked there', async () => {
+  const discovered = { refs: [{ ref: { ats: 'greenhouse', slug: 'acme', jobId: '5551234', region: null }, count: 1 }], unsupported: [] };
+  const d = pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [], discovered }) });
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), d);
+  assert.equal(r.badge, 'green');
+  assert.equal(r.detected.ats, 'Greenhouse');
+  assert.equal(r.detected.boardSource, 'link on careers.acme.com');
+  assert.ok(r.reasons.some((x) => /careers\.acme\.com uses Greenhouse/.test(x.text)));
+});
+
+test('careers page linking to a board without this job -> not found counts', async () => {
+  const discovered = { refs: [{ ref: { ats: 'greenhouse', slug: 'acme', jobId: null, region: null }, count: 3 }], unsupported: [] };
+  const d = pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [], discovered }) });
+  const r = await checkJob(job({ applyHref: PAGE_HREF, title: 'Data Scientist', description: '' }), d);
+  assert.equal(r.badge, 'red');
+});
+
+test('careers page using an unsupported ATS says which one', async () => {
+  const discovered = { refs: [], unsupported: ['HERP'] };
+  const d = pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [], discovered }) });
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), d);
+  assert.equal(r.badge, 'unknown');
+  assert.match(r.reasons[0].text, /HERP, which GhostCheck can't check yet/);
+  assert.equal(r.detected.unsupportedAts, 'HERP');
+});

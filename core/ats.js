@@ -35,6 +35,23 @@ export function detectAts(rawUrl) {
   const host = url.hostname.toLowerCase();
   const parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
 
+  // Public API addresses, as careers pages embed them in scripts.
+  const ghApi = host.match(/^boards-api(\.eu)?\.greenhouse\.io$/);
+  if (ghApi && parts[0] === 'v1' && parts[1] === 'boards') {
+    const slug = safeSlug(parts[2]);
+    const jobId = parts[3] === 'jobs' && /^\d+$/.test(parts[4] || '') ? parts[4] : null;
+    return slug ? { ats: 'greenhouse', slug, jobId, region: ghApi[1] ? 'eu' : null } : null;
+  }
+  const lvApi = host.match(/^api(\.eu)?\.lever\.co$/);
+  if (lvApi && parts[0] === 'v0' && parts[1] === 'postings') {
+    const slug = safeSlug(parts[2]);
+    const jobId = UUID_RE.test(parts[3] || '') ? parts[3].toLowerCase() : null;
+    return slug ? { ats: 'lever', slug, jobId, region: lvApi[1] ? 'eu' : null } : null;
+  }
+  if (host === 'api.ashbyhq.com' && parts[0] === 'posting-api' && parts[1] === 'job-board' && parts[2]) {
+    return { ats: 'ashby', slug: parts[2], jobId: null, region: null };
+  }
+
   // Greenhouse: boards.greenhouse.io/{slug}/jobs/{id}, job-boards(.eu).greenhouse.io/{slug}/jobs/{id},
   // boards.greenhouse.io/embed/job_app?for={slug}&token={id}
   const gh = host.match(/^(?:job-)?boards(\.eu)?\.greenhouse\.io$/);

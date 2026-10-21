@@ -171,10 +171,13 @@
     return pane;
   }
 
-  /** Follow the biggest block of text down from `root`, skipping the title area. */
+  /**
+   * The description is the biggest block of text in the pane outside the
+   * title area. Take the largest such child, then keep descending while one
+   * child holds most of the text (dropping headings, buttons, side boxes).
+   */
   function findDescription(root, titleEl) {
-    let el = root;
-    for (;;) {
+    const largestChild = (el) => {
       let best = null;
       let bestLen = 0;
       for (const child of el.children) {
@@ -185,10 +188,19 @@
           bestLen = len;
         }
       }
-      if (!best || bestLen < 0.7 * (el.textContent || '').length || bestLen < 200) break;
+      return { best, bestLen };
+    };
+    // Climb from the title until a level has a big block beside it (the pane
+    // root may be far above the description in deeply nested layouts).
+    let el = root;
+    let { best, bestLen } = largestChild(el);
+    if (!best || bestLen < 200) return '';
+    el = best;
+    for (;;) {
+      ({ best, bestLen } = largestChild(el));
+      if (!best || bestLen < 0.6 * (el.textContent || '').length || bestLen < 200) break;
       el = best;
     }
-    if (el === root || el.contains(titleEl)) return '';
     return clean(el.innerText || el.textContent);
   }
 

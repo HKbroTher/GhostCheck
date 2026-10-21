@@ -1,0 +1,5 @@
+# Real company careers pages (apply links seen on LinkedIn) that the
+# "Validate companies.json" workflow probes: structured data, linked ATS,
+# sitemap. Add pages that show "Can't verify" so we can see why.
+https://sakana.ai/careers/software-engineer-finance/
+https://sakana.ai/careers/

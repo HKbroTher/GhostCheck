@@ -26,6 +26,7 @@
     matchedTitle: 'Matched posting',
     closestScore: 'Closest title score',
     descriptionMatch: 'Description match',
+    unsupportedAts: 'Job system (not supported yet)',
     firstSeen: 'First seen',
   };
 

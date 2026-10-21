@@ -33,7 +33,10 @@ function render(id) {
     <div class="u1"><span>On-site</span><span>Full-time</span></div>
     <div class="v2"><button class="w3" aria-label="Easy Apply to ${j.title} at ${j.company}"><svg></svg><span>Easy Apply</span></button><button>Save</button></div>
     <section class="x4"><h2>About the job</h2><div class="y5"><p>${j.jd}</p></div></section>
-    <section><h2>People you can reach out to</h2><div>Meet the hiring team</div></section>`;
+    <section><h2>Your profile and resume match some required qualifications</h2><div>Show match details. BETA. Is this information helpful?</div></section>
+    <section><h2>Get personalized tips to stand out to hirers</h2><div>${'Find jobs where you are a top applicant and tailor your resume with the help of Premium. '.repeat(4)}</div></section>
+    <section><h2>People you can reach out to</h2><div>${'Meet the hiring team. Talent Acquisition Partner focused on Japan recruitment and branding. Message. '.repeat(4)}</div></section>
+    <section><h2>About the company</h2><div>${'Company overview, followers, employees on LinkedIn and industry information. '.repeat(5)}</div></section>`;
 }
 const p = new URLSearchParams(location.search);
 render(p.get('currentJobId') || '4471791897');

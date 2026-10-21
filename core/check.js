@@ -39,8 +39,9 @@ const WORKDAY_FULL_LIST_MAX = 100;
  *   one Workday posting; throws HttpError (isNotFound for removed postings)
  * @property {(origin: string) => Promise<boolean>} [hasOriginPermission]
  *   whether the user allowed GhostCheck to read this careers site
- * @property {(url: string) => Promise<{ status: number, ok: boolean, url: string, postings: object[] }>} [fetchPageJobs]
- *   a careers page and the schema.org JobPostings found in it
+ * @property {(url: string) => Promise<{ status: number, ok: boolean, url: string, postings: object[],
+ *   discovered?: ReturnType<import('./discover.js').discoverAts> }>} [fetchPageJobs]
+ *   a careers page, the schema.org JobPostings in it and the ATS it links to
  * @property {(origin: string) => Promise<Set<string> | null>} [fetchSitemapUrls]
  *   canonical URLs listed in the site's sitemaps, or null when there are none
  * @property {(texts: string[]) => Promise<number[][] | null>} [embed]
@@ -324,6 +325,7 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
     validThrough: p.validThrough,
   }));
 
+  let structured = null;
   if (postings.length) {
     const match = matchPosting(job, postings, {}, rules.matching);
     const outcome = outcomeFromMatch(match, {
@@ -341,8 +343,22 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
       if (p.validThrough && Date.parse(p.validThrough) < now.getTime()) {
         outcome.notes.push(`The page says applications closed on ${p.validThrough.slice(0, 10)}.`);
       }
+      return outcome;
     }
-    return outcome;
+    structured = outcome; // inconclusive; the ATS behind the page may know more
+  }
+
+  // The page links to or embeds an ATS we can query: ask it directly.
+  const discovered = page.discovered?.refs?.[0]?.ref;
+  if (discovered) {
+    const board = { ref: discovered, source: 'careers_page' };
+    let outcome = null;
+    if (discovered.ats === 'workday') outcome = await lookupWorkday(job, board, deps, rules);
+    else if (SOURCES[discovered.ats]) outcome = await lookupListAts(job, board, deps, rules);
+    if (outcome) {
+      outcome.notes = [`${host} uses ${ATS_NAMES[discovered.ats]} for its job listings.`, ...(outcome.notes || [])];
+      return { ...outcome, ref: discovered, viaPage: host };
+    }
   }
 
   // No structured data: is the page at least listed in the site's sitemap?
@@ -360,7 +376,15 @@ async function lookupSelfHosted(job, applyUrl, deps, rules, now) {
       };
     }
   }
-  return unknown(`We couldn't confirm the job on ${host}: the page has no structured job data we can read.`, base);
+  if (structured) return structured;
+  const others = page.discovered?.unsupported || [];
+  if (others.length) {
+    return unknown(`${host} lists its jobs on ${others.join(' / ')}, which GhostCheck can't check yet.`, {
+      ...base,
+      detected: { unsupportedAts: others.join(', ') },
+    });
+  }
+  return unknown(`We couldn't confirm the job on ${host}: the page has no job data we can read.`, base);
 }
 
 /**
@@ -421,7 +445,13 @@ export async function checkJob(job, deps) {
     else outcome = unknown(`${ATS_NAMES[board.ref.ats]} careers sites are not supported yet.`);
   } else if (applyUrl) {
     outcome = await lookupSelfHosted(job, applyUrl, deps, rules, now);
-    if (outcome) detected.ats = `Careers page (${outcome.siteName})`;
+    if (outcome?.viaPage) {
+      detected.ats = ATS_NAMES[outcome.ref.ats];
+      detected.board = outcome.ref.ats === 'workday' ? outcome.ref.workday?.publicBase : outcome.ref.slug;
+      detected.boardSource = `link on ${outcome.viaPage}`;
+    } else if (outcome) {
+      detected.ats = `Careers page (${outcome.siteName})`;
+    }
   }
   if (!outcome) {
     outcome = unknown(
@@ -450,7 +480,7 @@ export async function checkJob(job, deps) {
         vars.salary = official.detail;
       }
     }
-    const age = combineAge(await gatherAgeEvidence(job, board.ref, posting, deps), now);
+    const age = combineAge(await gatherAgeEvidence(job, outcome.ref ?? board.ref, posting, deps), now);
     if (age) {
       const a = ageSignals(age, rules.age);
       signals.posted_recently = a.posted_recently;

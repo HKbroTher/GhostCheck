@@ -13,6 +13,7 @@ import { snapshotPath } from '../core/snapshot.js';
 import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
 import { workday, WORKDAY_PAGE_SIZE } from '../core/sources/workday.js';
 import { extractJobPostings } from '../core/jsonld.js';
+import { discoverAts } from '../core/discover.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
@@ -245,7 +246,14 @@ async function fetchPageJobs(url) {
   if (cached) return cached;
   return dedupe(key, async () => {
     const page = await fetchText(url, { timeoutMs: 12000, maxBytes: 3_000_000, limiter });
-    const result = { status: page.status, ok: page.ok, url: page.url, postings: page.ok ? extractJobPostings(page.text) : [] };
+    const result = {
+      status: page.status,
+      ok: page.ok,
+      url: page.url,
+      postings: page.ok ? extractJobPostings(page.text) : [],
+      // ATS the page links to or embeds (the real home of many jobs).
+      discovered: page.ok ? discoverAts(page.text) : { refs: [], unsupported: [] },
+    };
     await cacheSet(key, result, TTL.page);
     return result;
   });

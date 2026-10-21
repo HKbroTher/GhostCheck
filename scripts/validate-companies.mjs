@@ -17,6 +17,7 @@ import { matchPosting } from '../core/matcher.js';
 import { workday } from '../core/sources/workday.js';
 import { fetchText } from '../core/http.js';
 import { extractJobPostings } from '../core/jsonld.js';
+import { discoverAts } from '../core/discover.js';
 import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 
 const filter = (process.argv[2] || '').toLowerCase();
@@ -61,6 +62,10 @@ async function probeSelfHosted(url) {
     const page = await fetchText(url, { timeoutMs: 20000, limiter });
     const jobs = page.ok ? extractJobPostings(page.text) : [];
     line += ` -> HTTP ${page.status}, ${jobs.length} JobPosting${jobs[0] ? ` ("${jobs[0].title}", posted ${jobs[0].datePosted?.slice(0, 10) ?? '?'}, org ${jobs[0].orgName || '?'})` : ''}`;
+    const found = page.ok ? discoverAts(page.text) : { refs: [], unsupported: [] };
+    const boards = found.refs.map((r) => `${r.ref.ats}/${r.ref.slug}${r.ref.jobId ? `#${r.ref.jobId}` : ''} x${r.count}`);
+    line += `; linked ATS: ${boards.join(', ') || 'none'}${found.unsupported.length ? `; unsupported: ${found.unsupported.join(', ')}` : ''}`;
+    line += `; ${page.text.length} bytes`;
     const robots = await fetchText(`${origin}/robots.txt`, { timeoutMs: 15000, limiter }).catch(() => null);
     const maps = robots?.ok ? sitemapsFromRobots(robots.text) : [];
     const queue = maps.length ? maps : [`${origin}/sitemap.xml`];
@@ -177,9 +182,14 @@ for (const c of index.entries) {
   }
 }
 
-if (selfHostedSamples.length) {
+// Pages users reported, plus own-domain pages seen on the boards above.
+const reported = readFileSync(new URL('../tests/careers-pages.txt', import.meta.url), 'utf8')
+  .split('\n')
+  .map((l) => l.trim())
+  .filter((l) => l && !l.startsWith('#'));
+if (selfHostedSamples.length || reported.length) {
   console.log('\nSelf-hosted careers pages:');
-  for (const url of selfHostedSamples) await probeSelfHosted(url);
+  for (const url of [...reported, ...selfHostedSamples]) await probeSelfHosted(url);
 }
 
 if (selfMatch.tried) {
