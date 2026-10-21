@@ -34,9 +34,13 @@ export function canonicalUrl(raw) {
   try {
     const u = new URL(raw);
     u.hash = '';
-    // Tracking and ATS-embed parameters (gh_jid duplicates the id in the path).
     for (const k of [...u.searchParams.keys()]) {
-      if (/^(utm_|gh_src$|gh_jid$|ashby_jid$|lever-|source$|src$|ref$|trk)/i.test(k)) u.searchParams.delete(k);
+      // Tracking parameters never identify the page.
+      if (/^(utm_|gh_src$|lever-|source$|src$|ref$|trk)/i.test(k)) u.searchParams.delete(k);
+      // ATS job ids are dropped only when the path repeats them
+      // (/positions/77?gh_jid=77). On generic pages (/job?gh_jid=77) the id
+      // is the only thing that tells jobs apart, so it must stay.
+      else if (/^(gh_jid|ashby_jid)$/i.test(k) && u.pathname.includes(u.searchParams.get(k))) u.searchParams.delete(k);
     }
     const path = u.pathname.replace(/\/+$/, '') || '/';
     return `${u.protocol}//${u.host.toLowerCase()}${decodeURI(path)}${u.search}`;
