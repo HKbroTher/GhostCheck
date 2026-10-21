@@ -15,7 +15,6 @@ const UNSUPPORTED = [
   [/(^|\.)hrmos\.co$/, 'HRMOS'],
   [/(^|\.)talentio\.com$/, 'Talentio'],
   [/(^|\.)wantedly\.com$/, 'Wantedly'],
-  [/(^|\.)workable\.com$/, 'Workable'],
   [/(^|\.)smartrecruiters\.com$/, 'SmartRecruiters'],
   [/(^|\.)recruitee\.com$/, 'Recruitee'],
   [/(^|\.)jobs\.personio\.(de|com)$/, 'Personio'],

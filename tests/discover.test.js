@@ -45,3 +45,15 @@ test('unsupported systems are named, unrelated links ignored', () => {
   assert.deepEqual(unsupported.sort(), ['HERP', 'HRMOS']);
   assert.deepEqual(discoverAts(''), { refs: [], unsupported: [] });
 });
+
+test('workable links: apply page, account subdomain and widget API', () => {
+  assert.deepEqual(detectAts('https://apply.workable.com/sakana-ai/j/AB12CD34EF/apply'), {
+    ats: 'workable', slug: 'sakana-ai', jobId: 'AB12CD34EF', region: null,
+  });
+  assert.equal(detectAts('https://acme.workable.com/j/0123ABCDEF').jobId, '0123ABCDEF');
+  assert.equal(detectAts('https://apply.workable.com/api/v1/widget/accounts/acme').slug, 'acme');
+  assert.equal(detectAts('https://www.workable.com/pricing'), null);
+  const { refs, unsupported } = discoverAts('<meta http-equiv="refresh" content="0; url=https://apply.workable.com/acme/j/AB12CD34EF/">');
+  assert.equal(refs[0].ref.ats, 'workable');
+  assert.deepEqual(unsupported, []);
+});

@@ -66,6 +66,24 @@ async function probeSelfHosted(url) {
     const boards = found.refs.map((r) => `${r.ref.ats}/${r.ref.slug}${r.ref.jobId ? `#${r.ref.jobId}` : ''} x${r.count}`);
     line += `; linked ATS: ${boards.join(', ') || 'none'}${found.unsupported.length ? `; unsupported: ${found.unsupported.join(', ')}` : ''}`;
     line += `; ${page.text.length} bytes`;
+    // Follow the first supported board, as the extension would.
+    const top = found.refs[0]?.ref;
+    if (top && SOURCES[top.ats]) {
+      try {
+        const raw = await fetchJson(SOURCES[top.ats].listUrl(top), { timeoutMs: 30000, retries: 1, limiter });
+        const first = Array.isArray(raw) ? raw[0] : raw?.jobs?.[0];
+        if (first && !shownRawKeys.has(top.ats)) {
+          shownRawKeys.add(top.ats);
+          console.log(`      raw ${top.ats} fields: ${Object.keys(first).sort().join(', ')}`);
+        }
+        const posts = SOURCES[top.ats].parse(raw);
+        const listed = top.jobId ? posts.some((p) => p.id.toLowerCase() === String(top.jobId).toLowerCase()) : null;
+        const sample = posts[0] ? ` e.g. "${posts[0].title}" @ ${posts[0].location || '?'} (${posts[0].createdAt?.slice(0, 10) ?? 'no date'})` : '';
+        line += `; ${top.ats} board: ${posts.length} jobs${listed === null ? '' : `, linked posting ${listed ? 'listed' : 'NOT listed'}`}${sample}`;
+      } catch (err) {
+        line += `; ${top.ats} board: ${err.message}`;
+      }
+    }
     const robots = await fetchText(`${origin}/robots.txt`, { timeoutMs: 15000, limiter }).catch(() => null);
     const maps = robots?.ok ? sitemapsFromRobots(robots.text) : [];
     const queue = maps.length ? maps : [`${origin}/sitemap.xml`];
@@ -165,7 +183,7 @@ for (const c of index.entries) {
       if (!same) failures.push(`${c.name}: Greenhouse board "${c.slug}" is named "${info?.name}"`);
     }
     selfMatchCheck(c.name, postings);
-    const ownDomain = postings.find((p) => p.url && !/greenhouse\.io|lever\.co|ashbyhq\.com/.test(new URL(p.url).host));
+    const ownDomain = postings.find((p) => p.url && !/greenhouse\.io|lever\.co|ashbyhq\.com|workable\.com/.test(new URL(p.url).host));
     if (ownDomain && selfHostedSamples.length < 4) selfHostedSamples.push(ownDomain.url);
     const dated = postings.filter((p) => p.createdAt).length;
     const sample = postings[0] ? ` e.g. "${postings[0].title}" @ ${postings[0].location || '?'}` : '';

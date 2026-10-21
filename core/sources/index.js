@@ -22,9 +22,10 @@
 import { greenhouse } from './greenhouse.js';
 import { lever } from './lever.js';
 import { ashby } from './ashby.js';
+import { workable } from './workable.js';
 
 /** @type {Record<string, Source>} */
-export const SOURCES = { greenhouse, lever, ashby };
+export const SOURCES = { greenhouse, lever, ashby, workable };
 
 /** Hosts the extension needs permission for (keep in sync with manifest.json). */
 export const SOURCE_HOSTS = [
@@ -33,5 +34,6 @@ export const SOURCE_HOSTS = [
   'api.lever.co',
   'api.eu.lever.co',
   'api.ashbyhq.com',
+  'apply.workable.com',
 ];
 
