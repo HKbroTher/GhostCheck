@@ -29,12 +29,15 @@ export function isLikelyJobSitemap(url) {
   return /job|career|position|opening|vacanc|requisition|posting/i.test(url);
 }
 
-/** Comparable form of a URL: host lowercased, no hash, no trailing slash, tracking params dropped. */
+/** Comparable form of a URL: host lowercased, no hash, no trailing slash, tracking/embed params dropped. */
 export function canonicalUrl(raw) {
   try {
     const u = new URL(raw);
     u.hash = '';
-    for (const k of [...u.searchParams.keys()]) if (/^(utm_|gh_src|source|src|ref$)/i.test(k)) u.searchParams.delete(k);
+    // Tracking and ATS-embed parameters (gh_jid duplicates the id in the path).
+    for (const k of [...u.searchParams.keys()]) {
+      if (/^(utm_|gh_src$|gh_jid$|ashby_jid$|lever-|source$|src$|ref$|trk)/i.test(k)) u.searchParams.delete(k);
+    }
     const path = u.pathname.replace(/\/+$/, '') || '/';
     return `${u.protocol}//${u.host.toLowerCase()}${decodeURI(path)}${u.search}`;
   } catch {
