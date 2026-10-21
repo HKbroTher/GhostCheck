@@ -161,7 +161,8 @@ export async function refineMatch(job, match, postings, embed, opts = {}) {
  * @param {Array<{ similarity: number }>} scored   candidates with cosine similarity
  * @param {'promote' | 'tiebreak'} mode
  * @param {typeof DEFAULT_SEMANTIC} o
- * @returns {{ pick: object | null, similarity: number, runnerUp: number | null, decision: string }}
+ * @returns {{ pick: object | null, similarity: number, runnerUp: number | null, decision: 'kept' | 'tiebreak' | 'promoted' }}
+ *   decision is a code; core/i18n.js has the words
  */
 export function decide(scored, mode, o) {
   const sorted = [...scored].sort((a, b) => b.similarity - a.similarity);
@@ -170,7 +171,7 @@ export function decide(scored, mode, o) {
   const out = { pick: null, similarity: round(best.similarity), runnerUp: second ? round(second.similarity) : null, decision: 'kept' };
   const margin = second ? best.similarity - second.similarity : 1;
   if (margin < o.min_margin) return out;
-  if (mode === 'tiebreak') return { ...out, pick: best, decision: 'picked the posting with the closest description' };
-  if (best.similarity >= o.promote_min_similarity) return { ...out, pick: best, decision: 'same description, different title' };
+  if (mode === 'tiebreak') return { ...out, pick: best, decision: 'tiebreak' };
+  if (best.similarity >= o.promote_min_similarity) return { ...out, pick: best, decision: 'promoted' };
   return out;
 }

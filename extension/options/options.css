@@ -6,3 +6,6 @@ section + section { border-top: 1px solid var(--line); margin-top: 18px; }
 #origins { list-style: none; padding: 0; }
 #origins li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; overflow-wrap: anywhere; }
 #origins button { padding: 4px 12px; font-size: 13px; }
+select { font: inherit; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+fieldset { border: 0; padding: 0; margin: 10px 0; display: grid; gap: 8px; }
+fieldset:disabled { opacity: .5; }

@@ -47,6 +47,7 @@
       ],
       "js": [
         "content/selectors.js",
+        "content/strings.js",
         "content/extract.js",
         "content/ui.js",
         "content/main.js"

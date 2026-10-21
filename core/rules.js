@@ -9,7 +9,7 @@ import { DEFAULT_SEMANTIC } from './semantic.js';
  * @property {string} id
  * @property {'positive' | 'negative'} type
  * @property {number} weight   always >= 0; `type` decides the sign
- * @property {string} reason
+ * @property {Record<string, string>} reason   by language; `en` always present
  *
  * @typedef {object} Rules
  * @property {{ green: { min_score: number }, red: { max_score: number } }} badges
@@ -43,7 +43,13 @@ export function parseRules(yamlText) {
     seen.add(s.id);
     if (s.type !== 'positive' && s.type !== 'negative') fail(`${s.id}.type must be positive or negative`);
     if (num(s.weight, `${s.id}.weight`) < 0) fail(`${s.id}.weight must be >= 0 (use type for the sign)`);
-    if (typeof s.reason !== 'string' || !s.reason.trim()) fail(`${s.id}.reason must be a non-empty string`);
+    // reason: "text" or { en: "text", zh: "文字" }; English is required.
+    const reason = typeof s.reason === 'string' ? { en: s.reason } : s.reason;
+    if (!reason || typeof reason.en !== 'string' || !reason.en.trim()) fail(`${s.id}.reason.en must be a non-empty string`);
+    for (const [lang, text] of Object.entries(reason)) {
+      if (typeof text !== 'string' || !text.trim()) fail(`${s.id}.reason.${lang} must be a non-empty string`);
+    }
+    s.reason = reason;
   }
 
   const rules = {
@@ -82,9 +88,11 @@ export function parseRules(yamlText) {
 export function fillTemplate(text, vars) {
   return text
     .replace(/\s*\(\s*\{(\w+)\}\s*\)/g, (m, k) => (vars[k] ? ` (${vars[k]})` : ''))
+    .replace(/（\{(\w+)\}）/g, (m, k) => (vars[k] ? `（${vars[k]}）` : ''))
     .replace(/"\{(\w+)\}"/g, (m, k) => (vars[k] ? `"${vars[k]}"` : ''))
+    .replace(/「\{(\w+)\}」/g, (m, k) => (vars[k] ? `「${vars[k]}」` : ''))
     .replace(/\{(\w+)\}/g, (m, k) => (vars[k] !== undefined && vars[k] !== null ? String(vars[k]) : ''))
-    .replace(/\s*\(\s*\)/g, '')
+    .replace(/\s*\(\s*\)|（\s*）/g, '')
     .replace(/\s+([.,])/g, '$1')
     .trim();
 }
@@ -96,10 +104,11 @@ export function fillTemplate(text, vars) {
  * @param {Record<string, unknown>} [opts.vars]       template values
  * @param {string[]} [opts.notes]                      neutral context lines
  * @param {string | null} [opts.unknownReason]         why we cannot verify (shown first when ⚪)
+ * @param {string} [opts.lang]                         reason language (falls back to English)
  * @returns {{ badge: 'green' | 'yellow' | 'red' | 'unknown', score: number | null,
  *             reasons: import('./result.js').Reason[] }}
  */
-export function evaluate(rules, signals, { vars = {}, notes = [], unknownReason = null } = {}) {
+export function evaluate(rules, signals, { vars = {}, notes = [], unknownReason = null, lang = 'en' } = {}) {
   const known = (id) => signals[id] === true || signals[id] === false;
   const verifiable = rules.require_any_known.length === 0 || rules.require_any_known.some(known);
 
@@ -116,7 +125,7 @@ export function evaluate(rules, signals, { vars = {}, notes = [], unknownReason 
   const signalReasons = hits.map(({ rule }) => ({
     id: rule.id,
     polarity: rule.type,
-    text: fillTemplate(rule.reason, vars),
+    text: fillTemplate(rule.reason[lang] ?? rule.reason.en, vars),
   }));
   const noteReasons = notes.filter(Boolean).map((text, i) => ({ id: `note_${i}`, polarity: 'neutral', text }));
 

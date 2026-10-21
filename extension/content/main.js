@@ -23,13 +23,46 @@
     lastResult: null,
   };
 
+  // Interface language: the options-page setting, else the browser language
+  // (same rule as resolveLanguage() in core/i18n.js).
+  const STRINGS = globalThis.GhostCheckStrings;
+  let lang = /^zh\b/i.test(chrome.i18n.getUILanguage()) ? 'zh' : 'en';
+  const stringsFor = (l) => STRINGS[l] || STRINGS.en;
+
   const ui = new globalThis.GhostCheckUI({
+    strings: stringsFor(lang),
     onRecheck: () => runCheck(state.jobId, { force: true }),
     onAction: (action) => {
       if (action.type === 'grant-origin') {
         chrome.runtime.sendMessage({ type: 'ghostcheck:grant-origin', origin: action.origin }).catch(() => {});
       }
     },
+  });
+
+  async function loadLanguage() {
+    try {
+      const { settings } = await chrome.storage.local.get('settings');
+      const setting = settings?.language;
+      const next = setting === 'en' || setting === 'zh' ? setting : /^zh\b/i.test(chrome.i18n.getUILanguage()) ? 'zh' : 'en';
+      if (next !== lang) {
+        lang = next;
+        ui.setStrings(stringsFor(lang));
+        return true;
+      }
+    } catch {
+      // keep the current language
+    }
+    return false;
+  }
+  const languageReady = loadLanguage();
+
+  // Language switched on the options page: re-render and re-check (reasons
+  // come from the service worker in the chosen language).
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'local' || !changes.settings) return;
+    loadLanguage().then((changed) => {
+      if (changed && state.jobId) runCheck(state.jobId);
+    });
   });
 
   // The permission page asks us to check again once access was granted.
@@ -50,7 +83,7 @@
       return {
         badge: 'unknown',
         emoji: '⚪',
-        label: "Can't verify",
+        label: ui.t('badge.unknown'),
         score: null,
         officialUrl: null,
         detected: {},
@@ -58,9 +91,7 @@
           {
             id: 'extension_error',
             polarity: 'neutral',
-            text: invalidated
-              ? 'GhostCheck was updated or reloaded. Refresh this page to check again.'
-              : 'GhostCheck could not complete the check. This is not evidence against the job.',
+            text: ui.t(invalidated ? 'error.reloaded' : 'error.failed'),
           },
         ],
       };
@@ -74,6 +105,7 @@
    */
   async function runCheck(jobId, { force = false } = {}) {
     const token = ++state.token;
+    await languageReady;
     for (let attempt = 0; attempt < READY_MAX_TRIES; attempt++) {
       if (token !== state.token) return;
       const { titleEl, data } = extractJob();

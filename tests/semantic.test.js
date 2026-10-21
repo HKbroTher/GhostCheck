@@ -63,7 +63,7 @@ test('a reworded title is promoted when the description clearly matches', async 
   assert.equal(refined.status, 'found');
   assert.equal(refined.posting.id, 'ledger');
   assert.equal(refined.via, 'description');
-  assert.equal(semantic.decision, 'same description, different title');
+  assert.equal(semantic.decision, 'promoted');
 });
 
 test('boilerplate alone never promotes a job', async () => {

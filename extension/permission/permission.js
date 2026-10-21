@@ -1,23 +1,36 @@
 // Requests access to one careers site. Opened by the service worker when the
 // user clicks "Allow checking <site>" on a GhostCheck card.
+import { resolveLanguage, t } from '../core/i18n.js';
+
 const params = new URLSearchParams(location.search);
 const origin = params.get('origin') || '';
 const tabId = Number(params.get('tab'));
-const status = document.getElementById('status');
-const allow = document.getElementById('allow');
+const $ = (id) => document.getElementById(id);
 
+const { settings } = await chrome.storage.local.get('settings').catch(() => ({}));
+const lang = resolveLanguage(settings?.language, chrome.i18n.getUILanguage());
+document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+let host = '';
 let valid = false;
 try {
   const u = new URL(origin);
   valid = u.protocol === 'https:' && u.origin === origin;
-  for (const id of ['host', 'host2']) document.getElementById(id).textContent = u.hostname;
-  document.getElementById('origin').textContent = `${origin}/*`;
+  host = u.hostname;
 } catch {
   // handled below
 }
+
+document.title = t(lang, 'perm.pageTitle');
+$('heading').textContent = t(lang, 'perm.heading', { host });
+$('body').textContent = t(lang, 'perm.body', { host });
+$('scope').textContent = t(lang, 'perm.scope', { origin: `${origin}/*` });
+$('privacy').textContent = t(lang, 'perm.privacy');
+$('allow').textContent = t(lang, 'perm.allow');
+$('cancel').textContent = t(lang, 'perm.cancel');
 if (!valid) {
-  allow.disabled = true;
-  status.textContent = 'This link is not a valid https careers site.';
+  $('allow').disabled = true;
+  $('status').textContent = t(lang, 'perm.invalid');
 }
 
 async function closeSelf() {
@@ -30,22 +43,22 @@ async function closeSelf() {
   }
 }
 
-allow.addEventListener('click', async () => {
-  allow.disabled = true;
+$('allow').addEventListener('click', async () => {
+  $('allow').disabled = true;
   let granted = false;
   try {
     granted = await chrome.permissions.request({ origins: [`${origin}/*`] });
   } catch (err) {
-    status.textContent = `Chrome refused the request: ${err?.message || err}`;
+    $('status').textContent = t(lang, 'perm.refused', { error: err?.message || err });
   }
   if (!granted) {
-    allow.disabled = false;
-    if (!status.textContent) status.textContent = 'Access was not granted. The job stays "Can’t verify".';
+    $('allow').disabled = false;
+    if (!$('status').textContent) $('status').textContent = t(lang, 'perm.denied');
     return;
   }
-  status.textContent = 'Access granted. Rechecking the job…';
+  $('status').textContent = t(lang, 'perm.granted');
   if (Number.isInteger(tabId)) await chrome.tabs.sendMessage(tabId, { type: 'ghostcheck:recheck' }).catch(() => {});
   setTimeout(closeSelf, 600);
 });
 
-document.getElementById('cancel').addEventListener('click', closeSelf);
+$('cancel').addEventListener('click', closeSelf);
