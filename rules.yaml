@@ -9,7 +9,7 @@
 # After editing, run `node scripts/sync.mjs` and `node --test`.
 #
 # Reason text placeholders (filled in when available):
-#   {company} {ats} {days} {ageSource} {team} {phrase} {salary} {matchedTitle}
+#   {company} {ats} {days} {atsDays} {ageSource} {team} {phrase} {salary} {matchedTitle}
 
 version: 1
 
@@ -85,3 +85,11 @@ signals:
     type: negative
     weight: 1
     reason: "The description reads like a generic or pipeline posting (\"{phrase}\")."
+
+  # The careers site shows a publish date more than recent_days newer than the
+  # oldest evidence (snapshots / Wayback): the posting was re-published so it
+  # looks fresh. Overlaps with posted_long_ago, hence the low weight.
+  - id: reposted_to_look_new
+    type: negative
+    weight: 1
+    reason: "The careers site dates it {atsDays} days ago, but it existed long before, so it was probably re-posted to look new."

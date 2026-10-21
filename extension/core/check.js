@@ -137,6 +137,7 @@ export async function checkJob(job, deps) {
     salary_listed: salary.value,
     specific_team: team.value,
     generic_template: template.value,
+    reposted_to_look_new: null,
   };
   const vars = {
     company: job.company || 'the company',
@@ -207,11 +208,9 @@ export async function checkJob(job, deps) {
           vars.days = age.days;
           vars.ageSource = AGE_SOURCE_LABELS[age.oldest.source];
           detected.firstSeen = `${age.oldest.date.slice(0, 10)} (${AGE_SOURCE_LABELS[age.oldest.source]})`;
-          if (a.refreshed) {
-            notes.push(
-              `The careers site shows a newer date (${age.atsDays} days ago), so the posting was probably re-published.`,
-            );
-          }
+          // Only judged when the careers site gives its own date to compare.
+          signals.reposted_to_look_new = age.atsDays === null ? null : a.refreshed;
+          vars.atsDays = age.atsDays;
         }
       } else if (match.status === 'id_missing') {
         signals.found_on_official_site = false;
