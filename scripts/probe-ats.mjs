@@ -5,19 +5,21 @@
  * Informational: prints what each step finds; the workflow does not fail on it.
  */
 import { fetchJson, fetchText } from '../core/http.js';
-import { careersCandidates, pickCompanyWebsite, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
+import { careersCandidates, pickCompanyWebsite, WIKIDATA_HEADERS, wikidataEntitiesUrl, wikidataSearchUrl } from '../core/wikidata.js';
 import { discoverAts } from '../core/discover.js';
 import { phenomSite } from '../core/sources/site-search.js';
 
 const COMPANIES = ['FedEx', 'Stripe', 'Mastercard', 'Sakana AI', 'Notion', 'Cyient', 'Thermo Fisher Scientific'];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Outside a browser, Wikimedia also wants a descriptive User-Agent.
+const WD = { headers: { ...WIKIDATA_HEADERS, 'User-Agent': WIKIDATA_HEADERS['Api-User-Agent'] } };
 
 for (const company of COMPANIES) {
   try {
-    const search = await fetchJson(wikidataSearchUrl(company));
+    const search = await fetchJson(wikidataSearchUrl(company), WD);
     await sleep(1200); // Wikidata rate limit
     const ids = (search?.search || []).map((h) => h.id);
-    const site = ids.length ? pickCompanyWebsite(company, search, await fetchJson(wikidataEntitiesUrl(ids))) : null;
+    const site = ids.length ? pickCompanyWebsite(company, search, await fetchJson(wikidataEntitiesUrl(ids), WD)) : null;
     await sleep(1200);
     if (!site) {
       console.log(`website  ${company}: none found (${ids.length} Wikidata hits)`);
