@@ -87,5 +87,11 @@ export function careersCandidates(website) {
     return [];
   }
   const root = host.replace(/^www\d*\./, '');
-  return [`https://careers.${root}/`, `https://jobs.${root}/`, `https://www.${root}/careers`, `https://www.${root}/jobs`];
+  // Paths on the website's own host (sakana.ai has no www), then on www.
+  const hosts = [...new Set([host, `www.${root}`])];
+  return [
+    `https://careers.${root}/`,
+    `https://jobs.${root}/`,
+    ...hosts.flatMap((h) => [`https://${h}/careers`, `https://${h}/jobs`]),
+  ];
 }
