@@ -7,6 +7,10 @@ on:
       - data/companies.json
       - core/sources/**
       - core/http.js
+      - core/jsonld.js
+      - core/sitemap.js
+      - core/matcher.js
+      - core/normalize.js
       - scripts/validate-companies.mjs
       - .github/workflows/validate-companies.yml
   pull_request:
