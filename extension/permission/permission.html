@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GhostCheck: allow a careers site</title>
+  <link rel="stylesheet" href="permission.css">
+</head>
+<body>
+  <main>
+    <h1>Let GhostCheck read <span id="host">this site</span>?</h1>
+    <p>The job you are looking at is published on <strong id="host2">this site</strong>, the company's own careers page.
+       To check that the job is really listed there, GhostCheck needs to read that site's public pages.</p>
+    <ul>
+      <li>Only <code id="origin"></code> is affected. You can remove access anytime in <code>chrome://extensions</code>.</li>
+      <li>GhostCheck reads the job page and the site's public sitemap. It sends no cookies and nothing about you.</li>
+    </ul>
+    <div class="buttons">
+      <button id="allow" type="button">Allow</button>
+      <button id="cancel" type="button" class="secondary">Not now</button>
+    </div>
+    <p id="status" role="status"></p>
+  </main>
+  <script src="permission.js"></script>
+</body>
+</html>

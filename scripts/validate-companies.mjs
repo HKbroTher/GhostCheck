@@ -14,6 +14,10 @@ import { buildCompanyIndex, normalizeCompanyName } from '../core/companies.js';
 import { fetchJson, RateLimiter } from '../core/http.js';
 import { SOURCES } from '../core/sources/index.js';
 import { matchPosting } from '../core/matcher.js';
+import { workday } from '../core/sources/workday.js';
+import { fetchText } from '../core/http.js';
+import { extractJobPostings } from '../core/jsonld.js';
+import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
 
 const filter = (process.argv[2] || '').toLowerCase();
 const index = buildCompanyIndex(JSON.parse(readFileSync(new URL('../data/companies.json', import.meta.url), 'utf8')));
@@ -44,11 +48,92 @@ function selfMatchCheck(company, postings) {
 }
 const warnings = [];
 const shownRawKeys = new Set();
+const selfHostedSamples = [];
+
+/**
+ * Real self-hosted careers pages (boards whose job URLs live on the
+ * company's own domain): does JSON-LD parse, and is the page in the sitemap?
+ */
+async function probeSelfHosted(url) {
+  const origin = new URL(url).origin;
+  let line = `page     ${url}`;
+  try {
+    const page = await fetchText(url, { timeoutMs: 20000, limiter });
+    const jobs = page.ok ? extractJobPostings(page.text) : [];
+    line += ` -> HTTP ${page.status}, ${jobs.length} JobPosting${jobs[0] ? ` ("${jobs[0].title}", posted ${jobs[0].datePosted?.slice(0, 10) ?? '?'}, org ${jobs[0].orgName || '?'})` : ''}`;
+    const robots = await fetchText(`${origin}/robots.txt`, { timeoutMs: 15000, limiter }).catch(() => null);
+    const maps = robots?.ok ? sitemapsFromRobots(robots.text) : [];
+    const queue = maps.length ? maps : [`${origin}/sitemap.xml`];
+    const urls = new Set();
+    for (let i = 0; i < 4 && queue.length; i++) {
+      queue.sort((a, b) => Number(isLikelyJobSitemap(b)) - Number(isLikelyJobSitemap(a)));
+      const res = await fetchText(queue.shift(), { timeoutMs: 20000, maxBytes: 8_000_000, limiter }).catch(() => null);
+      if (!res?.ok) continue;
+      const parsed = parseSitemap(res.text);
+      queue.push(...parsed.sitemaps.filter(isLikelyJobSitemap));
+      for (const u of parsed.urls) urls.add(canonicalUrl(u.loc));
+    }
+    line += `; sitemap: ${urls.size} urls, page ${urls.has(canonicalUrl(page.url)) || urls.has(canonicalUrl(url)) ? 'listed' : 'not listed'}`;
+  } catch (err) {
+    line += ` -> ${err?.message || err}`;
+  }
+  console.log(line);
+}
+
+/** Workday: search the board, fetch one posting, and probe a removed posting. */
+async function validateWorkday(c, label) {
+  const ref = { ats: 'workday', slug: c.slug, workday: c.workday };
+  const post = (text) =>
+    fetchJson(workday.searchUrl(ref), { method: 'POST', body: workday.searchBody(text), timeoutMs: 30000, retries: 2, limiter });
+  try {
+    const raw = await post('');
+    const { total, postings } = workday.parseSearch(raw, ref);
+    if (!shownRawKeys.has('workday') && raw?.jobPostings?.[0]) {
+      shownRawKeys.add('workday');
+      console.log(`      raw workday search fields: ${Object.keys(raw.jobPostings[0]).sort().join(', ')}`);
+    }
+    let detailNote = '';
+    if (postings[0]) {
+      const detailRaw = await fetchJson(workday.detailUrl(ref, postings[0].id), { timeoutMs: 30000, retries: 2, limiter });
+      const detail = workday.parseDetail(detailRaw, ref, postings[0].id);
+      if (!shownRawKeys.has('workday-detail') && detailRaw?.jobPostingInfo) {
+        shownRawKeys.add('workday-detail');
+        console.log(`      raw workday detail fields: ${Object.keys(detailRaw.jobPostingInfo).sort().join(', ')}`);
+      }
+      detailNote = detail ? ` detail ok (published ${detail.createdAt?.slice(0, 10) ?? '?'}, ${detail.text.length} chars)` : ' DETAIL UNPARSED';
+      if (!detail) warnings.push(`${c.name}: Workday detail could not be parsed`);
+      // A posting path that cannot exist: how does Workday answer?
+      const bogus = '/job/Nowhere/GhostCheck-Probe_R000000000';
+      try {
+        await fetchJson(workday.detailUrl(ref, bogus), { timeoutMs: 30000, retries: 0, limiter });
+        detailNote += '; removed posting -> 200 (!)';
+        warnings.push(`${c.name}: Workday answered 200 for a removed posting`);
+      } catch (err) {
+        detailNote += `; removed posting -> ${err.status ?? err.kind}`;
+      }
+    }
+    const sample = postings[0] ? ` e.g. "${postings[0].title}" @ ${postings[0].location || '?'} (${postings[0].createdAt?.slice(0, 10) ?? '?'})` : '';
+    console.log(`OK    ${label}  ${total} jobs.${detailNote}${sample}`);
+    if (!total) warnings.push(`${c.name}: Workday board has 0 jobs`);
+  } catch (err) {
+    if (err?.isNotFound || err?.status === 422 || err?.status === 400) {
+      console.log(`FAIL  ${label}  Workday site not found (${err.status})`);
+      failures.push(`${c.name}: Workday site ${c.workday.host}/${c.workday.site} not found`);
+    } else {
+      console.log(`WARN  ${label}  ${err?.message || err}`);
+      warnings.push(`${c.name}: ${err?.message || err}`);
+    }
+  }
+}
 
 for (const c of index.entries) {
   if (filter && !c.name.toLowerCase().includes(filter) && !c.slug.toLowerCase().includes(filter)) continue;
-  const source = SOURCES[c.ats];
   const label = `${c.name.padEnd(24)} ${c.ats.padEnd(10)} ${c.slug}`;
+  if (c.ats === 'workday') {
+    await validateWorkday(c, label);
+    continue;
+  }
+  const source = SOURCES[c.ats];
   if (!source) {
     console.log(`SKIP  ${label}  (no source for ${c.ats} yet)`);
     continue;
@@ -75,6 +160,8 @@ for (const c of index.entries) {
       if (!same) failures.push(`${c.name}: Greenhouse board "${c.slug}" is named "${info?.name}"`);
     }
     selfMatchCheck(c.name, postings);
+    const ownDomain = postings.find((p) => p.url && !/greenhouse\.io|lever\.co|ashbyhq\.com/.test(new URL(p.url).host));
+    if (ownDomain && selfHostedSamples.length < 4) selfHostedSamples.push(ownDomain.url);
     const dated = postings.filter((p) => p.createdAt).length;
     const sample = postings[0] ? ` e.g. "${postings[0].title}" @ ${postings[0].location || '?'}` : '';
     console.log(`OK    ${label}  ${postings.length} jobs, ${dated} with publish date.${nameNote}${sample}`);
@@ -88,6 +175,11 @@ for (const c of index.entries) {
       warnings.push(`${c.name}: ${err?.message || err}`);
     }
   }
+}
+
+if (selfHostedSamples.length) {
+  console.log('\nSelf-hosted careers pages:');
+  for (const url of selfHostedSamples) await probeSelfHosted(url);
 }
 
 if (selfMatch.tried) {

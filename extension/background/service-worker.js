@@ -5,12 +5,16 @@
 import { checkJob } from '../core/check.js';
 import { buildCompanyIndex } from '../core/companies.js';
 import { RAW_BASE } from '../core/config.js';
-import { fetchJson, RateLimiter } from '../core/http.js';
+import { fetchJson, fetchText, RateLimiter } from '../core/http.js';
 import { parseRules } from '../core/rules.js';
 import { unknownResult } from '../core/result.js';
 import { SOURCES } from '../core/sources/index.js';
 import { snapshotPath } from '../core/snapshot.js';
 import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
+import { workday, WORKDAY_PAGE_SIZE } from '../core/sources/workday.js';
+import { extractJobPostings } from '../core/jsonld.js';
+import { canonicalUrl, isLikelyJobSitemap, parseSitemap, sitemapsFromRobots } from '../core/sitemap.js';
+import { isLinkedInHost } from '../core/apply-url.js';
 import { cacheDelete, cacheGet, cacheSet, pruneCache } from './cache.js';
 
 const HOUR = 3600000;
@@ -22,7 +26,14 @@ const TTL = {
   firstSeen: 12 * HOUR, // snapshots change once a day
   wayback: 7 * 24 * HOUR, // an earliest capture never changes
   waybackNone: 24 * HOUR,
+  workday: 6 * HOUR,
+  page: 1 * HOUR,
+  sitemap: 6 * HOUR,
 };
+/** Workday boards up to this many jobs are listed completely (5 requests). */
+const WORKDAY_FULL_LIST_MAX = 100;
+const SITEMAP_MAX_FETCHES = 6;
+const SITEMAP_MAX_URLS = 20000;
 /** Failed board fetches are remembered briefly in memory only, to avoid hammering. */
 const FAILURE_BACKOFF_MS = 10 * 60000;
 
@@ -166,6 +177,139 @@ async function fetchWayback(url) {
   });
 }
 
+// ----------------------------------------------------------------- workday
+
+const workdayPost = (ref, text, offset) =>
+  fetchJson(workday.searchUrl(ref), { method: 'POST', body: workday.searchBody(text, offset), timeoutMs: 15000, retries: 1, limiter });
+
+/** Whole-board info: total job count, and every posting when the board is small. */
+async function workdayBoard(ref) {
+  const key = `wdboard:${ref.workday.apiBase}`;
+  const cached = await cacheGet(key);
+  if (cached) return cached;
+  return dedupe(key, async () => {
+    const first = workday.parseSearch(await workdayPost(ref, '', 0), ref);
+    let postings = null;
+    if (first.total <= WORKDAY_FULL_LIST_MAX) {
+      postings = [...first.postings];
+      for (let offset = WORKDAY_PAGE_SIZE; offset < first.total; offset += WORKDAY_PAGE_SIZE) {
+        postings.push(...workday.parseSearch(await workdayPost(ref, '', offset), ref).postings);
+      }
+    }
+    const board = { total: first.total, postings };
+    await cacheSet(key, board, TTL.workday);
+    return board;
+  });
+}
+
+/** Search a Workday site by title; complete=true when the whole board was listed. */
+async function searchWorkday(ref, title) {
+  const board = await workdayBoard(ref);
+  if (board.postings) return { postings: board.postings, complete: true, total: board.total };
+  const key = `wdsearch:${ref.workday.apiBase}:${title.toLowerCase()}`;
+  const cached = await cacheGet(key);
+  if (cached) return { postings: cached, complete: false, total: board.total };
+  const { postings } = workday.parseSearch(await workdayPost(ref, title, 0), ref);
+  await cacheSet(key, postings, TTL.workday);
+  return { postings, complete: false, total: board.total };
+}
+
+/** One Workday posting; throws HttpError (isNotFound when removed). */
+async function fetchWorkdayDetail(ref, externalPath) {
+  const key = `wddetail:${ref.workday.apiBase}${externalPath}`;
+  const cached = await cacheGet(key);
+  if (cached) return cached;
+  return dedupe(key, async () => {
+    const json = await fetchJson(workday.detailUrl(ref, externalPath), { timeoutMs: 15000, retries: 1, limiter });
+    const posting = workday.parseDetail(json, ref, externalPath);
+    if (posting) await cacheSet(key, posting, TTL.workday);
+    return posting;
+  });
+}
+
+// ------------------------------------------------------- self-hosted pages
+
+/** Has the user allowed GhostCheck to read this site? (optional_host_permissions) */
+async function hasOriginPermission(origin) {
+  try {
+    return await chrome.permissions.contains({ origins: [`${origin}/*`] });
+  } catch {
+    return false;
+  }
+}
+
+/** A careers page and the JSON-LD JobPostings in it. Only small results are cached. */
+async function fetchPageJobs(url) {
+  const key = `page:${url}`;
+  const cached = await cacheGet(key);
+  if (cached) return cached;
+  return dedupe(key, async () => {
+    const page = await fetchText(url, { timeoutMs: 12000, maxBytes: 3_000_000, limiter });
+    const result = { status: page.status, ok: page.ok, url: page.url, postings: page.ok ? extractJobPostings(page.text) : [] };
+    await cacheSet(key, result, TTL.page);
+    return result;
+  });
+}
+
+/** Canonical URLs listed in a site's sitemaps (job sitemaps first), or null. */
+async function fetchSitemapUrls(origin) {
+  const key = `sitemap:${origin}`;
+  const cached = await cacheGet(key);
+  if (cached !== undefined) return cached.urls ? new Set(cached.urls) : null;
+  return dedupe(key, async () => {
+    let queue = [];
+    try {
+      const robots = await fetchText(`${origin}/robots.txt`, { timeoutMs: 8000, maxBytes: 500_000, limiter });
+      if (robots.ok) queue = sitemapsFromRobots(robots.text);
+    } catch {
+      // fall back to the conventional location
+    }
+    if (!queue.length) queue = [`${origin}/sitemap.xml`];
+
+    const urls = new Set();
+    let fetches = 0;
+    while (queue.length && fetches < SITEMAP_MAX_FETCHES && urls.size < SITEMAP_MAX_URLS) {
+      queue.sort((a, b) => Number(isLikelyJobSitemap(b)) - Number(isLikelyJobSitemap(a)));
+      const next = queue.shift();
+      if (new URL(next, origin).origin !== origin) continue; // stay on the permitted site
+      fetches++;
+      let res;
+      try {
+        res = await fetchText(new URL(next, origin).href, { timeoutMs: 12000, maxBytes: 8_000_000, limiter });
+      } catch {
+        continue;
+      }
+      if (!res.ok) continue;
+      const parsed = parseSitemap(res.text);
+      queue.push(...parsed.sitemaps.filter(isLikelyJobSitemap));
+      for (const u of parsed.urls) {
+        const c = canonicalUrl(u.loc);
+        if (c) urls.add(c);
+        if (urls.size >= SITEMAP_MAX_URLS) break;
+      }
+    }
+    const list = urls.size ? [...urls] : null;
+    await cacheSet(key, { urls: list }, TTL.sitemap);
+    return list ? new Set(list) : null;
+  });
+}
+
+/** https origin of a public careers site we may ask permission for. */
+function validCareersOrigin(origin) {
+  try {
+    const u = new URL(origin);
+    return (
+      u.protocol === 'https:' &&
+      u.origin === origin &&
+      !isLinkedInHost(u.hostname) &&
+      u.hostname.includes('.') &&
+      !/^(localhost|[\d.]+|\[.*\])$/.test(u.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 // ---------------------------------------------------------------- messages
 
 /**
@@ -229,6 +373,11 @@ async function handleCheck(rawJob, force) {
     fetchBoardName,
     fetchFirstSeen,
     fetchWayback,
+    searchWorkday,
+    fetchWorkdayDetail,
+    hasOriginPermission,
+    fetchPageJobs,
+    fetchSitemapUrls,
   };
   const result = await checkJob(job, deps);
   // Do not cache "can't verify" for long: it is often a transient failure.
@@ -242,6 +391,16 @@ async function fetchPostingsFresh(ref) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // The card's "Allow checking <site>" button: permissions can only be
+  // requested from an extension page, so open a small one.
+  if (message?.type === 'ghostcheck:grant-origin' && isTrustedSender(sender)) {
+    if (!validCareersOrigin(message.origin) || !sender.tab?.id) return false;
+    const page = chrome.runtime.getURL(
+      `permission/permission.html?origin=${encodeURIComponent(message.origin)}&tab=${sender.tab.id}`,
+    );
+    chrome.tabs.create({ url: page, index: sender.tab.index + 1 });
+    return false;
+  }
   if (message?.type !== 'ghostcheck:check' || !isTrustedSender(sender)) return false;
   handleCheck(message.job, message.force === true)
     .then(sendResponse)

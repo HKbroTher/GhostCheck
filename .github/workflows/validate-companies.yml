@@ -8,6 +8,7 @@ on:
       - core/sources/**
       - core/http.js
       - scripts/validate-companies.mjs
+      - .github/workflows/validate-companies.yml
   pull_request:
     paths:
       - data/companies.json

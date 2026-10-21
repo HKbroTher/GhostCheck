@@ -44,10 +44,28 @@ test('ashby urls keep slug case', () => {
   });
 });
 
-test('workday is detected (fetching comes in a later stage)', () => {
-  const ref = detectAts('https://acme.wd5.myworkdayjobs.com/en-US/External_Careers/job/NY/Engineer_R123');
+test('workday job links give tenant, site, API base and posting path', () => {
+  const ref = detectAts('https://acme.wd5.myworkdayjobs.com/en-US/External_Careers/job/New-York-NY/Senior-Engineer_R123/apply');
   assert.equal(ref.ats, 'workday');
-  assert.deepEqual(ref.workday, { tenant: 'acme', host: 'acme.wd5.myworkdayjobs.com', site: 'External_Careers' });
+  assert.equal(ref.slug, 'acme');
+  assert.equal(ref.jobId, '/job/New-York-NY/Senior-Engineer_R123');
+  assert.equal(ref.workday.apiBase, 'https://acme.wd5.myworkdayjobs.com/wday/cxs/acme/External_Careers');
+  assert.equal(ref.workday.publicBase, 'https://acme.wd5.myworkdayjobs.com/External_Careers');
+});
+
+test('workday board links without a job and without a locale', () => {
+  const ref = detectAts('https://acme.wd1.myworkdayjobs.com/Careers');
+  assert.equal(ref.jobId, null);
+  assert.equal(ref.workday.site, 'Careers');
+  assert.equal(detectAts('https://acme.wd1.myworkdayjobs.com/').workday.apiBase, null);
+});
+
+test('workday shared myworkdaysite.com host', () => {
+  const ref = detectAts('https://wd3.myworkdaysite.com/en-US/recruiting/acme/Ext/job/Remote/Analyst_JR9');
+  assert.equal(ref.slug, 'acme');
+  assert.equal(ref.jobId, '/job/Remote/Analyst_JR9');
+  assert.equal(ref.workday.apiBase, 'https://wd3.myworkdaysite.com/wday/cxs/acme/Ext');
+  assert.equal(ref.workday.publicBase, 'https://wd3.myworkdaysite.com/recruiting/acme/Ext');
 });
 
 test('unknown and invalid urls', () => {

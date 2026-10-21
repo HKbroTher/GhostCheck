@@ -56,7 +56,8 @@ export function matchPosting(job, postings, ref = {}, thresholds = {}) {
   const t = { ...DEFAULT_THRESHOLDS, ...thresholds };
 
   if (ref?.jobId) {
-    const byId = postings.find((p) => p.id === String(ref.jobId).toLowerCase());
+    const want = String(ref.jobId).toLowerCase();
+    const byId = postings.find((p) => String(p.id).toLowerCase() === want);
     if (byId) return { status: 'found', posting: byId, score: 1, via: 'id', mismatch: null };
   }
 

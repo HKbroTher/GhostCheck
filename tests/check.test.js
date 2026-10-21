@@ -197,3 +197,140 @@ test('age lookups failing never hurts the verdict', async () => {
   assert.equal(r.badge, 'green');
   assert.ok(r.reasons.some((x) => x.id === 'posted_recently')); // falls back to the ATS date
 });
+
+// ------------------------------------------------- stage 4: workday + pages
+
+import { workdayRef } from '../core/sources/workday.js';
+
+const WD_HREF = 'https://acme.wd5.myworkdayjobs.com/en-US/External/job/New-York-NY/Senior-Software-Engineer_R1';
+const wdPosting = (over = {}) => ({
+  id: '/job/New-York-NY/Senior-Software-Engineer_R1',
+  title: 'Senior Software Engineer, Payments',
+  location: 'San Francisco, CA',
+  url: 'https://acme.wd5.myworkdayjobs.com/External/job/New-York-NY/Senior-Software-Engineer_R1',
+  createdAt: '2026-10-11T00:00:00.000Z',
+  createdAtExact: true,
+  salary: null,
+  text: '',
+  ...over,
+});
+
+test('workday: apply link posting found directly', async () => {
+  const d = deps({ fetchWorkdayDetail: async () => wdPosting(), searchWorkday: async () => assert.fail('no search needed') });
+  const r = await checkJob(job({ company: 'Other', linkedinCompanySlug: null, applyHref: WD_HREF }), d);
+  assert.equal(r.badge, 'green');
+  assert.equal(r.detected.ats, 'Workday');
+  assert.ok(r.reasons.some((x) => x.id === 'posted_recently'));
+});
+
+test('workday: apply link posting removed (404) -> closed', async () => {
+  const d = deps({
+    fetchWorkdayDetail: async () => {
+      throw new HttpError('http', 'gone', 404);
+    },
+    searchWorkday: async () => assert.fail('no search needed'),
+  });
+  const r = await checkJob(job({ company: 'Other', linkedinCompanySlug: null, applyHref: WD_HREF, description: '' }), d);
+  assert.equal(r.badge, 'red');
+  assert.equal(r.reasons[0].id, 'apply_link_closed');
+});
+
+const wdCompanies = buildCompanyIndex({
+  companies: [{ name: 'Acme', ats: 'workday', slug: 'acme', workday: { host: 'acme.wd5.myworkdayjobs.com', site: 'External' } }],
+});
+const easy = { applyHref: null, applyType: 'easy' };
+
+test('workday: large board, search misses -> unknown (not counted)', async () => {
+  const d = deps({ companies: wdCompanies, searchWorkday: async () => ({ postings: [], complete: false, total: 2400 }) });
+  const r = await checkJob(job({ ...easy, title: 'Data Scientist' }), d);
+  assert.equal(r.badge, 'unknown');
+  assert.match(r.reasons[0].text, /can't be checked completely/);
+});
+
+test('workday: small board listed completely, missing -> red', async () => {
+  const d = deps({ companies: wdCompanies, searchWorkday: async () => ({ postings: [wdPosting()], complete: true, total: 1 }) });
+  const r = await checkJob(job({ ...easy, title: 'Data Scientist', description: '' }), d);
+  assert.equal(r.badge, 'red');
+  assert.equal(r.reasons[0].id, 'not_found_on_official_site');
+});
+
+test('workday: search hit is enriched with details', async () => {
+  const d = deps({
+    companies: wdCompanies,
+    searchWorkday: async () => ({ postings: [wdPosting({ createdAt: null, text: '' })], complete: false, total: 500 }),
+    fetchWorkdayDetail: async () => wdPosting({ text: 'Base pay range: 150,000 - 190,000 USD' }),
+  });
+  const r = await checkJob(job({ ...easy, description: '' }), d);
+  assert.equal(r.badge, 'green');
+  assert.ok(r.reasons.some((x) => x.id === 'salary_listed'));
+  assert.ok(r.reasons.some((x) => x.id === 'posted_recently'));
+});
+
+test('workday: unreachable -> unknown', async () => {
+  const d = deps({
+    companies: wdCompanies,
+    searchWorkday: async () => {
+      throw new HttpError('timeout', 'slow');
+    },
+  });
+  assert.equal((await checkJob(job(easy), d)).badge, 'unknown');
+});
+
+const PAGE_HREF = 'https://careers.acme.com/jobs/123';
+const pageDeps = (over = {}) =>
+  deps({
+    companies: buildCompanyIndex({ companies: [] }),
+    fetchBoardName: async () => null,
+    hasOriginPermission: async () => true,
+    fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [] }),
+    fetchSitemapUrls: async () => null,
+    ...over,
+  });
+const ldPosting = (over = {}) => ({
+  title: 'Senior Software Engineer - Payments',
+  datePosted: '2026-10-05T00:00:00.000Z',
+  validThrough: null,
+  orgName: 'Acme, Inc.',
+  location: 'San Francisco, CA',
+  url: PAGE_HREF,
+  text: '',
+  salary: null,
+  ...over,
+});
+
+test('self-hosted: no permission yet -> unknown with an allow button', async () => {
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ hasOriginPermission: async () => false }));
+  assert.equal(r.badge, 'unknown');
+  assert.deepEqual(r.action, { type: 'grant-origin', origin: 'https://careers.acme.com', label: 'Allow checking careers.acme.com' });
+});
+
+test('self-hosted: JSON-LD JobPosting confirms the job', async () => {
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [ldPosting()] }) }));
+  assert.equal(r.badge, 'green');
+  assert.equal(r.officialUrl, PAGE_HREF);
+  assert.ok(r.reasons.some((x) => x.id === 'posted_recently'));
+});
+
+test('self-hosted: JSON-LD from a different company is not proof', async () => {
+  const r = await checkJob(
+    job({ applyHref: PAGE_HREF }),
+    pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [ldPosting({ orgName: 'Staffing Partners LLC' })] }) }),
+  );
+  assert.equal(r.badge, 'unknown');
+  assert.match(r.reasons[0].text, /Staffing Partners/);
+});
+
+test('self-hosted: 404 apply page -> closed; 5xx -> unknown', async () => {
+  const gone = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ fetchPageJobs: async () => ({ status: 404, ok: false, url: PAGE_HREF, postings: [] }) }));
+  assert.equal(gone.reasons[0].id, 'apply_link_closed');
+  const err = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ fetchPageJobs: async () => ({ status: 503, ok: false, url: PAGE_HREF, postings: [] }) }));
+  assert.equal(err.badge, 'unknown');
+});
+
+test('self-hosted: no JSON-LD but listed in sitemap -> found; not listed -> unknown, never not-found', async () => {
+  const listed = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ fetchSitemapUrls: async () => new Set(['https://careers.acme.com/jobs/123']) }));
+  assert.equal(listed.signals.found_on_official_site, true);
+  const missing = await checkJob(job({ applyHref: PAGE_HREF }), pageDeps({ fetchSitemapUrls: async () => new Set(['https://careers.acme.com/jobs/9']) }));
+  assert.equal(missing.badge, 'unknown');
+  assert.equal(missing.signals.not_found_on_official_site, null);
+});
