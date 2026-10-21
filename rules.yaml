@@ -42,14 +42,21 @@ matching:
 # titles. It never makes a job look worse. See core/semantic.js.
 semantic:
   enabled: true
-  min_chars: 300                 # role-specific text needed on both sides
-  # Measured on 224 postings from 9 live boards (scripts/eval-semantic.mjs):
-  # 0.88 confirmed 72% of reworded titles and never matched a different job
-  # (the closest wrong posting scored 0.871); 0.85 confirmed 81% but matched
-  # a wrong job in 1.3% of cases.
-  promote_min_similarity: 0.88   # cosine similarity to accept a reworded title
-  min_margin: 0.05               # ...and how far ahead of the runner-up it must be
+  min_chars: 300                 # role-specific text needed on both sides (a CJK character counts ~3)
+  min_margin: 0.05               # best match must be this far ahead of the runner-up
   tie_title_gap: 0.05            # titles this close are a tie the descriptions may break
+  # Cosine similarity needed to accept a reworded title, per model (users
+  # choose the model on the options page). Measured with
+  # scripts/eval-semantic.mjs on live boards: the threshold sits above the
+  # best-scoring WRONG posting, so a different job is never confirmed.
+  models:
+    english:
+      # 224 postings, 9 boards: 0.88 confirmed 72% of reworded titles with
+      # no wrong match (closest wrong posting: 0.871); 0.85 confirmed 81%
+      # but matched a wrong job in 1.3% of cases.
+      promote_min_similarity: 0.88
+    multilingual:
+      promote_min_similarity: 0.9
 
 # Age thresholds in days. The age is the oldest of: the careers site's own
 # publish date, GhostCheck's daily snapshots, and the Wayback Machine.

@@ -69,6 +69,12 @@ export function parseRules(yamlText) {
     },
     semantic: {
       enabled: raw.semantic?.enabled !== false,
+      models: Object.fromEntries(
+        Object.entries(raw.semantic?.models || {}).map(([name, m]) => [
+          name,
+          { promote_min_similarity: num(m?.promote_min_similarity, `semantic.models.${name}.promote_min_similarity`) },
+        ]),
+      ),
       min_chars: num(raw.semantic?.min_chars ?? DEFAULT_SEMANTIC.min_chars, 'semantic.min_chars'),
       promote_min_similarity: num(
         raw.semantic?.promote_min_similarity ?? DEFAULT_SEMANTIC.promote_min_similarity,

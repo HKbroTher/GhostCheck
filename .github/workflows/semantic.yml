@@ -7,6 +7,9 @@ on:
     paths:
       - core/semantic.js
       - core/matcher.js
+      - core/check.js
+      - core/normalize.js
+      - rules.yaml
       - scripts/eval-semantic.mjs
       - tests/e2e/**
       - extension/offscreen/**
@@ -21,9 +24,13 @@ permissions:
 
 jobs:
   evaluate:
-    name: Thresholds on live job boards
+    name: Thresholds on live job boards (${{ matrix.model }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [english, multilingual]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,11 +38,13 @@ jobs:
           node-version: 22
       - run: npm install --no-save --ignore-scripts=false @huggingface/transformers@3.7.6
       - run: node scripts/eval-semantic.mjs
+        env:
+          MODEL: ${{ matrix.model }}
 
   browser:
     name: Extension in Chromium
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

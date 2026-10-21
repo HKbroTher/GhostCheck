@@ -8,7 +8,10 @@
  */
 import { env, pipeline } from '../vendor/transformers/transformers.min.js';
 
-const MODEL = 'Xenova/all-MiniLM-L6-v2';
+const MODELS = {
+  english: 'Xenova/all-MiniLM-L6-v2',
+  multilingual: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
+};
 const IDLE_CLOSE_MS = 5 * 60000;
 
 env.allowLocalModels = false;
@@ -19,13 +22,21 @@ env.backends.onnx.wasm.wasmPaths = chrome.runtime.getURL('vendor/transformers/')
 env.backends.onnx.wasm.numThreads = 1; // no cross-origin isolation in extensions
 env.backends.onnx.wasm.proxy = false;
 
-let extractorPromise = null;
-function getExtractor() {
-  extractorPromise ??= pipeline('feature-extraction', MODEL, { dtype: 'q8', device: 'wasm' }).catch((err) => {
-    extractorPromise = null; // allow a retry later (e.g. after a network error)
-    throw err;
-  });
-  return extractorPromise;
+// One model in memory at a time; switching models replaces it.
+let current = { name: null, promise: null };
+function getExtractor(name) {
+  const model = MODELS[name] ? name : 'english';
+  if (current.name !== model) {
+    current.promise?.then((e) => e.dispose?.()).catch(() => {});
+    current = {
+      name: model,
+      promise: pipeline('feature-extraction', MODELS[model], { dtype: 'q8', device: 'wasm' }).catch((err) => {
+        current = { name: null, promise: null }; // allow a retry later (e.g. after a network error)
+        throw err;
+      }),
+    };
+  }
+  return current.promise;
 }
 
 let idleTimer = null;
@@ -39,15 +50,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.target !== 'ghostcheck-offscreen' || sender.id !== chrome.runtime.id) return false;
   touch();
   if (message.type === 'embed') {
-    const texts = Array.isArray(message.texts) ? message.texts.filter((t) => typeof t === 'string').slice(0, 16) : [];
-    getExtractor()
+    const texts = Array.isArray(message.texts) ? message.texts.filter((t) => typeof t === 'string').slice(0, 64) : [];
+    getExtractor(message.model)
       .then((extractor) => extractor(texts, { pooling: 'mean', normalize: true }))
       .then((tensor) => sendResponse({ vectors: tensor.tolist() }))
       .catch((err) => sendResponse({ error: String(err?.message || err) }));
     return true;
   }
   if (message.type === 'warmup') {
-    getExtractor().then(
+    getExtractor(message.model).then(
       () => sendResponse({ ready: true }),
       (err) => sendResponse({ error: String(err?.message || err) }),
     );

@@ -46,6 +46,7 @@ const WORKDAY_FULL_LIST_MAX = 100;
  *   a careers page, the schema.org JobPostings in it and the ATS it links to
  * @property {(origin: string) => Promise<Set<string> | null>} [fetchSitemapUrls]
  *   canonical URLs listed in the site's sitemaps, or null when there are none
+ * @property {'english' | 'multilingual'} [semanticModel]   which local model `embed` runs
  * @property {(texts: string[]) => Promise<number[][] | null>} [embed]
  *   local sentence embeddings (normalized vectors); null while the model loads
  * @property {'en' | 'zh'} [lang]   language of reasons and notes (default English)
@@ -200,7 +201,9 @@ async function lookupListAts(job, board, deps, rules) {
   let match = matchPosting(job, postings, ref, rules.matching);
   let semantic = null;
   if (deps.embed && rules.semantic?.enabled) {
-    ({ match, semantic } = await refineMatch(job, match, postings, deps.embed, rules.semantic));
+    const model = deps.semanticModel === 'multilingual' ? 'multilingual' : 'english';
+    const opts = { ...rules.semantic, ...rules.semantic.models?.[model], multilingual: model === 'multilingual' };
+    ({ match, semantic } = await refineMatch(job, match, postings, deps.embed, opts));
   }
   // A board found by name might belong to another company with the same
   // name, and a title in another language may simply be a translation:

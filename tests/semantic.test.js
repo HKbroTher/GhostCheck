@@ -126,3 +126,32 @@ test('English detection keeps other Latin-script languages away from the English
   const { semantic } = await refineMatch(job, matchPosting(job, BOARD), BOARD, fakeEmbed, OPTS);
   assert.equal(semantic, null); // skipped, not guessed
 });
+
+test('sentence splitting: CJK punctuation splits, dots inside words do not', async () => {
+  const { splitSentences, textWeight } = await import('../core/semantic.js');
+  assert.deepEqual(splitSentences('We use Node.js and Python 3.5 for our backend services today. Second sentence is long enough here.'), [
+    'We use Node.js and Python 3.5 for our backend services today.',
+    'Second sentence is long enough here.',
+  ]);
+  assert.equal(splitSentences('決済基盤チームにて、APIの設計と開発を担当していただきます。当社は東京に本社を置く企業です。').length, 2);
+  assert.equal(textWeight('支付平台'), 12);
+});
+
+test('multilingual model: a Japanese title is matched to an English posting via titles, then descriptions', async () => {
+  // Stand-in multilingual model: a tiny shared vocabulary maps both languages to the same concepts.
+  const concepts = { ledger: ['ledger', '元帳'], payments: ['payments', '決済'], mobile: ['mobile', 'モバイル'], data: ['data', 'データ'], engineer: ['engineer', 'エンジニア'], money: ['money', 'お金'], reconciliation: ['reconciliation', '照合'] };
+  const embed = async (texts) =>
+    texts.map((t) => Object.values(concepts).map((words) => words.reduce((n, w) => n + (t.toLowerCase().split(w).length - 1), 0)));
+  const jaJd =
+    '元帳 決済 お金 照合 を担当していただきます。元帳 決済 お金 照合 のシステムを開発します。'.repeat(6);
+  const job = { title: '決済元帳エンジニア', location: 'San Francisco, CA', description: jaJd };
+  const board = [P('ledger', 'Payments Ledger Engineer', 'ledger payments money reconciliation. '.repeat(12)), P('mobile', 'Mobile Engineer', 'mobile mobile engineer data. '.repeat(12))];
+  const match = matchPosting(job, board);
+  assert.equal(match.status, 'not_found');
+  const { match: refined } = await refineMatch(job, match, board, embed, { ...OPTS, multilingual: true, promote_min_similarity: 0.8 });
+  assert.equal(refined.status, 'found');
+  assert.equal(refined.posting.id, 'ledger');
+  // The English-only setting never looks at Japanese text.
+  const { semantic } = await refineMatch(job, match, board, embed, { ...OPTS, multilingual: false });
+  assert.equal(semantic, null);
+});

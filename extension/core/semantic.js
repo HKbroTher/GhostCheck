@@ -14,7 +14,12 @@
  * script; this module only needs an `embed(texts) => number[][]` function.
  */
 
+import { sameTitleLanguage } from './normalize.js';
+
 const MIN_SENTENCE_CHARS = 25;
+/** Postings whose titles are compared when the LinkedIn title is in another language. */
+const MAX_TITLE_CANDIDATES = 300;
+const EMBED_BATCH = 48;
 /** The model reads ~256 tokens; longer text only costs time. */
 const MAX_EMBED_CHARS = 1500;
 const MAX_CANDIDATES = 8;
@@ -31,9 +36,17 @@ export const DEFAULT_SEMANTIC = {
 /** @param {string} text */
 export function splitSentences(text) {
   return String(text || '')
-    .split(/(?<=[.!?])\s+|\n+|\s[•·]\s/)
+    // Latin sentences end with ". " (so "Node.js" stays whole); CJK ones with 。！？ and no space.
+    .split(/(?<=[.!?])\s+|(?<=[。！？])|\n+|\s[•·]\s/)
     .map((s) => s.replace(/\s+/g, ' ').trim())
-    .filter((s) => s.length >= MIN_SENTENCE_CHARS);
+    .filter((s) => textWeight(s) >= MIN_SENTENCE_CHARS);
+}
+
+/** Length that counts a Chinese/Japanese character like ~3 Latin ones. */
+export function textWeight(text) {
+  const s = String(text || '');
+  const cjk = (s.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu) || []).length;
+  return s.length + cjk * 2;
 }
 
 const sentenceKey = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
@@ -131,10 +144,23 @@ export async function refineMatch(job, match, postings, embed, opts = {}) {
   const boilerplate = buildBoilerplate(postings.map((p) => p.text));
   const jd = stripBoilerplate(job.description, boilerplate);
   // The default model is English-only; the multilingual one reads any language.
-  if (jd.length < o.min_chars || (!o.multilingual && !isLikelyEnglish(jd))) return none;
+  if (textWeight(jd) < o.min_chars || (!o.multilingual && !isLikelyEnglish(jd))) return none;
+
+  // A title in another language than the board's (Japanese vs English): the
+  // title scores that chose the pool mean nothing, so let the multilingual
+  // model pick the candidates by title first.
+  if (mode === 'promote' && o.multilingual && match.eligible?.length && !sameTitleLanguage(job.title, match.eligible.map((c) => c.posting))) {
+    try {
+      pool = await rankByTitle(job.title, match.eligible.slice(0, MAX_TITLE_CANDIDATES), embed);
+    } catch {
+      return none;
+    }
+    if (!pool?.length) return none;
+  }
+
   const usable = pool
     .map((c) => ({ ...c, text: stripBoilerplate(c.posting.text, boilerplate) }))
-    .filter((c) => c.text.length >= o.min_chars && (o.multilingual || isLikelyEnglish(c.text)));
+    .filter((c) => textWeight(c.text) >= o.min_chars && (o.multilingual || isLikelyEnglish(c.text)));
   if (!usable.length) return none;
 
   let vectors;
@@ -154,6 +180,18 @@ export async function refineMatch(job, match, postings, embed, opts = {}) {
     match: { ...match, status: 'found', posting: verdict.pick.posting, score: verdict.pick.score, via: 'description', mismatch: null },
     semantic,
   };
+}
+
+/** Candidates ordered by title similarity in the embedding space. */
+async function rankByTitle(title, candidates, embed) {
+  const scored = [];
+  for (let i = 0; i < candidates.length; i += EMBED_BATCH) {
+    const batch = candidates.slice(i, i + EMBED_BATCH);
+    const vectors = await embed([title, ...batch.map((c) => c.posting.title)]);
+    if (!vectors || vectors.length !== batch.length + 1) return null;
+    batch.forEach((c, j) => scored.push({ ...c, titleSimilarity: cosine(vectors[0], vectors[j + 1]) }));
+  }
+  return scored.sort((a, b) => b.titleSimilarity - a.titleSimilarity).slice(0, MAX_CANDIDATES);
 }
 
 /**

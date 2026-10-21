@@ -325,7 +325,8 @@ const OFFSCREEN_PATH = 'offscreen/offscreen.html';
 /** First use downloads the model (~23 MB); later calls take well under a second. */
 const EMBED_TIMEOUT_MS = { cold: 25000, warm: 10000 };
 let offscreenCreating = null;
-let modelWarm = false;
+/** Models known to be loaded in the offscreen document. */
+const warmModels = new Set();
 
 /** User settings (options page). Stored outside the "gc:" cache namespace. */
 async function getSettings() {
@@ -363,18 +364,20 @@ const withTimeout = (promise, ms) =>
  * model is unavailable or still downloading; callers treat that as "no
  * opinion". `onPending` is told when the model was still loading.
  */
-async function embed(texts, onPending) {
+async function embed(texts, onPending, model = 'english') {
   await ensureOffscreen();
+  const warm = warmModels.has(model);
   try {
     const res = await withTimeout(
-      chrome.runtime.sendMessage({ target: 'ghostcheck-offscreen', type: 'embed', texts }),
-      modelWarm ? EMBED_TIMEOUT_MS.warm : EMBED_TIMEOUT_MS.cold,
+      chrome.runtime.sendMessage({ target: 'ghostcheck-offscreen', type: 'embed', texts, model }),
+      warm ? EMBED_TIMEOUT_MS.warm : model === 'multilingual' ? EMBED_TIMEOUT_MS.cold * 3 : EMBED_TIMEOUT_MS.cold,
     );
     if (!res || res.error || !Array.isArray(res.vectors)) throw new Error(res?.error || 'no response from model');
-    modelWarm = true;
+    warmModels.clear(); // the offscreen document holds one model at a time
+    warmModels.add(model);
     return res.vectors;
   } catch (err) {
-    if (!modelWarm) onPending?.();
+    if (!warm) onPending?.();
     throw err;
   }
 }
@@ -413,11 +416,11 @@ function sanitizeJob(job) {
 }
 
 /** Results are cached per LinkedIn job and language, invalidated if what we read changes. */
-function resultKey(job, lang) {
+function resultKey(job, lang, model) {
   const fingerprint = [job.title, job.company, job.location, job.applyHref, job.description.length].join('|');
   let h = 0;
   for (let i = 0; i < fingerprint.length; i++) h = (Math.imul(31, h) + fingerprint.charCodeAt(i)) | 0;
-  return `result:${lang}:${job.jobId || 'nojob'}:${(h >>> 0).toString(36)}`;
+  return `result:${lang}:${model}:${job.jobId || 'nojob'}:${(h >>> 0).toString(36)}`;
 }
 
 async function handleCheck(rawJob, force) {
@@ -427,7 +430,7 @@ async function handleCheck(rawJob, force) {
   if (!job.title || !job.company) {
     return unknownResult(t(lang, 'error.unreadable'), lang);
   }
-  const key = resultKey(job, lang);
+  const key = resultKey(job, lang, settings.semantic === false ? 'off' : settings.semanticModel || 'english');
   if (!force) {
     const cached = await cacheGet(key);
     if (cached) return cached;
@@ -438,14 +441,20 @@ async function handleCheck(rawJob, force) {
 
   const [rules, companies] = await Promise.all([getRules(), getCompanies()]);
   const useModel = settings.semantic !== false;
+  const semanticModel = settings.semanticModel === 'multilingual' ? 'multilingual' : 'english';
   let modelPending = false;
   const deps = {
     lang,
+    semanticModel,
     embed: useModel
       ? (texts) =>
-          embed(texts, () => {
-            modelPending = true;
-          })
+          embed(
+            texts,
+            () => {
+              modelPending = true;
+            },
+            semanticModel,
+          )
       : null,
     rules,
     companies,
@@ -478,7 +487,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // the description model through the real service worker -> offscreen path.
   if (message?.type === 'ghostcheck:debug-embed' && sender.id === chrome.runtime.id && sender.url?.startsWith(chrome.runtime.getURL(''))) {
     const texts = Array.isArray(message.texts) ? message.texts.map(String).slice(0, 16) : [];
-    embed(texts).then(
+    embed(texts, null, message.model === 'multilingual' ? 'multilingual' : 'english').then(
       (vectors) => sendResponse({ vectors }),
       (err) => sendResponse({ error: String(err?.message || err) }),
     );
@@ -487,7 +496,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // The offscreen model host has been idle: free its memory.
   if (message?.type === 'ghostcheck:offscreen-idle' && sender.url === chrome.runtime.getURL(OFFSCREEN_PATH)) {
     chrome.offscreen.closeDocument().catch(() => {});
-    modelWarm = false;
+    warmModels.clear();
     return false;
   }
   // The card's "Allow checking <site>" button: permissions can only be
