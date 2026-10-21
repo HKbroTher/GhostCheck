@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>GhostCheck model host</title></head>
+<body>
+  <!-- Runs the local embedding model. Service workers cannot load it:
+       ONNX Runtime needs dynamic import(), which workers do not allow. -->
+  <script type="module" src="offscreen.js"></script>
+</body>
+</html>

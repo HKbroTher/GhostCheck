@@ -310,6 +310,64 @@ function validCareersOrigin(origin) {
   }
 }
 
+// ------------------------------------------------------- local AI model
+
+const OFFSCREEN_PATH = 'offscreen/offscreen.html';
+/** First use downloads the model (~23 MB); later calls take well under a second. */
+const EMBED_TIMEOUT_MS = { cold: 25000, warm: 10000 };
+let offscreenCreating = null;
+let modelWarm = false;
+
+/** User setting (options page). Stored outside the "gc:" cache namespace. */
+async function semanticEnabled() {
+  try {
+    const { settings } = await chrome.storage.local.get('settings');
+    return settings?.semantic !== false;
+  } catch {
+    return true;
+  }
+}
+
+async function ensureOffscreen() {
+  const url = chrome.runtime.getURL(OFFSCREEN_PATH);
+  const existing = await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'], documentUrls: [url] });
+  if (existing.length) return;
+  offscreenCreating ??= chrome.offscreen
+    .createDocument({
+      url: OFFSCREEN_PATH,
+      reasons: ['WORKERS'],
+      justification: 'Runs a small local text-embedding model to compare job descriptions.',
+    })
+    .finally(() => {
+      offscreenCreating = null;
+    });
+  await offscreenCreating;
+}
+
+const withTimeout = (promise, ms) =>
+  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('model timeout')), ms))]);
+
+/**
+ * Normalized sentence embeddings from the offscreen model. Throws when the
+ * model is unavailable or still downloading; callers treat that as "no
+ * opinion". `onPending` is told when the model was still loading.
+ */
+async function embed(texts, onPending) {
+  await ensureOffscreen();
+  try {
+    const res = await withTimeout(
+      chrome.runtime.sendMessage({ target: 'ghostcheck-offscreen', type: 'embed', texts }),
+      modelWarm ? EMBED_TIMEOUT_MS.warm : EMBED_TIMEOUT_MS.cold,
+    );
+    if (!res || res.error || !Array.isArray(res.vectors)) throw new Error(res?.error || 'no response from model');
+    modelWarm = true;
+    return res.vectors;
+  } catch (err) {
+    if (!modelWarm) onPending?.();
+    throw err;
+  }
+}
+
 // ---------------------------------------------------------------- messages
 
 /**
@@ -365,8 +423,15 @@ async function handleCheck(rawJob, force) {
     recentFailures.clear();
   }
 
-  const [rules, companies] = await Promise.all([getRules(), getCompanies()]);
+  const [rules, companies, useModel] = await Promise.all([getRules(), getCompanies(), semanticEnabled()]);
+  let modelPending = false;
   const deps = {
+    embed: useModel
+      ? (texts) =>
+          embed(texts, () => {
+            modelPending = true;
+          })
+      : null,
     rules,
     companies,
     fetchPostings: force ? fetchPostingsFresh : fetchPostings,
@@ -381,7 +446,10 @@ async function handleCheck(rawJob, force) {
   };
   const result = await checkJob(job, deps);
   // Do not cache "can't verify" for long: it is often a transient failure.
-  await cacheSet(key, result, result.badge === 'unknown' ? 15 * 60000 : TTL.result);
+  // Same while the description model is still downloading, so the next look
+  // gets the benefit of it.
+  const shortLived = result.badge === 'unknown' || modelPending;
+  await cacheSet(key, result, shortLived ? (modelPending ? 10 : 15) * 60000 : TTL.result);
   return result;
 }
 
@@ -391,6 +459,22 @@ async function fetchPostingsFresh(ref) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Diagnostics from the extension's own pages (options page, tests): run
+  // the description model through the real service worker -> offscreen path.
+  if (message?.type === 'ghostcheck:debug-embed' && sender.id === chrome.runtime.id && sender.url?.startsWith(chrome.runtime.getURL(''))) {
+    const texts = Array.isArray(message.texts) ? message.texts.map(String).slice(0, 16) : [];
+    embed(texts).then(
+      (vectors) => sendResponse({ vectors }),
+      (err) => sendResponse({ error: String(err?.message || err) }),
+    );
+    return true;
+  }
+  // The offscreen model host has been idle: free its memory.
+  if (message?.type === 'ghostcheck:offscreen-idle' && sender.url === chrome.runtime.getURL(OFFSCREEN_PATH)) {
+    chrome.offscreen.closeDocument().catch(() => {});
+    modelWarm = false;
+    return false;
+  }
   // The card's "Allow checking <site>" button: permissions can only be
   // requested from an extension page, so open a small one.
   if (message?.type === 'ghostcheck:grant-origin' && isTrustedSender(sender)) {

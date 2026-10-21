@@ -25,12 +25,24 @@ test('every file referenced by the manifest exists', () => {
     ...manifest.content_scripts.flatMap((c) => c.js),
     ...Object.values(manifest.icons),
     'rules.yaml',
+    manifest.options_ui.page,
+    'offscreen/offscreen.html',
+    'permission/permission.html',
     'data/companies.json',
   ];
   for (const f of files) assert.ok(existsSync(new URL(f, root)), `missing: extension/${f}`);
 });
 
-test('no remote code: manifest has no external script sources', () => {
-  assert.equal(manifest.content_security_policy, undefined);
+test('no remote code: scripts only from the extension itself', () => {
+  assert.equal(manifest.content_security_policy.extension_pages, "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'");
   assert.equal(JSON.stringify(manifest).includes('http://'), false);
+});
+
+test('the bundled model runtime is local and the offscreen page points at it', () => {
+  for (const f of ['transformers.min.js', 'ort-wasm-simd-threaded.jsep.mjs', 'ort-wasm-simd-threaded.jsep.wasm']) {
+    assert.ok(existsSync(new URL(`vendor/transformers/${f}`, root)), `missing vendor/transformers/${f}`);
+  }
+  const offscreen = readFileSync(new URL('offscreen/offscreen.js', root), 'utf8');
+  assert.match(offscreen, /wasmPaths = chrome\.runtime\.getURL\('vendor\/transformers\/'\)/);
+  assert.ok(manifest.permissions.includes('offscreen'));
 });
