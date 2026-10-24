@@ -5,8 +5,20 @@ const SAMPLES = [
     officialUrl: 'https://boards.greenhouse.io/example/jobs/1',
     reasons: [
       { id: 'found', polarity: 'positive', text: "This job is listed on the company's own careers site." },
-      { id: 'fresh', polarity: 'positive', text: 'It first appeared in the last 30 days.' },
       { id: 'pay', polarity: 'positive', text: 'The posting states a pay range.' },
+      { id: 'reposted', polarity: 'negative', text: 'The posting dates disagree: LinkedIn (reposted) shows it 1 days ago, Workable · example 1000 days ago.' },
+    ],
+    signals: { reposted_to_look_new: true },
+    checks: [
+      { label: 'Apply page on careers.example.com', status: 'found', detail: '' },
+      { label: 'Job search on careers.example.com', status: 'found', detail: '' },
+      { label: 'Workable · example', status: 'unknown', detail: '' },
+      { label: 'Sitemap of careers.example.com', status: 'skipped', detail: '' },
+    ],
+    dates: [
+      { source: 'LinkedIn (reposted)', date: '2026-10-23', days: 1 },
+      { source: 'Job search on careers.example.com', date: '2026-10-23', days: 1 },
+      { source: 'Workable · example', date: '2024-01-28', days: 1000 },
     ],
   },
   {

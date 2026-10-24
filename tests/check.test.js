@@ -362,11 +362,36 @@ test('careers page without job data, but its Apply button goes to Greenhouse -> 
   assert.ok(r.reasons.some((x) => /careers\.acme\.com uses Greenhouse/.test(x.text)));
 });
 
-test('careers page linking to a board without this job -> not found counts', async () => {
+test('careers page linking to a board without this job: confirms only, never "not found"', async () => {
+  // A link on a page may be a footer link, an old board or a subsidiary's:
+  // the company's own site may list the job elsewhere.
   const discovered = { refs: [{ ref: { ats: 'greenhouse', slug: 'acme', jobId: null, region: null }, count: 3 }], unsupported: [] };
   const d = pageDeps({ fetchPageJobs: async () => ({ status: 200, ok: true, url: PAGE_HREF, postings: [], discovered }) });
   const r = await checkJob(job({ applyHref: PAGE_HREF, title: 'Data Scientist', description: '' }), d);
-  assert.equal(r.badge, 'red');
+  assert.equal(r.badge, 'unknown');
+  assert.equal(r.signals.not_found_on_official_site, null);
+  assert.ok(r.checks.some((c) => c.label === 'Greenhouse · acme' && c.status === 'unknown'));
+});
+
+test('the apply page shows the job: real, whatever the board linked from it says (all checks, any one finds it)', async () => {
+  const discovered = { refs: [{ ref: { ats: 'greenhouse', slug: 'acme', jobId: null, region: null }, count: 3 }], unsupported: [] };
+  const page = {
+    status: 200, ok: true, url: PAGE_HREF, postings: [], discovered,
+    texts: ['Data Scientist, Fraud | Acme Careers', 'Data Scientist, Fraud', 'Acme Careers'], siteName: 'Acme Careers',
+  };
+  const r = await checkJob(job({ applyHref: PAGE_HREF, title: 'Data Scientist, Fraud', description: '' }), pageDeps({ fetchPageJobs: async () => page }));
+  assert.equal(r.badge, 'green');
+  assert.equal(r.signals.found_on_official_site, true);
+  const byLabel = Object.fromEntries(r.checks.map((c) => [c.label, c.status]));
+  assert.equal(byLabel['Apply page on careers.acme.com'], 'found');
+  assert.equal(byLabel['Greenhouse · acme'], 'unknown');
+});
+
+test('a page on another domain that only names the job is not proof', async () => {
+  const href = 'https://jobs.staffingpartners.com/123';
+  const page = { status: 200, ok: true, url: href, postings: [], texts: ['Data Scientist, Fraud'], siteName: 'Staffing Partners' };
+  const r = await checkJob(job({ applyHref: href, title: 'Data Scientist, Fraud', description: '' }), pageDeps({ fetchPageJobs: async () => page }));
+  assert.equal(r.signals.found_on_official_site, null);
 });
 
 test('careers page using an unsupported ATS says which one', async () => {
@@ -404,17 +429,17 @@ test('permission prompt offers this site or all careers sites', async () => {
 
 test('job board apply link: never read as the official site', async () => {
   const href = 'https://www.liepin.com/job/1970000000.shtml';
-  let fetched = false;
+  const fetched = [];
   const r = await checkJob(
     job({ company: 'Unlisted Co', linkedinCompanySlug: null, applyHref: href }),
     pageDeps({
-      fetchPageJobs: async () => {
-        fetched = true;
+      fetchPageJobs: async (url) => {
+        fetched.push(url);
         return { status: 200, ok: true, url: href, postings: [ldPosting()] };
       },
     }),
   );
-  assert.equal(fetched, false, 'the job board page is not read');
+  assert.equal(fetched.some((u) => u.includes('liepin')), false, 'the job board page is not read');
   assert.equal(r.badge, 'unknown');
   assert.equal(r.signals.found_on_official_site, null);
   assert.match(r.reasons[0].text, /Liepin \(猎聘\), a job board/);
@@ -530,25 +555,26 @@ test('Phenom careers page: found by title through the site search; a miss is nev
   assert.equal(missed.officialUrl, 'https://careers.mastercard.com/us/en/search-results?keywords=Head+of+Payments+Research');
 });
 
-test('an old job shown as new on LinkedIn: reposted_on_linkedin, never together with reposted_to_look_new', async () => {
+test('posting dates from every source are compared: new on LinkedIn, old on the careers site', async () => {
   const old = ghPostings.map((p) => (p.id === '5551234' ? { ...p, createdAt: '2026-03-01T00:00:00Z', createdAtExact: true } : p));
   const check = (metaText) => checkJob(job({ metaText }), deps({ fetchPostings: async () => old }));
 
   const reposted = await check('San Francisco, CA · Reposted 3 days ago · 40 applicants');
   assert.equal(reposted.signals.posted_long_ago, true);
-  assert.equal(reposted.signals.reposted_on_linkedin, true);
-  assert.ok(reposted.reasons.some((x) => /LinkedIn shows it as posted 3 days ago/.test(x.text)));
-  assert.equal(reposted.detected.linkedinPosted, 'reposted 3 d');
+  assert.equal(reposted.signals.reposted_to_look_new, true);
+  assert.ok(reposted.reasons.some((x) => /LinkedIn \(reposted\) shows it 3 days ago, Greenhouse · acme 234 days ago/.test(x.text)));
+  assert.deepEqual(reposted.dates.map((d) => [d.source, d.days]), [['LinkedIn (reposted)', 3], ['Greenhouse · acme', 234]]);
 
   // LinkedIn agrees that it is old: nothing extra.
-  assert.equal((await check('San Francisco, CA · 6 months ago · 40 applicants')).signals.reposted_on_linkedin, false);
-  // No date on the page: unknown.
-  assert.equal((await check('San Francisco, CA')).signals.reposted_on_linkedin, null);
+  assert.equal((await check('San Francisco, CA · 6 months ago · 40 applicants')).signals.reposted_to_look_new, false);
+  // Only one date: nothing to compare.
+  assert.equal((await check('San Francisco, CA')).signals.reposted_to_look_new, null);
   // A recent job is never affected.
   const fresh = ghPostings.map((p) => (p.id === '5551234' ? { ...p, createdAt: '2026-10-10T00:00:00Z', createdAtExact: true } : p));
   const r = await checkJob(job({ metaText: 'SF · 2 days ago' }), deps({ fetchPostings: async () => fresh }));
-  assert.equal(r.signals.reposted_on_linkedin, false);
+  assert.equal(r.signals.reposted_to_look_new, false);
 });
+
 
 const oracle = await import('../core/sources/oracle.js');
 const ORACLE_HREF = 'https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210788451';
@@ -639,7 +665,7 @@ test('no usable link: the careers site is found from the company name (Wikidata 
     });
   const easy = job({ applyType: 'easy', applyHref: null, linkedinCompanySlug: null });
   const r = await checkJob(easy, d());
-  assert.deepEqual(fetched, ['https://careers.acme.com/']);
+  assert.equal(fetched[0], 'https://careers.acme.com/');
   assert.equal(r.badge, 'green');
   assert.equal(r.detected.website, 'https://www.acme.com/');
   assert.match(r.detected.boardSource, /Wikidata/);
@@ -678,4 +704,54 @@ test('name guesses cover Workable and SmartRecruiters, verified by the board\'s 
   assert.deepEqual(tried, ['greenhouse:bosch', 'workable:bosch', 'smartrecruiters:Bosch', 'smartrecruiters:BoschGroup']);
   assert.equal(r.detected.ats, 'SmartRecruiters');
   assert.equal(r.badge, 'green');
+});
+
+test('a guessed company domain counts only when the site links to the company\'s LinkedIn page', async () => {
+  const sites = {
+    'https://acme.com/': { status: 200, ok: true, url: 'https://acme.com/', postings: [], linkedin: ['acme-inc'], siteName: 'Welcome', careersLinks: ['https://acme.com/careers'] },
+    'https://acme.com/careers': {
+      status: 200, ok: true, url: 'https://acme.com/careers', postings: [],
+      searchForm: 'https://acme.com/careers/search?keywords={q}', texts: ['Open roles'],
+    },
+  };
+  const searched = [];
+  const d = (linkedin) =>
+    deps({
+      companies: buildCompanyIndex({ companies: [] }),
+      fetchBoardName: async () => null,
+      hasOriginPermission: async () => true,
+      fetchPageJobs: async (url) => {
+        if (url.startsWith('https://acme.com/careers/search')) {
+          searched.push(url);
+          return { status: 200, ok: true, url, postings: [], texts: ['Senior Software Engineer - Payments', 'Data Analyst'] };
+        }
+        const page = sites[url];
+        if (!page) throw new HttpError('network', 'no such host');
+        return url === 'https://acme.com/' ? { ...page, linkedin } : page;
+      },
+    });
+  const easy = job({ applyType: 'easy', applyHref: null });
+  const r = await checkJob(easy, d(['acme-inc']));
+  assert.equal(r.badge, 'green');
+  assert.match(searched[0], /keywords=Senior%20Software%20Engineer/);
+  assert.ok(r.checks.some((c) => c.label === 'Job search on acme.com' && c.status === 'found'));
+
+  // Same domain, but it links to another company's LinkedIn page: not used.
+  const other = await checkJob(easy, d(['someone-else']));
+  assert.equal(other.signals.found_on_official_site, null);
+});
+
+test('apply link gone, but the job is listed on the official board: real, with a note', async () => {
+  const d = pageDeps({
+    companies,
+    fetchPostings: async () => ghPostings,
+    fetchPageJobs: async () => ({ status: 404, ok: false, url: PAGE_HREF, postings: [] }),
+  });
+  const r = await checkJob(job({ applyHref: PAGE_HREF }), d);
+  assert.equal(r.badge, 'green');
+  assert.equal(r.signals.apply_link_closed, false);
+  assert.ok(r.reasons.some((x) => /apply link no longer works, but the job is listed elsewhere/.test(x.text)));
+  const statuses = Object.fromEntries(r.checks.map((c) => [c.label, c.status]));
+  assert.equal(statuses['Apply page on careers.acme.com'], 'closed');
+  assert.equal(statuses['Greenhouse · acme'], 'found');
 });

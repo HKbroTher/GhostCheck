@@ -41,7 +41,7 @@ try {
     const anchorFont = await page.evaluate(() => getComputedStyle(document.querySelector('ghostcheck-badge').parentElement).fontSize);
     // The card opens by itself once the result is ready.
     await page.waitForFunction(() => document.querySelector('ghostcheck-card')?.shadowRoot.querySelector('.card'), null, { timeout: 5000 });
-    await page.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelector('details').open = true));
+    await page.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelectorAll('details').forEach((d) => (d.open = true))));
     const card = await page.evaluate(() => document.querySelector('ghostcheck-card').shadowRoot.querySelector('.card').innerText);
     await page.keyboard.press('Escape');
     assert.equal(await page.evaluate(() => !!document.querySelector('ghostcheck-card')), false, 'Escape closes the card');

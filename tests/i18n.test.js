@@ -39,7 +39,7 @@ test('translation helpers', () => {
   assert.equal(resolveLanguage('auto', 'ja'), 'en');
   assert.equal(resolveLanguage('en', 'zh-TW'), 'en');
   assert.equal(resolveLanguage(undefined, 'zh-TW'), 'zh');
-  assert.ok(Object.keys(pageStrings('zh')).every((k) => /^(badge|ui|field|error)\./.test(k)));
+  assert.ok(Object.keys(pageStrings('zh')).every((k) => /^(badge|ui|field|error|checkStatus)\./.test(k)));
 });
 
 test('Chinese templates drop empty placeholders cleanly', () => {

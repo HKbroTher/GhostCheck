@@ -5,7 +5,7 @@
 import { checkJob } from '../core/check.js';
 import { buildCompanyIndex } from '../core/companies.js';
 import { RAW_BASE } from '../core/config.js';
-import { fetchJson, fetchText, RateLimiter } from '../core/http.js';
+import { fetchJson, fetchText, HttpError, RateLimiter } from '../core/http.js';
 import { parseRules } from '../core/rules.js';
 import { unknownResult } from '../core/result.js';
 import { resolveLanguage, t } from '../core/i18n.js';
@@ -15,6 +15,7 @@ import { parseWayback, waybackQueryUrl } from '../core/wayback.js';
 import { workday, WORKDAY_PAGE_SIZE } from '../core/sources/workday.js';
 import { extractJobPostings } from '../core/jsonld.js';
 import { discoverAts } from '../core/discover.js';
+import { careersLinks, linkedinCompanies, pageTexts, searchFormUrl, siteName } from '../core/careers-page.js';
 import { amazonSearchUrl, parseAmazon, parsePhenom, phenomSearchBody, phenomSite } from '../core/sources/site-search.js';
 import {
   ORACLE_FULL_LIST_MAX,
@@ -380,9 +381,17 @@ async function hasOriginPermission(origin) {
 async function fetchPageJobs(url) {
   const key = `page:${url}`;
   const cached = await cacheGet(key);
+  if (cached?.status === 0) throw new HttpError('network', cached.error || `Network error: ${url}`);
   if (cached) return cached;
   return dedupe(key, async () => {
-    const page = await fetchText(url, { timeoutMs: 12000, maxBytes: 3_000_000, limiter });
+    let page;
+    try {
+      page = await fetchText(url, { timeoutMs: 12000, maxBytes: 3_000_000, limiter });
+    } catch (err) {
+      // Many guessed careers hosts do not exist: remember that for a while.
+      if (err?.kind === 'network') await cacheSet(key, { status: 0, ok: false, url, postings: [], error: err.message }, 30 * 60000);
+      throw err;
+    }
     const result = {
       status: page.status,
       ok: page.ok,
@@ -392,6 +401,12 @@ async function fetchPageJobs(url) {
       discovered: page.ok ? discoverAts(page.text) : { refs: [], unsupported: [] },
       // A job search the site exposes (Phenom).
       siteSearch: page.ok ? phenomSite(page.text, page.url) : null,
+      // What a person would read on the page, and where it leads.
+      texts: page.ok ? pageTexts(page.text) : [],
+      siteName: page.ok ? siteName(page.text) : '',
+      linkedin: page.ok ? linkedinCompanies(page.text) : [],
+      careersLinks: page.ok ? careersLinks(page.text, page.url) : [],
+      searchForm: page.ok ? searchFormUrl(page.text, page.url) : null,
     };
     await cacheSet(key, result, TTL.page);
     return result;

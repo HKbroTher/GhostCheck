@@ -143,3 +143,18 @@ export function hostMatchesCompany(host, company) {
     names.some((n) => label === n || (label.length >= 4 && n.length >= 4 && (n.startsWith(label) || label.startsWith(n)))),
   );
 }
+
+/**
+ * Domains a company with this name might use: "Acme Robotics" ->
+ * acmerobotics.com, acme-robotics.com, acmerobotics.ai, ... Only a guess:
+ * the site must still show it belongs to the company.
+ */
+export function guessDomains(name) {
+  const words = normalizeCompanyName(name).split(' ').filter(Boolean);
+  if (!words.length) return [];
+  const joined = words.join('');
+  if (joined.length < 3) return [];
+  const out = [`${joined}.com`, `${joined}.ai`, `${joined}.io`, `${joined}.co`];
+  if (words.length > 1) out.splice(1, 0, `${words.join('-')}.com`);
+  return out;
+}
