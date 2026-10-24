@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "ats": "workable",
+  "slug": "sakana-ai",
+  "since": "2026-10-24",
+  "jobs": {
+    "9B6A0E82AF": {"t":"Forward Deployed Engineer (Enterprise)","f":"2026-10-24"},
+    "32D78E5190": {"t":"Software Engineer (Platform)","f":"2026-10-24"},
+    "45EFD3E658": {"t":"Technical Project Manager","f":"2026-10-24"},
+    "45F2EBFD1C": {"t":"Cybersecurity Engineer","f":"2026-10-24"},
+    "90E55B4EE6": {"t":"Public Sector Specialist","f":"2026-10-24"},
+    "397C4C43B5": {"t":"Defense Domain Expert","f":"2026-10-24"},
+    "738F0A1106": {"t":"Project Manager (Cybersecurity, Finance)","f":"2026-10-24"},
+    "897CE17BCB": {"t":"Technical Editor (Defense)","f":"2026-10-24"},
+    "15867CFAF5": {"t":"Public Sector Associate","f":"2026-10-24"},
+    "627809A4D1": {"t":"Project Manager (Cybersecurity, Defense)","f":"2026-10-24"},
+    "8019526436": {"t":"Project Manager (Generalist)","f":"2026-10-24"},
+    "A551977AD6": {"t":"Applied Research Engineer (Enterprise)","f":"2026-10-24"},
+    "B04C5405C3": {"t":"Project Manager (Defense)","f":"2026-10-24"},
+    "B5BD2039E8": {"t":"UI/UX Designer","f":"2026-10-24"},
+    "B20BBC7F62": {"t":"Applied Research Engineer (Defense)","f":"2026-10-24"},
+    "B2582F1E88": {"t":"UI/UX Designer (Defense)","f":"2026-10-24"},
+    "BD44A5B1D0": {"t":"Forward Deployed Engineer（Defense）","f":"2026-10-24"},
+    "C5E8C66252": {"t":"Security GRC Program Manager","f":"2026-10-24"},
+    "DAD9DAD6CF": {"t":"Software Engineer (Defense)","f":"2026-10-24"},
+    "DD56B3E42F": {"t":"Solution Engineer","f":"2026-10-24"},
+    "E903CA1407": {"t":"Software Engineer (Enterprise)","f":"2026-10-24"},
+    "FBC4B650C1": {"t":"System Infrastructure Architect (Defense)","f":"2026-10-24"},
+    "FD174E38EE": {"t":"Project Manager (Finance)","f":"2026-10-24"},
+    "FFBD084522": {"t":"Project Manager (Manufacturing)","f":"2026-10-24"}
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "ats": "greenhouse",
+  "slug": "dropbox",
+  "since": "2026-10-24",
+  "jobs": {
+    "6330377": {"t":"Infrastructure Software Engineer","f":"2026-10-24"},
+    "8067362": {"t":"Vice President, Revenue Operations","f":"2026-10-24"},
+    "8067367": {"t":"Vice President, Revenue Operations","f":"2026-10-24"},
+    "8075216": {"t":"Regional Sales Operations Manager - EMEA (Remote)","f":"2026-10-24"},
+    "8159652": {"t":"Account Executive","f":"2026-10-24"},
+    "8159659": {"t":"Senior Account Executive - LATAM","f":"2026-10-24"},
+    "8159670": {"t":"Senior Account Executive","f":"2026-10-24"},
+    "8207874": {"t":"Senior Financial Planning & Analysis Partner - Product & Growth","f":"2026-10-24"},
+    "8207875": {"t":"Senior Financial Planning & Analysis Partner - Product & Growth","f":"2026-10-24"},
+    "8208317": {"t":"Senior Manager, APJ Field & Channel Marketing","f":"2026-10-24"},
+    "8234201": {"t":"Senior Program Manager,  Employee Experience","f":"2026-10-24"},
+    "8234202": {"t":"Senior Program Manager, Employee Experience","f":"2026-10-24"},
+    "8249475": {"t":"Customer Success Manager — Japanese & Korean Speaking (Remote)","f":"2026-10-24"},
+    "8249957": {"t":"Integrated Campaign Strategist","f":"2026-10-24"},
+    "8249958": {"t":"Integrated Campaign Strategist","f":"2026-10-24"},
+    "8279631": {"t":"Senior Manager, Lifecycle Marketing","f":"2026-10-24"},
+    "8279632": {"t":"Senior Manager, Lifecycle Marketing","f":"2026-10-24"},
+    "8280093": {"t":"Senior Corporate Enterprise Platform Engineer, Windows","f":"2026-10-24"},
+    "8280094": {"t":"Senior Corporate Enterprise Platform Engineer, Windows","f":"2026-10-24"},
+    "8285045": {"t":"Senior Technical Solutions Specialist","f":"2026-10-24"},
+    "8286535": {"t":"Executive Assistant to the Chief Business Officer","f":"2026-10-24"},
+    "8286536": {"t":"Executive Assistant to the Chief Business Officer","f":"2026-10-24"},
+    "8296377": {"t":"Learning Experience Designer","f":"2026-10-24"}
+  }
+}

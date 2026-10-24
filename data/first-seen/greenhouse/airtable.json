@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "ats": "greenhouse",
+  "slug": "airtable",
+  "since": "2026-10-24",
+  "jobs": {
+    "8368711002": {"t":"Sales Manager, Strategic Accounts","f":"2026-10-24"},
+    "8403107002": {"t":"Account Executive, Corporate","f":"2026-10-24"},
+    "8403127002": {"t":"Account Executive, Strategic","f":"2026-10-24"},
+    "8425211002": {"t":"Business Development Representative","f":"2026-10-24"}
+  }
+}
