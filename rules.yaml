@@ -10,7 +10,8 @@
 #
 # Each reason has an English (en) and a Chinese (zh) version; the card shows
 # the user's language. Reason text placeholders (filled in when available):
-#   {company} {ats} {days} {atsDays} {linkedinDays} {ageSource} {team} {phrase} {salary} {matchedTitle}
+#   {company} {ats} {days} {ageSource} {newestSource} {newestDays} {oldestSource} {oldestDays}
+#   {team} {phrase} {salary} {matchedTitle}
 
 version: 1
 
@@ -62,15 +63,14 @@ semantic:
       # use is a Japanese/Chinese LinkedIn job against an English careers site.
       promote_min_similarity: 0.9
 
-# Age thresholds in days. The age is the oldest of: the careers site's own
-# publish date, GhostCheck's daily snapshots, and the Wayback Machine.
+# Age thresholds in days. The age is the oldest of: the publish dates the
+# careers sites show, GhostCheck's daily snapshots, and the Wayback Machine.
 age:
   recent_days: 30
   old_days: 90
-  # reposted_on_linkedin: LinkedIn must date the job at least this many days
-  # after its first appearance (companies often post on LinkedIn a little
-  # later, so small gaps are normal).
-  linkedin_gap_days: 60
+  # reposted_to_look_new: the newest and oldest dates must be at least this
+  # far apart (a company posting on LinkedIn a few weeks later is normal).
+  date_gap_days: 60
 
 signals:
   # ---------------------------------------------------------------- positive
@@ -133,24 +133,13 @@ signals:
       en: "The description reads like a generic or pipeline posting (\"{phrase}\")."
       zh: "职位描述像是通用模板或人才储备岗位（「{phrase}」）。"
 
-  # The careers site shows a publish date more than recent_days newer than the
-  # oldest evidence (snapshots / Wayback): the posting was re-published so it
-  # looks fresh. Overlaps with posted_long_ago, hence the low weight.
+  # Sources disagree about when the job was posted: one (a careers site or
+  # LinkedIn) shows it within recent_days, another shows it more than old_days
+  # ago, at least date_gap_days apart. The job was probably re-posted to look
+  # fresh. Overlaps with posted_long_ago, hence the low weight.
   - id: reposted_to_look_new
     type: negative
     weight: 1
     reason:
-      en: "The careers site dates it {atsDays} days ago, but it existed long before, so it was probably re-posted to look new."
-      zh: "官网显示的发布日期是 {atsDays} 天前，但这个职位早已存在，可能是为了显得新而重新发布。"
-
-  # The job has been open for more than old_days, but LinkedIn shows it as
-  # posted or reposted within recent_days (and at least linkedin_gap_days
-  # after it first appeared): it was re-posted on LinkedIn to look fresh.
-  # Overlaps with posted_long_ago, hence the low weight; never counted
-  # together with reposted_to_look_new.
-  - id: reposted_on_linkedin
-    type: negative
-    weight: 1
-    reason:
-      en: "LinkedIn shows it as posted {linkedinDays} days ago, but it first appeared {days} days ago, so it was probably re-posted on LinkedIn to look new."
-      zh: "LinkedIn 显示发布于 {linkedinDays} 天前，但这个职位 {days} 天前就已出现，可能是在 LinkedIn 上重新发布以显得新。"
+      en: "The posting dates disagree: {newestSource} shows it {newestDays} days ago, {oldestSource} {oldestDays} days ago. It was probably re-posted to look new."
+      zh: "各网站的发布时间对不上：{newestSource}显示 {newestDays} 天前，{oldestSource}显示 {oldestDays} 天前。这个职位可能是为了显得新而重新发布的。"

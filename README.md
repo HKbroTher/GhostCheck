@@ -43,12 +43,15 @@ flowchart LR
 ```
 
 1. **Read the job.** The extension reads the public job details on the page: title, company, location, description, pay shown by LinkedIn, and the apply link. LinkedIn wraps apply links in redirects; GhostCheck unwraps them.
-2. **Find the official source.** The apply link usually reveals the company's applicant tracking system (ATS). Without a usable link (Easy Apply, a job board, a page with no job data) GhostCheck tries, in order:
-   - [`data/companies.json`](data/companies.json), the community list;
-   - a board named after the company on Greenhouse, Workable or SmartRecruiters, used only if the board's own company name matches;
-   - the company's official website from [Wikidata](https://www.wikidata.org/) (free, no account), then its careers site (`careers.<domain>`, `jobs.<domain>`, `<domain>/careers`) and the ATS that page links to. The domain must carry the company's name, and GhostCheck only reads careers sites you allowed.
+2. **Ask every official source, at the same time.** GhostCheck does not stop at the first source it finds; it checks all of them:
+   - the ATS in the apply link, and the one listed for the company in [`data/companies.json`](data/companies.json);
+   - the apply page itself: its job data, or simply the job title on the page as a person would read it;
+   - the careers site's own job search (its search form, or the search API of the platform it runs on) and its sitemap;
+   - every ATS the careers pages link to or embed;
+   - the company's own website, from [Wikidata](https://www.wikidata.org/) (free, no account) or a domain guessed from the name and confirmed by the site's link to the company's LinkedIn page; then its careers page, found through the home page's "Careers" / "Jobs" link or the usual places (`careers.<domain>`, `<domain>/careers`, ...);
+   - a board named after the company on Greenhouse, Workable or SmartRecruiters, used only if the board's own company name matches.
 
-   Boards found by name can confirm a job but never count it as missing, since a namesake company could own them.
+   **If any one source lists the job, it is real.** "Not found" only counts when no source lists it *and* a source known to hold the company's complete list (the apply link's ATS, or the one in `companies.json`) says it is not there. Boards found along the way (by name, on a website, linked from a page) can confirm a job but never count it as missing. The card lists every source and what it said. GhostCheck only reads company sites you allowed.
 3. **Ask the careers site** through its public API or public pages:
 
    | Careers site | How GhostCheck checks | Can it say "not found"? |
@@ -64,7 +67,7 @@ flowchart LR
    When the apply link opens a careers site's home or search page instead of the job's own page, the job is simply not on that page: the card says so and links to the site's search, and never counts it as "not found".
 
 4. **Match the job.** Titles are normalized (`Sr.` → `Senior`, `SWE` → `Software Engineer`, noise like `(m/w/d)` or `Remote` removed), then compared with fuzzy matching. Seniority level, location and manager vs. individual-contributor roles must agree. When titles are worded differently, a small AI model that runs on your computer compares the job descriptions (see [below](#description-matching-local-ai-model)).
-5. **Estimate the job's age** from the oldest of: the careers site's own publish date, GhostCheck's daily snapshots (`data/first-seen/`), and the earliest [Wayback Machine](https://web.archive.org/) capture. Snapshots and captures prove a job existed *by* a date, so they can show a job is old but never that it is new.
+5. **Compare the posting dates.** Every source that lists the job gives its own date; LinkedIn shows one too; GhostCheck adds its daily snapshots (`data/first-seen/`) and the earliest [Wayback Machine](https://web.archive.org/) capture. The job's age is the oldest of them. The card lists all dates, and warns when they disagree, for example two sites saying "yesterday" and one "1,000 days ago": the job was probably re-posted to look new. Snapshots and captures prove a job existed *by* a date, so they can show a job is old but never that it is new.
 6. **Score it** with the community-editable [`rules.yaml`](rules.yaml):
 
    | Signal | Points | When |
@@ -77,8 +80,7 @@ flowchart LR
    | `apply_link_closed` | −3 | The apply link points to a posting that no longer exists |
    | `posted_long_ago` | −2 | Listed for more than 90 days |
    | `generic_template` | −1 | The description reads like a pipeline posting ("talent pool", "future opportunities") |
-   | `reposted_to_look_new` | −1 | The careers site shows a much newer date than the job really has |
-   | `reposted_on_linkedin` | −1 | Open for over 90 days, but LinkedIn shows it as posted or "Reposted" in the last 30 days |
+   | `reposted_to_look_new` | −1 | The sources disagree: one (a careers site or LinkedIn) shows the job as posted in the last 30 days, another over 90 days ago |
 
    A total of **+3 or more is 🟢**, **−3 or less is 🔴**, anything in between is 🟡. If the careers site could not be checked at all, the badge is ⚪, whatever the other signals say.
 

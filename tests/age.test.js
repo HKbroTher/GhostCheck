@@ -20,14 +20,13 @@ test('the oldest evidence wins', () => {
   const s = ageSignals(age, T);
   assert.equal(s.posted_long_ago, true);
   assert.equal(s.posted_recently, false);
-  assert.equal(s.refreshed, true); // careers site says 10 days, evidence says 150
 });
 
 test('recent needs exact evidence', () => {
   const exact = ageSignals(combineAge([{ date: daysAgo(5), exact: true, source: 'ats' }], NOW), T);
-  assert.deepEqual(exact, { posted_recently: true, posted_long_ago: false, refreshed: false });
+  assert.deepEqual(exact, { posted_recently: true, posted_long_ago: false});
   const bound = ageSignals(combineAge([{ date: daysAgo(5), exact: false, source: 'snapshot' }], NOW), T);
-  assert.deepEqual(bound, { posted_recently: null, posted_long_ago: null, refreshed: false });
+  assert.deepEqual(bound, { posted_recently: null, posted_long_ago: null});
 });
 
 test('a lower bound alone can prove a job is old', () => {
@@ -37,13 +36,13 @@ test('a lower bound alone can prove a job is old', () => {
 
 test('between the thresholds', () => {
   const s = ageSignals(combineAge([{ date: daysAgo(60), exact: true, source: 'ats' }], NOW), T);
-  assert.deepEqual(s, { posted_recently: false, posted_long_ago: false, refreshed: false });
+  assert.deepEqual(s, { posted_recently: false, posted_long_ago: false});
 });
 
 test('no evidence -> unknown', () => {
   assert.equal(combineAge([], NOW), null);
   assert.equal(combineAge([{ date: 'garbage', exact: true, source: 'ats' }], NOW), null);
-  assert.deepEqual(ageSignals(null, T), { posted_recently: null, posted_long_ago: null, refreshed: false });
+  assert.deepEqual(ageSignals(null, T), { posted_recently: null, posted_long_ago: null});
 });
 
 test('wayback parsing', () => {

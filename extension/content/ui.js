@@ -87,6 +87,14 @@
     a.official:hover { color: #fff; border-bottom-color: #fff; }
     details { border-top: 1px dashed color-mix(in srgb, var(--amber) 35%, transparent); padding-top: 8px; margin-bottom: 8px; }
     summary { cursor: pointer; color: var(--amber-dim); font: 17px/20px ${FONT}; letter-spacing: .5px; }
+    ul.checks, ul.dates { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12px; }
+    ul.checks li, ul.dates li { display: flex; gap: 8px; align-items: baseline; padding: 1px 0; }
+    ul.checks .mark { flex: none; width: 12px; text-align: center; font: 16px/16px ${FONT}; }
+    ul.checks .what, ul.dates .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    ul.checks .status, ul.dates .status { flex: none; color: var(--amber-dim); }
+    ul.checks li[data-status="found"] .mark, ul.checks li[data-status="found"] .status { color: var(--green); }
+    ul.checks li[data-status="missing"] .mark, ul.checks li[data-status="closed"] .mark { color: var(--red); }
+    ul.dates.disagree .status { color: var(--red); }
     dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 10px; margin: 8px 0 0; font-size: 12px; }
     dt { color: var(--amber-dim); }
     dd { margin: 0; overflow-wrap: anywhere; }
@@ -199,6 +207,7 @@
   }
 
   const MARKS = { positive: '+', negative: '−', neutral: '•' };
+  const CHECK_MARKS = { found: '✓', missing: '✗', closed: '✗', unknown: '?', skipped: '–' };
 
   class GhostCheckUI {
     constructor({ onRecheck, onAction, onDismiss, strings } = {}) {
@@ -428,6 +437,33 @@
               s.officialLabel || this.t('ui.viewJob'),
             ),
           );
+        }
+
+        // Every source GhostCheck asked, and what it said.
+        if (Array.isArray(s.checks) && s.checks.length) {
+          const list = el('ul', { class: 'checks' });
+          for (const c of s.checks) {
+            list.append(
+              el(
+                'li',
+                { 'data-status': c.status, title: c.detail || '' },
+                el('span', { class: 'mark', 'aria-hidden': 'true' }, CHECK_MARKS[c.status] || '?'),
+                el('span', { class: 'what' }, c.label),
+                el('span', { class: 'status' }, this.t(`checkStatus.${c.status}`)),
+              ),
+            );
+          }
+          card.append(el('details', { open: '' }, el('summary', {}, this.t('ui.checks')), list));
+        }
+
+        // When each source says the job was posted; flagged when they disagree.
+        if (Array.isArray(s.dates) && s.dates.length) {
+          const disagree = s.signals?.reposted_to_look_new === true;
+          const list = el('ul', { class: disagree ? 'dates disagree' : 'dates' });
+          for (const d of s.dates) {
+            list.append(el('li', {}, el('span', { class: 'what' }, d.source), el('span', { class: 'status' }, `${this.t('ui.daysAgo', { days: d.days })} · ${d.date}`)));
+          }
+          card.append(el('details', disagree ? { open: '' } : {}, el('summary', {}, `${disagree ? '⚠ ' : ''}${this.t('ui.dates')}`), list));
         }
 
         const detected = s.detected || {};

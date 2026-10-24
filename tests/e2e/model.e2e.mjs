@@ -108,7 +108,7 @@ try {
   );
   // The card opens by itself when the result is ready.
   await page.waitForFunction(() => document.querySelector('ghostcheck-card')?.shadowRoot.querySelector('.card'), null, { timeout: 5000 });
-  await page.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelector('details').open = true));
+  await page.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelectorAll('details').forEach((d) => (d.open = true))));
   const card = await page.evaluate(() => document.querySelector('ghostcheck-card').shadowRoot.querySelector('.card').innerText);
   console.log(`\n--- card ---\n${card}\n------------`);
   assert.match(card, /Likely real/);
@@ -157,7 +157,7 @@ try {
   );
   // The card opens by itself when the result is ready.
   await jp.waitForFunction(() => document.querySelector('ghostcheck-card')?.shadowRoot.querySelector('.card'), null, { timeout: 5000 });
-  await jp.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelector('details').open = true));
+  await jp.evaluate(() => (document.querySelector('ghostcheck-card').shadowRoot.querySelectorAll('details').forEach((d) => (d.open = true))));
   const jaCard = await jp.evaluate(() => document.querySelector('ghostcheck-card').shadowRoot.querySelector('.card').innerText);
   console.log(`\n--- Japanese job, multilingual model ---\n${jaCard}\n------------`);
   // Never "not found" across languages; with the multilingual model it should be confirmed.

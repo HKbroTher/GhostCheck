@@ -19,6 +19,7 @@ const DAY_MS = 86400000;
  * @property {string} date      ISO date
  * @property {boolean} exact
  * @property {'ats' | 'snapshot' | 'wayback'} source
+ * @property {string} [label]   which source exactly, for the card
  */
 
 export const AGE_SOURCE_LABELS = {
@@ -50,21 +51,17 @@ export function combineAge(evidence, now) {
  * Age signals for rules.yaml.
  * @param {ReturnType<typeof combineAge>} age
  * @param {{ recent_days: number, old_days: number }} thresholds
- * @returns {{ posted_recently: boolean | null, posted_long_ago: boolean | null, refreshed: boolean }}
+ * @returns {{ posted_recently: boolean | null, posted_long_ago: boolean | null }}
  */
 export function ageSignals(age, { recent_days, old_days }) {
-  if (!age) return { posted_recently: null, posted_long_ago: null, refreshed: false };
+  if (!age) return { posted_recently: null, posted_long_ago: null };
   const old = age.days > old_days;
   // A lower bound alone cannot show that a job is new.
   const recent = age.hasExact ? age.days <= recent_days : old ? false : null;
-  // Careers site shows a much newer date than the oldest evidence: the
-  // posting was probably re-published to look fresh.
-  const refreshed = age.atsDays !== null && age.oldest.source !== 'ats' && age.days - age.atsDays > recent_days;
   return {
     posted_recently: recent,
     // Between the thresholds both are false; without enough evidence for
     // either side, a lower bound under old_days says nothing.
     posted_long_ago: old ? true : age.hasExact ? false : null,
-    refreshed,
   };
 }
