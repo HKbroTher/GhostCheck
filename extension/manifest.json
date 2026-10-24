@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "GhostCheck",
+  "version": "0.11.0",
+  "description": "Checks whether a LinkedIn job is really open by comparing it with the company's own careers site.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "https://boards-api.greenhouse.io/*",
+    "https://boards-api.eu.greenhouse.io/*",
+    "https://api.lever.co/*",
+    "https://api.eu.lever.co/*",
+    "https://api.ashbyhq.com/*",
+    "https://apply.workable.com/*",
+    "https://raw.githubusercontent.com/*",
+    "https://archive.org/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://*.myworkdaysite.com/*",
+    "https://*.oraclecloud.com/*",
+    "https://api.smartrecruiters.com/*",
+    "https://www.wikidata.org/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "js": [
+        "content/selectors.js",
+        "content/strings.js",
+        "content/extract.js",
+        "content/ui.js",
+        "content/main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+name: Validate companies.json
+
+# Checks every board in data/companies.json against the live ATS APIs.
+on:
+  push:
+    paths:
+      - data/companies.json
+      - core/sources/**
+      - core/http.js
+      - core/jsonld.js
+      - core/sitemap.js
+      - core/matcher.js
+      - core/normalize.js
+      - core/discover.js
+      - tests/careers-pages.txt
+      - scripts/validate-companies.mjs
+      - scripts/probe-sites.mjs
+      - scripts/probe-ats.mjs
+      - .github/workflows/validate-companies.yml
+  pull_request:
+    paths:
+      - data/companies.json
+      - core/sources/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/validate-companies.mjs
+      - name: Probe careers-site search APIs (informational)
+        run: node scripts/probe-sites.mjs
+        continue-on-error: true
+      - name: Find careers sites from company names (informational)
+        run: node scripts/probe-ats.mjs
+        continue-on-error: true

@@ -1,0 +1,30 @@
+{
+  "jobs": [
+    {
+      "id": 5551234,
+      "internal_job_id": 4440001,
+      "title": "Senior Software Engineer, Payments",
+      "updated_at": "2026-10-15T12:00:00-04:00",
+      "first_published": "2026-10-01T09:00:00-04:00",
+      "requisition_id": "R-100",
+      "company_name": "Acme",
+      "location": { "name": "San Francisco, CA" },
+      "absolute_url": "https://boards.greenhouse.io/acme/jobs/5551234",
+      "metadata": null,
+      "content": "&lt;p&gt;Join the &lt;strong&gt;Payments Platform&lt;/strong&gt; team.&lt;/p&gt;&lt;p&gt;Pay: $150,000 &amp;ndash; $190,000&lt;/p&gt;",
+      "departments": [{ "id": 1, "name": "Engineering" }],
+      "offices": [{ "id": 2, "name": "San Francisco", "location": "San Francisco, CA" }]
+    },
+    {
+      "id": 5559999,
+      "title": "Product Designer",
+      "updated_at": "2026-03-01T12:00:00Z",
+      "first_published": "2026-02-01T12:00:00Z",
+      "location": { "name": "Remote - US" },
+      "absolute_url": "https://boards.greenhouse.io/acme/jobs/5559999",
+      "content": "",
+      "departments": [],
+      "offices": []
+    }
+  ]
+}

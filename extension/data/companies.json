@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "companies": [
+    { "name": "Airbnb", "linkedin": ["airbnb"], "ats": "greenhouse", "slug": "airbnb" },
+    { "name": "Airtable", "ats": "greenhouse", "slug": "airtable" },
+    { "name": "Anthropic", "linkedin": ["anthropicresearch"], "ats": "greenhouse", "slug": "anthropic" },
+    { "name": "Asana", "ats": "greenhouse", "slug": "asana" },
+    { "name": "Cloudflare", "linkedin": ["cloudflare"], "ats": "greenhouse", "slug": "cloudflare" },
+    { "name": "Coinbase", "linkedin": ["coinbase"], "ats": "greenhouse", "slug": "coinbase" },
+    { "name": "Databricks", "linkedin": ["databricks"], "ats": "greenhouse", "slug": "databricks" },
+    { "name": "Discord", "ats": "greenhouse", "slug": "discord" },
+    { "name": "Dropbox", "linkedin": ["dropbox"], "ats": "greenhouse", "slug": "dropbox" },
+    { "name": "Duolingo", "linkedin": ["duolingo"], "ats": "greenhouse", "slug": "duolingo" },
+    { "name": "Figma", "linkedin": ["figma"], "ats": "greenhouse", "slug": "figma" },
+    { "name": "GitLab", "linkedin": ["gitlab-com"], "ats": "greenhouse", "slug": "gitlab" },
+    { "name": "Instacart", "ats": "greenhouse", "slug": "instacart" },
+    { "name": "Lyft", "linkedin": ["lyft"], "ats": "greenhouse", "slug": "lyft" },
+    { "name": "Pinterest", "linkedin": ["pinterest"], "ats": "greenhouse", "slug": "pinterest" },
+    { "name": "Reddit", "aliases": ["Reddit, Inc."], "ats": "greenhouse", "slug": "reddit" },
+    { "name": "Robinhood", "linkedin": ["robinhood"], "ats": "greenhouse", "slug": "robinhood" },
+    { "name": "Stripe", "linkedin": ["stripe"], "ats": "greenhouse", "slug": "stripe" },
+    { "name": "Vercel", "linkedin": ["vercel"], "ats": "greenhouse", "slug": "vercel" },
+    { "name": "Palantir Technologies", "aliases": ["Palantir"], "linkedin": ["palantir-technologies"], "ats": "lever", "slug": "palantir" },
+    { "name": "Spotify", "linkedin": ["spotify"], "ats": "lever", "slug": "spotify" },
+    { "name": "Adobe", "linkedin": ["adobe"], "ats": "workday", "slug": "adobe", "workday": { "host": "adobe.wd5.myworkdayjobs.com", "site": "external_experienced" } },
+    { "name": "Intel Corporation", "aliases": ["Intel"], "linkedin": ["intel-corporation"], "ats": "workday", "slug": "intel", "workday": { "host": "intel.wd1.myworkdayjobs.com", "site": "External" } },
+    { "name": "Mastercard", "linkedin": ["mastercard"], "ats": "workday", "slug": "mastercard", "workday": { "host": "mastercard.wd1.myworkdayjobs.com", "site": "CorporateCareers" } },
+    { "name": "NVIDIA", "linkedin": ["nvidia"], "ats": "workday", "slug": "nvidia", "workday": { "host": "nvidia.wd5.myworkdayjobs.com", "site": "NVIDIAExternalCareerSite" } },
+    { "name": "Salesforce", "linkedin": ["salesforce"], "ats": "workday", "slug": "salesforce", "workday": { "host": "salesforce.wd12.myworkdayjobs.com", "site": "External_Career_Site" } },
+    { "name": "Sakana AI", "linkedin": ["sakana-ai"], "ats": "workable", "slug": "sakana-ai" },
+    { "name": "Linear", "ats": "ashby", "slug": "linear" },
+    { "name": "Notion", "linkedin": ["notionhq"], "ats": "ashby", "slug": "notion" },
+    { "name": "OpenAI", "linkedin": ["openai"], "ats": "ashby", "slug": "openai" },
+    { "name": "Ramp", "ats": "ashby", "slug": "ramp" },
+    { "name": "Supabase", "linkedin": ["supabase"], "ats": "ashby", "slug": "supabase" },
+    { "name": "Bosch", "aliases": ["Bosch Group", "Robert Bosch", "Robert Bosch GmbH"], "linkedin": ["bosch"], "ats": "smartrecruiters", "slug": "BoschGroup" },
+    {
+      "name": "JPMorgan Chase", "aliases": ["JPMorgan Chase & Co.", "J.P. Morgan", "JPMorganChase"], "linkedin": ["jpmorganchase", "jpmorgan"],
+      "ats": "oracle", "slug": "jpmc", "oracle": { "url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001" }
+    }
+  ]
+}

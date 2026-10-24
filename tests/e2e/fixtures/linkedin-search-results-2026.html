@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><title>(13) Software Application Engineer | Cyient | LinkedIn</title>
+<!-- Mock of LinkedIn's /jobs/search-results/ layout (Oct 2026): obfuscated class names, the job title appears in the list and in the details pane, the tab title updates after the pane. Built from a user screenshot; used by tests/e2e/layout.e2e.mjs. -->
+<style>
+ body{font:14px sans-serif;margin:0} .a1{display:flex;gap:16px} .b2{width:420px} .c3{flex:1}
+ .d4 a{font-size:16px;font-weight:600;color:#0a66c2} .e5{font-size:24px;font-weight:600} .f6{font-size:14px;color:#666}
+ .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style></head><body>
+<header><div class="zz">Describe the job you want</div></header>
+<main class="a1">
+  <div class="b2" id="list">
+    <h2 class="q1">Jobs based on your preferences</h2>
+    <ul>
+      <li class="d4"><a href="#" data-id="4471791897">Software Application Engineer <span class="vh">with verification</span></a><div>Cyient</div><div>Tokyo, Japan (On-site)</div></li>
+      <li class="d4"><a href="#" data-id="4471790000">Software Engineer <span class="vh">with verification</span></a><div>Cyient</div><div>Tokyo</div></li>
+      <li class="d4"><a href="#" data-id="4471795555">Backend Engineer (PayPay Securities)</a><div>PayPay Corporation</div><div>Tokyo, Japan (Hybrid)</div><div>5M JPY/yr - 10.5M JPY/yr</div></li>
+    </ul>
+  </div>
+  <div class="c3" id="pane"></div>
+</main>
+<script>
+const JOBS = {
+  '4471791897': { title: 'Software Application Engineer', company: 'Cyient', slug: 'cyient', meta: ['Tokyo, Japan', '3 weeks ago', '83 applicants'],
+    jd: 'Cyient is a global engineering company. '.repeat(3) + 'You will develop embedded application software for railway signalling systems in C++ and Python, working with the Tokyo rolling stock team. '.repeat(6) },
+  '4471790000': { title: 'Software Engineer', company: 'Cyient', slug: 'cyient', meta: ['Tokyo', '1 week ago', '20 applicants'],
+    jd: 'Cyient is a global engineering company. '.repeat(3) + 'You will build test automation for avionics software and maintain CI pipelines. '.repeat(6) },
+};
+function render(id) {
+  const j = JOBS[id];
+  document.getElementById('pane').innerHTML = `
+    <div class="r7"><a class="s8" href="https://www.linkedin.com/company/${j.slug}/life/">${j.company}</a></div>
+    <div class="t9"><p class="e5">${j.title} <svg width="16" height="16"></svg><span class="vh">Verified job</span></p></div>
+    <div class="f6"><span>${j.meta[0]}</span><span> · </span><span>${j.meta[1]}</span><span> · </span><span>${j.meta[2]}</span></div>
+    <div class="u1"><span>On-site</span><span>Full-time</span></div>
+    <div class="v2"><button class="w3" aria-label="Easy Apply to ${j.title} at ${j.company}"><svg></svg><span>Easy Apply</span></button><button>Save</button></div>
+    <section class="x4"><h2>About the job</h2><div class="y5"><p>${j.jd}</p></div></section>
+    <section><h2>Your profile and resume match some required qualifications</h2><div>Show match details. BETA. Is this information helpful?</div></section>
+    <section><h2>Get personalized tips to stand out to hirers</h2><div>${'Find jobs where you are a top applicant and tailor your resume with the help of Premium. '.repeat(4)}</div></section>
+    <section><h2>People you can reach out to</h2><div>${'Meet the hiring team. Talent Acquisition Partner focused on Japan recruitment and branding. Message. '.repeat(4)}</div></section>
+    <section><h2>About the company</h2><div>${'Company overview, followers, employees on LinkedIn and industry information. '.repeat(5)}</div></section>`;
+}
+const p = new URLSearchParams(location.search);
+render(p.get('currentJobId') || '4471791897');
+document.getElementById('list').addEventListener('click', (e) => {
+  const a = e.target.closest('a[data-id]'); if (!a) return; e.preventDefault();
+  history.pushState({}, '', '/jobs/search-results/?currentJobId=' + a.dataset.id + '&eBP=xyz');
+  setTimeout(() => render(a.dataset.id), 500);                       // pane re-renders late
+  setTimeout(() => { document.title = '(13) ' + JOBS[a.dataset.id].title + ' | Cyient | LinkedIn'; }, 1200); // tab title even later
+});
+</script></body></html>

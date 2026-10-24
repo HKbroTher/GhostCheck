@@ -1,0 +1,13 @@
+section + section { border-top: 1px dashed var(--line); margin-top: 18px; }
+.toggle { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.toggle input { margin-top: 4px; }
+.hint { color: var(--amber-dim); font-size: 14px; }
+#origins { list-style: none; padding: 0; }
+#origins li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; overflow-wrap: anywhere; }
+#origins button { padding: 2px 12px; font-size: 17px; }
+select {
+  font: 19px var(--mono); padding: 2px 8px; border-radius: 4px;
+  border: 1px solid var(--amber); background: var(--screen); color: var(--amber);
+}
+fieldset { border: 0; padding: 0; margin: 10px 0; display: grid; gap: 8px; }
+fieldset:disabled { opacity: .5; }
