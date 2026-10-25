@@ -401,7 +401,7 @@
     "941bad28-7abe-43c7-b20a-2bc7e5b3c6e8": {"t":"Researcher, Alignment","f":"2026-10-24"},
     "967f94aa-1706-4dba-ac89-bfbc2c38b688": {"t":"Forward Deployed Engineer (FDE) - SF","f":"2026-10-24"},
     "974fff14-f2d7-4a99-8740-eb8dc5300d82": {"t":"Account Associate - Singapore (Korean-speaking)","f":"2026-10-24"},
-    "987c4eb8-819e-4258-a91c-f34ecfbcd5f1": {"t":"Development Lead","f":"2026-10-24"},
+    "987c4eb8-819e-4258-a91c-f34ecfbcd5f1": {"t":"Development Lead","f":"2026-10-24","g":"2026-10-25"},
     "989d85db-2f7e-4833-8934-9e64b652675f": {"t":"SMB Innovation Sales & Strategy Lead","f":"2026-10-24"},
     "01091aed-427d-4e10-8cdb-fb500cf55bb9": {"t":"Applied AI Engineer, Enterprise","f":"2026-10-24"},
     "1328e781-c66c-4f71-8eb0-6c684273833b": {"t":"Applied AI Engineer, Cyber | Tokyo","f":"2026-10-24"},
@@ -799,6 +799,6 @@
     "fe7039ce-51e2-4cfa-9ea5-507eb7a0eee1": {"t":"Technical Program Manager, Robotics Infrastructure","f":"2026-10-24"},
     "fe753283-d232-4470-8e20-fbeb217ea9e2": {"t":"Strategic Sourcing Manager, Data Center Infrastructure, Electrical","f":"2026-10-24"},
     "fecac6f9-2b94-454e-95ef-80d9b7abeb5a": {"t":"Account Director, Large Enterprise","f":"2026-10-24"},
-    "ff316e82-c88a-4c94-91e1-2ccea6de129e": {"t":"Infrastructure Operations & Sustainability Lead","f":"2026-10-24"}
+    "ff316e82-c88a-4c94-91e1-2ccea6de129e": {"t":"Infrastructure Operations & Sustainability Lead","f":"2026-10-24","g":"2026-10-25"}
   }
 }
