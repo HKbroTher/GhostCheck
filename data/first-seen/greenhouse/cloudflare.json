@@ -14,6 +14,7 @@
     "6998777": {"t":"Senior Design Engineer","f":"2026-10-24"},
     "7053411": {"t":"Staff/Principal Software Engineer - Security Platform","f":"2026-10-24"},
     "7093840": {"t":"Senior Systems Engineer, Basin Pipelines","f":"2026-10-24"},
+    "7167659": {"t":"Business Development Representative - Bahasa Indonesia Speaking","f":"2026-10-26"},
     "7241874": {"t":"Customer Experience Manager - Russian Speaking","f":"2026-10-24"},
     "7272028": {"t":"Senior Digital Native  Account Executive, Spain","f":"2026-10-24"},
     "7276690": {"t":"Senior Software Engineer, R2 Metadata","f":"2026-10-24"},
@@ -36,7 +37,7 @@
     "7525971": {"t":"Customer Engineering Specialist - Network Services","f":"2026-10-24"},
     "7530475": {"t":"Senior Customer Engineer, Public Sector Federal","f":"2026-10-24"},
     "7534033": {"t":"Senior Cloudflare One GTM Specialist","f":"2026-10-24"},
-    "7535803": {"t":"IT Asset Manager","f":"2026-10-24"},
+    "7535803": {"t":"Manager of IT Asset Management","f":"2026-10-24"},
     "7541032": {"t":"Senior Software Engineer - Network Platforms","f":"2026-10-24"},
     "7544182": {"t":"Deal Desk Manager, EMEA","f":"2026-10-24"},
     "7552575": {"t":"Major Account Executive, France","f":"2026-10-24"},
@@ -87,7 +88,7 @@
     "7991345": {"t":"Business Development Representative (BDR), LATAM Spanish Speaking","f":"2026-10-24"},
     "7992903": {"t":"Senior Network Engineer","f":"2026-10-24"},
     "7997341": {"t":"Finance Business Partner, G&A","f":"2026-10-24"},
-    "8012884": {"t":"Senior Territory Account Executive - China","f":"2026-10-24"},
+    "8012884": {"t":"Senior Territory Account Executive - China","f":"2026-10-24","g":"2026-10-26"},
     "8015719": {"t":"Senior Account Executive, Startups (San Francisco)","f":"2026-10-24"},
     "8016162": {"t":"Senior Software Engineer, Cloudflare Hyperdrive","f":"2026-10-24"},
     "8016569": {"t":"Senior Talent Acquisition Partner, G&A","f":"2026-10-24"},
@@ -289,7 +290,7 @@
     "8202081": {"t":"Senior Territory Account Executive (Pittsburgh)","f":"2026-10-24"},
     "8202094": {"t":"Senior Territory Account Executive (Atlanta)","f":"2026-10-24"},
     "8202120": {"t":"Senior Named Account Executive, New York","f":"2026-10-24"},
-    "8203600": {"t":"Sales Manager, Startups","f":"2026-10-24"},
+    "8203600": {"t":"Sales Manager, Startups","f":"2026-10-24","g":"2026-10-26"},
     "8203700": {"t":"Senior Territory Account Executive, the Baltics","f":"2026-10-24"},
     "8203752": {"t":"Senior Territory Account Executive, Central Eastern Europe - Digital Natives","f":"2026-10-24"},
     "8204256": {"t":"Senior Software Engineer, Zero Trust Client","f":"2026-10-24"},
@@ -306,7 +307,7 @@
     "8212352": {"t":"Senior Software Engineer - Load Balancing","f":"2026-10-24"},
     "8212368": {"t":"Senior Project Manager, Professional Services","f":"2026-10-24"},
     "8213265": {"t":"Senior Account Executive, South Africa - Startups","f":"2026-10-24"},
-    "8213269": {"t":"Senior Account Executive, Turkey - Startups","f":"2026-10-24"},
+    "8213269": {"t":"Senior Account Executive, Turkey - Startups","f":"2026-10-24","g":"2026-10-26"},
     "8214470": {"t":"Performance Engineer, Kernel and Memory","f":"2026-10-24"},
     "8214726": {"t":"Supply Chain Program Manager - Rack Integration","f":"2026-10-24"},
     "8219758": {"t":"Deal Desk Manager, APAC","f":"2026-10-24"},
@@ -457,6 +458,7 @@
     "8312254": {"t":"Senior Software Engineer, Agentic Commerce","f":"2026-10-24"},
     "8312256": {"t":"Software Engineer, Agentic Commerce","f":"2026-10-24"},
     "8312664": {"t":"Senior Customer Engineer, Central & Eastern Europe - Russian Speaking","f":"2026-10-24"},
-    "8312693": {"t":"Senior Manager, Customer Engineering - Central Eastern Europe","f":"2026-10-24"}
+    "8312693": {"t":"Senior Manager, Customer Engineering, Central Eastern Europe & Israel - Hebrew Speaking","f":"2026-10-24"},
+    "8317751": {"t":"Customer Reliability Engineer","f":"2026-10-26"}
   }
 }
