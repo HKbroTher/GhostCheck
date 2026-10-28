@@ -70,7 +70,7 @@
     "8092651": {"t":"Senior Software Engineer, Backend (Consumer - Growth Foundations)","f":"2026-10-24"},
     "8093264": {"t":"Accounting Manager, GL Operations & Intercompany","f":"2026-10-24"},
     "8094196": {"t":"Senior Software Engineer- Blockchain Network","f":"2026-10-24"},
-    "8097292": {"t":"Internal Audit Manager","f":"2026-10-24"},
+    "8097292": {"t":"Internal Audit Manager","f":"2026-10-24","g":"2026-10-28"},
     "8097444": {"t":"Derivative Sales Analyst","f":"2026-10-24"},
     "8097944": {"t":"Senior Software Engineer, Core Reliability","f":"2026-10-24"},
     "8099099": {"t":"Embedded Engineer, Compliance [Office of the CTO]","f":"2026-10-24"},
@@ -120,7 +120,7 @@
     "8174232": {"t":"Senior Software Engineer, Backend/Fullstack (Coinbase Advisor - Agentic Trading)","f":"2026-10-24"},
     "8175339": {"t":"Product Design Intern","f":"2026-10-24"},
     "8175360": {"t":"User Research Intern","f":"2026-10-24"},
-    "8175363": {"t":"Accelerations Programs Intern","f":"2026-10-24"},
+    "8175363": {"t":"Acceleration Programs Intern","f":"2026-10-24"},
     "8175366": {"t":"Business Controller Intern","f":"2026-10-24"},
     "8175369": {"t":"Credit Risk Intern","f":"2026-10-24"},
     "8175429": {"t":"Employee and Workplace Experience Intern","f":"2026-10-24"},
@@ -220,6 +220,7 @@
     "8281622": {"t":"Analyst, Privacy (Privacy Assessments)","f":"2026-10-24"},
     "8285182": {"t":"Senior Frontend Engineer, Portfolio","f":"2026-10-24"},
     "8287662": {"t":"Staff Software Engineer, Backend - FinHub (Transfers)","f":"2026-10-24"},
+    "8287668": {"t":"Senior Data Scientist, Product","f":"2026-10-28"},
     "8289787": {"t":"Complaints Analyst III","f":"2026-10-24"},
     "8289798": {"t":"Senior Complaints Analyst","f":"2026-10-24"},
     "8292793": {"t":"Senior Machine Learning Engineer, CX","f":"2026-10-24"},
@@ -234,6 +235,9 @@
     "8318555": {"t":"Staff User Researcher","f":"2026-10-24"},
     "8318599": {"t":"Offensive Security Engineer, AI","f":"2026-10-24"},
     "8319444": {"t":"Security Engineer, Corporate Security","f":"2026-10-27"},
-    "8319448": {"t":"Senior Security Engineer, Corporate Security","f":"2026-10-27"}
+    "8319448": {"t":"Senior Security Engineer, Corporate Security","f":"2026-10-27"},
+    "8325213": {"t":"Senior Software Engineer - Data Platform","f":"2026-10-28"},
+    "8326127": {"t":"Senior Software Engineer, Certificates Management","f":"2026-10-28"},
+    "8328079": {"t":"Senior Sales Associate - CB Infrastructure","f":"2026-10-28"}
   }
 }

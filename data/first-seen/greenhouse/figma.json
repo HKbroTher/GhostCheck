@@ -44,10 +44,10 @@
     "5822886004": {"t":"Account Executive, Strategic (London, United Kingdom)","f":"2026-10-24"},
     "5829751004": {"t":"Security Engineer","f":"2026-10-24"},
     "5832782004": {"t":"Business Recruiter (São Paulo, Brazil)","f":"2026-10-24"},
-    "5835172004": {"t":"Director, Technical Revenue Accounting","f":"2026-10-24"},
+    "5835172004": {"t":"Director, Technical Revenue Accounting","f":"2026-10-24","g":"2026-10-28"},
     "5844225004": {"t":"Account Executive, Mid-Market (Paris, France)","f":"2026-10-24"},
     "5969046004": {"t":"Executive Assistant, People","f":"2026-10-24"},
-    "5976498004": {"t":"Customer Enablement Manager (Paris, France)","f":"2026-10-24"},
+    "5976498004": {"t":"Customer Enablement Manager (Paris, France)","f":"2026-10-24","g":"2026-10-28"},
     "5985397004": {"t":"Account Executive, SMB (Berlin, Germany)","f":"2026-10-24"},
     "5988684004": {"t":"Senior Account Executive, UK Government (London, United Kingdom)","f":"2026-10-24"},
     "5989185004": {"t":"Product Manager, AI Growth","f":"2026-10-24"},
@@ -73,7 +73,7 @@
     "6122269004": {"t":"Inside Sales Representative (Berlin, Germany)","f":"2026-10-24"},
     "6124232004": {"t":"Senior Manager, Enterprise Sales (London, United Kingdom)","f":"2026-10-24"},
     "6126976004": {"t":"Product Designer, CMS","f":"2026-10-24"},
-    "6130540004": {"t":"Senior Program Manager, Scale Onboarding (London, United Kingdom)","f":"2026-10-24"},
+    "6130540004": {"t":"Senior Program Manager, Scale Onboarding (London, United Kingdom)","f":"2026-10-24","g":"2026-10-28"},
     "6130557004": {"t":"Senior Customer Enablement Manager (London, United Kingdom)","f":"2026-10-24","g":"2026-10-27"},
     "6130865004": {"t":"Director, Data Science","f":"2026-10-24"},
     "6132269004": {"t":"Manager, HRIS","f":"2026-10-24"},
@@ -146,7 +146,11 @@
     "6231832004": {"t":"Senior Onboarding Manager, Customer Experience","f":"2026-10-27"},
     "6232410004": {"t":"Business Systems Architect","f":"2026-10-27"},
     "6232422004": {"t":"Manager, Customer Enablement - Figma Weave (New York, United States)","f":"2026-10-27"},
+    "6232541004": {"t":"Customer Enablement Manager - Figma Weave (New York, United States)","f":"2026-10-28"},
     "6232584004": {"t":"Customer Enablement Manager - Figma Weave  (London, United Kingdom)","f":"2026-10-27"},
-    "6233207004": {"t":"Technical Quality Specialist - Figma Weave (Singapore)","f":"2026-10-26"}
+    "6233040004": {"t":"Data & Integration Engineer, Business Systems","f":"2026-10-28"},
+    "6233043004": {"t":"AI Engineer, Internal Tools","f":"2026-10-28"},
+    "6233207004": {"t":"Technical Quality Specialist - Figma Weave (Singapore)","f":"2026-10-26"},
+    "6235005004": {"t":"Product Partner Manager, Scaled","f":"2026-10-28"}
   }
 }

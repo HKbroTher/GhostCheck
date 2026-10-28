@@ -27,10 +27,10 @@
     "8623242002": {"t":"Growth Marketing Manager, Lifecycle","f":"2026-10-24"},
     "8626176002": {"t":"Sr. Manager, Accounts Payable","f":"2026-10-24"},
     "8627439002": {"t":"Senior Engineering Manager, Rider Loyalty, Partnerships, and Rider Pay","f":"2026-10-24"},
-    "8630916002": {"t":"Finance Transformation Specialist","f":"2026-10-24"},
+    "8630916002": {"t":"Finance Transformation Specialist","f":"2026-10-24","g":"2026-10-28"},
     "8638164002": {"t":"Engineering Manager, Rider Loyalty","f":"2026-10-24"},
     "8639200002": {"t":"ML Software Engineer, ETA","f":"2026-10-24"},
-    "8639319002": {"t":"Staff Software Engineer","f":"2026-10-24"},
+    "8639319002": {"t":"Staff Software Engineer","f":"2026-10-24","g":"2026-10-28"},
     "8648040002": {"t":"Analytics Lead, SCC","f":"2026-10-24"},
     "8648144002": {"t":"Staff Product Manager, Customer Care Platform & Data","f":"2026-10-24"},
     "8657497002": {"t":"Senior Software Engineer, AI Entries","f":"2026-10-24"},
@@ -188,6 +188,7 @@
     "8909213002": {"t":"Counsel, Product & Commercial (Rideshare)","f":"2026-10-24"},
     "8909350002": {"t":"Director, Global B2B TPM","f":"2026-10-24"},
     "8910495002": {"t":"Fleet Operations Lead","f":"2026-10-27"},
-    "8916924002": {"t":"Senior Product Manager, Rider ML/AI","f":"2026-10-27"}
+    "8916924002": {"t":"Senior Product Manager, Rider ML/AI","f":"2026-10-27"},
+    "8919442002": {"t":"Operations Associate, Flexdrive","f":"2026-10-28"}
   }
 }

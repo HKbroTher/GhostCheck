@@ -29,7 +29,7 @@
     "5841911004": {"t":"Account Executive, Majors (APAC)","f":"2026-10-24"},
     "5844601004": {"t":"Partner Lead, EMEA","f":"2026-10-24"},
     "5855000004": {"t":"Strategic Finance Manager, Product","f":"2026-10-24"},
-    "5971203004": {"t":"Startups Program Lead","f":"2026-10-24"},
+    "5971203004": {"t":"Startups Program Lead","f":"2026-10-24","g":"2026-10-28"},
     "5974107004": {"t":"Director, Commercial Sales, EMEA","f":"2026-10-24"},
     "5979111004": {"t":"Head of Field Engineering Operations","f":"2026-10-24"},
     "5995789004": {"t":"Senior Manager, Solutions Architecture","f":"2026-10-24"},
@@ -57,7 +57,7 @@
     "6122619004": {"t":"Senior Integrated Campaigns Manager","f":"2026-10-24"},
     "6123443004": {"t":"Commercial Account Executive, Install Base","f":"2026-10-24"},
     "6128387004": {"t":"Presentation Designer","f":"2026-10-24"},
-    "6129441004": {"t":"Design Engineer","f":"2026-10-24"},
+    "6129441004": {"t":"Design Engineer","f":"2026-10-24","g":"2026-10-28"},
     "6132416004": {"t":"Partner Solutions Engineer, EMEA","f":"2026-10-24"},
     "6136160004": {"t":"Account Executive, Commercial","f":"2026-10-24"},
     "6137958004": {"t":"Software Engineer - Next.js","f":"2026-10-24"},
@@ -98,6 +98,8 @@
     "6231047004": {"t":"Internal Communications Manager","f":"2026-10-24"},
     "6231535004": {"t":"Member of Technical Staff, Finance Data","f":"2026-10-24"},
     "6231540004": {"t":"Community Manager, Experiential Marketing","f":"2026-10-24"},
-    "6231864004": {"t":"Account Executive, Commercial","f":"2026-10-24"}
+    "6231864004": {"t":"Account Executive, Commercial","f":"2026-10-24"},
+    "6236516004": {"t":"Sales Strategy & Operations, Enterprise","f":"2026-10-28"},
+    "6236530004": {"t":"Strategy and Planning Lead","f":"2026-10-28"}
   }
 }

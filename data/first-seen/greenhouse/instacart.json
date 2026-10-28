@@ -19,8 +19,8 @@
     "7871825": {"t":"Director of Customer Success","f":"2026-10-24"},
     "7931358": {"t":"Senior Sales Associate","f":"2026-10-24"},
     "7951938": {"t":"Senior Software Engineer II, Ads Data Solutions Engineering","f":"2026-10-24"},
-    "7960958": {"t":"Engineering Manager, Service Platform","f":"2026-10-24"},
-    "7960988": {"t":"Engineering Manager, Service Platform","f":"2026-10-24"},
+    "7960958": {"t":"Engineering Manager, Service Platform","f":"2026-10-24","g":"2026-10-28"},
+    "7960988": {"t":"Engineering Manager, Service Platform","f":"2026-10-24","g":"2026-10-28"},
     "7991564": {"t":"Sales Development Representative II, Emerging - Instacart Business","f":"2026-10-24"},
     "7991566": {"t":"Sales Development Representative II, Emerging - Instacart Business","f":"2026-10-24"},
     "8029661": {"t":"Sales Development Representative II, Local Independent Grocery - New York","f":"2026-10-24","g":"2026-10-27"},
@@ -83,8 +83,8 @@
     "8237126": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24"},
     "8237127": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24"},
     "8237393": {"t":"Sr Software Engineer II - Ads Manager (Front End)","f":"2026-10-24"},
-    "8237985": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24"},
-    "8237987": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24"},
+    "8237985": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24","g":"2026-10-28"},
+    "8237987": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24","g":"2026-10-28"},
     "8240723": {"t":"Data Operations Manager","f":"2026-10-24"},
     "8241548": {"t":"Senior AI Solution Sales Executive","f":"2026-10-24"},
     "8241795": {"t":"Senior AI Solution Sales Executive","f":"2026-10-24"},
@@ -116,8 +116,8 @@
     "8302177": {"t":"Insights Manager II, Retail Insights","f":"2026-10-24"},
     "8304279": {"t":"Senior Software Engineer II - Enterprise Foundations","f":"2026-10-24"},
     "8304487": {"t":"Senior Software Engineer - Ads Manager","f":"2026-10-24"},
-    "8304802": {"t":"Associate Manager, Influencer Marketing","f":"2026-10-24"},
-    "8304832": {"t":"Social Content Producer","f":"2026-10-24"},
+    "8304802": {"t":"Associate Manager, Influencer Marketing","f":"2026-10-24","g":"2026-10-28"},
+    "8304832": {"t":"Social Content Producer","f":"2026-10-24","g":"2026-10-28"},
     "8315996": {"t":"Senior Software Engineer, Fulfillment","f":"2026-10-27"}
   }
 }
