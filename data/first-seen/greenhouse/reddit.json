@@ -90,7 +90,7 @@
     "8143702": {"t":"Senior Growth Manager (Contract)","f":"2026-10-24"},
     "8147559": {"t":"Front End Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8147617": {"t":"Senior Frontend Software Engineer, Consumer Engineering","f":"2026-10-24"},
-    "8147802": {"t":"Senior Support Engineer, Snoo Operations & Support","f":"2026-10-24"},
+    "8147802": {"t":"Senior Support Engineer, Snoo Operations & Support","f":"2026-10-24","g":"2026-10-29"},
     "8153017": {"t":"Account Executive, Mid-Market (DACH)","f":"2026-10-24"},
     "8157275": {"t":"Senior Staff Machine Learning Systems Engineer, Ads ML Platform","f":"2026-10-24"},
     "8157580": {"t":"Senior Data Scientist, Ads Integrity","f":"2026-10-24"},
@@ -168,7 +168,9 @@
     "8318010": {"t":"Manager, EMEA Community (Contract)","f":"2026-10-24"},
     "8319536": {"t":"Machine Learning Engineering Manager -  Core Ads Ranking","f":"2026-10-27"},
     "8319655": {"t":"Software Engineer, Ad Signals","f":"2026-10-25"},
+    "8329278": {"t":"Client Partner, Mid-Market Sales (B2B Services - Acquisitions)","f":"2026-10-29"},
     "8330450": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"},
-    "8330469": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"}
+    "8330469": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"},
+    "8331341": {"t":"Senior Software Engineer, Infrastructure Engineering","f":"2026-10-29"}
   }
 }

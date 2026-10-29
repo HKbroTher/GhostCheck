@@ -72,7 +72,7 @@
     "8159896": {"t":"Senior Product Designer, Sports","f":"2026-10-24"},
     "8160668": {"t":"Senior Product Designer, Trading","f":"2026-10-24"},
     "8162450": {"t":"Sanctions Crypto Investigator","f":"2026-10-28"},
-    "8164459": {"t":"Staff Product Manager - Prediction Markets","f":"2026-10-24"},
+    "8164459": {"t":"Staff Product Manager - Prediction Markets","f":"2026-10-24","g":"2026-10-29"},
     "8164884": {"t":"Financial Operations Manager","f":"2026-10-24"},
     "8164943": {"t":"Senior Software Engineer, Developer Experience (DevX)","f":"2026-10-28"},
     "8167194": {"t":"Staff Software Engineer, Event Contracts","f":"2026-10-24"},
@@ -88,7 +88,7 @@
     "8186166": {"t":"Staff Software Engineer, Exchange Platform","f":"2026-10-24"},
     "8186282": {"t":"Fraud Investigator - Customer Protection","f":"2026-10-24"},
     "8186689": {"t":"Customer Experience Manager, Trump Accounts","f":"2026-10-24"},
-    "8188665": {"t":"Staff Software Engineer, Brokerage Infra","f":"2026-10-24"},
+    "8188665": {"t":"Staff Software Engineer, Brokerage Infra","f":"2026-10-24","g":"2026-10-29"},
     "8189213": {"t":"Crypto Onchain Attorney","f":"2026-10-24"},
     "8189867": {"t":"Senior Staff Software Engineer, Developer Infrastructure","f":"2026-10-24"},
     "8189869": {"t":"Senior Staff Software Developer, Developer Infrastructure","f":"2026-10-24"},
@@ -130,6 +130,7 @@
     "8246088": {"t":"iOS Developer, International","f":"2026-10-24","g":"2026-10-27"},
     "8247333": {"t":"Senior Product Manager, Gold Growth","f":"2026-10-24"},
     "8248165": {"t":"Customer Experience Manager, Executive Office","f":"2026-10-24"},
+    "8248320": {"t":"Senior Web Engineer, Options","f":"2026-10-29"},
     "8250279": {"t":"Manager of Accounts Payable","f":"2026-10-24"},
     "8250286": {"t":"Internal Audit Senior Manager, Crypto","f":"2026-10-24"},
     "8250300": {"t":"Senior Manager, Valuation","f":"2026-10-24"},
@@ -162,12 +163,16 @@
     "8302220": {"t":"Staff iOS Engineer, Trading Tools","f":"2026-10-24"},
     "8302244": {"t":"Staff Web Engineer, Advisory Products","f":"2026-10-24"},
     "8302496": {"t":"Campus Operations Manager","f":"2026-10-24"},
+    "8303977": {"t":"Clearing Operations Program Manager","f":"2026-10-29"},
+    "8303985": {"t":"Senior Manager, Strategic Partnerships & Integrations","f":"2026-10-29"},
     "8304315": {"t":"Customer Experience Associate","f":"2026-10-24"},
+    "8305772": {"t":"AI Operations Engineer","f":"2026-10-29"},
     "8312485": {"t":"Fraud Operations Program Manager","f":"2026-10-24"},
     "8319304": {"t":"Account Servicing Associate","f":"2026-10-24"},
     "8319701": {"t":"Senior iOS Engineer, Crypto Perpetuals","f":"2026-10-24"},
     "8327450": {"t":"Customer Experience Associate, Money","f":"2026-10-28"},
     "8329280": {"t":"Customer Experience Associate, Pathway","f":"2026-10-28"},
-    "8329677": {"t":"Senior Quality Engineer","f":"2026-10-28"}
+    "8329677": {"t":"Senior Quality Engineer","f":"2026-10-28"},
+    "8331571": {"t":"Senior Software Engineer, Capacity & Efficiency","f":"2026-10-29"}
   }
 }
