@@ -64,6 +64,7 @@
     "8072054": {"t":"Technical Accounting Policy Manager","f":"2026-10-24"},
     "8072932": {"t":"Forward Deployed Engineer, Finance [Office of the CTO]","f":"2026-10-24"},
     "8077090": {"t":"Senior Product Marketing Manager, Trading","f":"2026-10-24","g":"2026-10-29"},
+    "8082199": {"t":"Senior Software Engineer, Data Engineering Platform","f":"2026-10-30"},
     "8082829": {"t":"Supervisor, Customer Success Team","f":"2026-10-24"},
     "8088201": {"t":"Senior Software Engineer - Frontend - Coinbase Card team","f":"2026-10-24"},
     "8089161": {"t":"Manager, WFM Compliance Operations","f":"2026-10-24"},
@@ -241,8 +242,21 @@
     "8325213": {"t":"Senior Software Engineer - Data Platform","f":"2026-10-28"},
     "8326127": {"t":"Senior Software Engineer, Certificates Management","f":"2026-10-28"},
     "8328079": {"t":"Senior Sales Associate - CB Infrastructure","f":"2026-10-28"},
-    "8329350": {"t":"Compliance Associate","f":"2026-10-29"},
+    "8329350": {"t":"Compliance Associate","f":"2026-10-29","g":"2026-10-30"},
     "8333165": {"t":"Staff Machine Learning Engineer, Compliance Automation (Platform)","f":"2026-10-29"},
-    "8333273": {"t":"Customer Support Specialist II","f":"2026-10-29"}
+    "8333273": {"t":"Customer Support Specialist II","f":"2026-10-29"},
+    "8333981": {"t":"Customer Support Specialist II","f":"2026-10-30"},
+    "8334152": {"t":"Customer Support Specialist II","f":"2026-10-30"},
+    "8334157": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8334161": {"t":"Payments Risk Analyst II","f":"2026-10-30"},
+    "8334164": {"t":"Payments Risk Analyst II","f":"2026-10-30"},
+    "8334228": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8334231": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8334234": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8334281": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8334290": {"t":"Customer Support Specialist ll","f":"2026-10-30"},
+    "8335547": {"t":"Senior Software Engineer, Backend (Coinbase One)","f":"2026-10-30"},
+    "8335796": {"t":"Compliance Senior Associate & Deputy MLRO, CBIE","f":"2026-10-30"},
+    "8336564": {"t":"Customer Support Specialist ll","f":"2026-10-30"}
   }
 }
