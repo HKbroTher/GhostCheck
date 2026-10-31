@@ -16,7 +16,7 @@
     "5649459004": {"t":"Software Engineer, Trust & Safety","f":"2026-10-24"},
     "5686511004": {"t":"Recruiting Coordinator (Contract)","f":"2026-10-24"},
     "5691965004": {"t":"Senior Legal Counsel, Product","f":"2026-10-24"},
-    "5701765004": {"t":"Engineering Manager, CDN","f":"2026-10-24"},
+    "5701765004": {"t":"Engineering Manager, CDN","f":"2026-10-24","g":"2026-10-31"},
     "5732855004": {"t":"Site Engineer","f":"2026-10-24"},
     "5752684004": {"t":"Forward-Deployed Engineer","f":"2026-10-24"},
     "5752956004": {"t":"Account Executive-Startups, EMEA (French Speaker)","f":"2026-10-24"},
@@ -25,6 +25,7 @@
     "5796302004": {"t":"Solutions Architect","f":"2026-10-24"},
     "5798406004": {"t":"Software Engineer, AI Gateway","f":"2026-10-24"},
     "5806749004": {"t":"Solutions Architect","f":"2026-10-24"},
+    "5822513004": {"t":"Business Development Representative, Startups","f":"2026-10-31"},
     "5825469004": {"t":"Strategic Cloud Partnerships Lead","f":"2026-10-24"},
     "5841911004": {"t":"Account Executive, Majors (APAC)","f":"2026-10-24"},
     "5844601004": {"t":"Partner Lead, EMEA","f":"2026-10-24"},
@@ -59,14 +60,14 @@
     "6128387004": {"t":"Presentation Designer","f":"2026-10-24"},
     "6129441004": {"t":"Design Engineer","f":"2026-10-24","g":"2026-10-28"},
     "6132416004": {"t":"Partner Solutions Engineer, EMEA","f":"2026-10-24"},
-    "6136160004": {"t":"Account Executive, Commercial","f":"2026-10-24"},
+    "6136160004": {"t":"Account Executive, Commercial","f":"2026-10-24","g":"2026-10-31"},
     "6137958004": {"t":"Software Engineer - Next.js","f":"2026-10-24"},
     "6137983004": {"t":"Workday Integrations Developer","f":"2026-10-24"},
     "6140055004": {"t":"Engineering Manager - Next.js","f":"2026-10-24"},
     "6142097004": {"t":"Scaled Commercial Account Executive, Install Base","f":"2026-10-24","g":"2026-10-27"},
     "6142959004": {"t":"Senior Deal Desk Analyst","f":"2026-10-24"},
     "6147956004": {"t":"Product Manager, Observability","f":"2026-10-24"},
-    "6148624004": {"t":"Senior Finance Manager, Sales","f":"2026-10-24"},
+    "6148624004": {"t":"Senior Finance Manager, Sales","f":"2026-10-24","g":"2026-10-31"},
     "6160974004": {"t":"Product Designer, Marketplace","f":"2026-10-24"},
     "6163582004": {"t":"Strategic Sourcing Manager","f":"2026-10-24","g":"2026-10-29"},
     "6179794004": {"t":"IT Operations Engineer","f":"2026-10-24","g":"2026-10-27"},
@@ -100,6 +101,7 @@
     "6231540004": {"t":"Community Manager, Experiential Marketing","f":"2026-10-24"},
     "6231864004": {"t":"Account Executive, Commercial","f":"2026-10-24"},
     "6236516004": {"t":"Sales Strategy & Operations, Enterprise","f":"2026-10-28"},
-    "6236530004": {"t":"Strategy and Planning Lead","f":"2026-10-28"}
+    "6236530004": {"t":"Strategy and Planning Lead","f":"2026-10-28"},
+    "6236991004": {"t":"Technical Business Development Representative","f":"2026-10-31"}
   }
 }

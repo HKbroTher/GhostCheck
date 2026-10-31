@@ -20,12 +20,13 @@
     "7702714": {"t":"Staff Software Engineer, Tech Foundations","f":"2026-10-24"},
     "7705262": {"t":"Staff Data Scientist, Marketplace Intelligence and Forecasting","f":"2026-10-24"},
     "7716341": {"t":"Machine Learning Engineer, Assistance Engineering","f":"2026-10-24"},
-    "7747259": {"t":"Senior Staff Machine Learning Engineer, Growth Platform Engineering","f":"2026-10-24"},
+    "7747259": {"t":"Senior Staff Machine Learning Engineer, Marketing Technology","f":"2026-10-24"},
     "7755758": {"t":"Senior Machine Learning Engineer, Payments","f":"2026-10-24"},
     "7789528": {"t":"Regulatory Operations Lead","f":"2026-10-24"},
     "7789554": {"t":"Associate Legal Counsel, Japan","f":"2026-10-24"},
     "7818982": {"t":"Senior Staff Software Engineer, Trust","f":"2026-10-24"},
     "7826337": {"t":"Machine Learning Engineer, Assistance Engineering","f":"2026-10-27"},
+    "7834481": {"t":"Business Operations and Growth Lead","f":"2026-10-31"},
     "7839229": {"t":"Senior Forecasting and Demand Planning Analyst","f":"2026-10-24"},
     "7858738": {"t":"Senior Staff Machine Learning Engineer, Post Training","f":"2026-10-24"},
     "7859539": {"t":"Policy Manager, Korea","f":"2026-10-24"},
@@ -105,7 +106,7 @@
     "8197652": {"t":"Senior Systems Engineer, Tech Foundations","f":"2026-10-24"},
     "8197715": {"t":"Staff Software Engineer, Data Warehouse","f":"2026-10-24"},
     "8201750": {"t":"Host Communications Strategy Lead","f":"2026-10-24"},
-    "8202802": {"t":"Senior Market Manager","f":"2026-10-24"},
+    "8202802": {"t":"Senior Market Manager","f":"2026-10-24","g":"2026-10-31"},
     "8202878": {"t":"Staff Workday Integration Engineer, Tech Foundations","f":"2026-10-24"},
     "8207084": {"t":"Lead Advanced Analyst, Integrated Marketing","f":"2026-10-24","g":"2026-10-27"},
     "8207095": {"t":"Staff Advanced Analytics, Community Blueprint & Quality","f":"2026-10-24"},
@@ -225,6 +226,11 @@
     "8332157": {"t":"Software Engineer, Payments","f":"2026-10-29"},
     "8332540": {"t":"Regional Workplace Operations Manager","f":"2026-10-29"},
     "8334880": {"t":"Senior Software Engineer, Experimentation Platform","f":"2026-10-30"},
-    "8334926": {"t":"Backend Engineer, Profile & Community","f":"2026-10-30"}
+    "8334926": {"t":"Backend Engineer, Profile & Community","f":"2026-10-30","g":"2026-10-31"},
+    "8336590": {"t":"Campaign Manager, Mexico","f":"2026-10-31"},
+    "8336861": {"t":"Delivery Excellence Manager","f":"2026-10-31"},
+    "8336893": {"t":"Market Manager","f":"2026-10-31"},
+    "8336959": {"t":"Senior Market Manager","f":"2026-10-31"},
+    "8337229": {"t":"Senior Manager, Community Policy","f":"2026-10-31"}
   }
 }

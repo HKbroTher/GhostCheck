@@ -35,8 +35,8 @@
     "8017552": {"t":"Product Manager, Adapt","f":"2026-10-24"},
     "8024052": {"t":"Product Designer","f":"2026-10-24"},
     "8027399": {"t":"Senior Solutions Architect","f":"2026-10-24"},
-    "8031595": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24"},
-    "8044789": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24"},
+    "8031595": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
+    "8044789": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
     "8044811": {"t":"Senior Analytical Engineering Manager","f":"2026-10-24"},
     "8044815": {"t":"Senior Product Manager, AI Context","f":"2026-10-24"},
     "8054355": {"t":"Strategic Enterprise Account Executive, Amazon","f":"2026-10-24"},
@@ -108,6 +108,7 @@
     "8279133": {"t":"Manager, Customer Success","f":"2026-10-24"},
     "8282374": {"t":"Business Value Consultant","f":"2026-10-24"},
     "8282422": {"t":"Sales Engineer","f":"2026-10-27"},
+    "8282518": {"t":"Legal Operations Analyst","f":"2026-10-31"},
     "8282522": {"t":"Corporate and Strategic Finance, FP&A","f":"2026-10-25"},
     "8282574": {"t":"Product Manager, Coordinate","f":"2026-10-24"},
     "8282680": {"t":"Renewal Manager","f":"2026-10-27"},
@@ -121,10 +122,11 @@
     "8311577": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-10-30"},
     "8311992": {"t":"Engineering Manager, Client Management","f":"2026-10-24"},
     "8315830": {"t":"CX Technical Enablement Partner","f":"2026-10-27"},
-    "8315854": {"t":"Manager, Customer Product Support - EMEA","f":"2026-10-24"},
+    "8315854": {"t":"Manager, Customer Product Support - EMEA","f":"2026-10-24","g":"2026-10-31"},
     "8318046": {"t":"People Partner","f":"2026-10-24"},
     "8319678": {"t":"Senior Software Engineer, AI","f":"2026-10-24"},
     "8324814": {"t":"Head of Web Strategy and Services","f":"2026-10-27"},
-    "8326988": {"t":"CX Technical Enablement Partner","f":"2026-10-27"}
+    "8326988": {"t":"CX Technical Enablement Partner","f":"2026-10-27"},
+    "8337386": {"t":"Implementation Manager","f":"2026-10-31"}
   }
 }

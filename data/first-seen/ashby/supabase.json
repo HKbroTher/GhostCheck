@@ -25,6 +25,7 @@
     "66bab062-b769-43cf-ac3c-a2630257624c": {"t":"Customer Solution Architect, Team Lead","f":"2026-10-24"},
     "68a397e7-8a1a-4566-ae41-e8c61dd6ed93": {"t":"Product Manager - Strategic Partner Integrations (regular travel to Bay Area)","f":"2026-10-24"},
     "73ddf93b-fe0c-455d-ba27-cdde0d3fb94f": {"t":"FinOps Data Engineer","f":"2026-10-24"},
+    "85f4d148-4602-4139-802a-962705133892": {"t":"Product Manager - Spark","f":"2026-10-31"},
     "98ae5c78-eab7-4879-b143-96b98e4d0dbb": {"t":"Developer Relations Engineer (New York, NY)","f":"2026-10-24"},
     "98ef6a11-9898-4960-9931-1264285849f3": {"t":"Performance Engineer - Performance Analysis & Tuning","f":"2026-10-24"},
     "99a80436-89ec-412b-b782-1dd462bd16dc": {"t":"Engineering Manager","f":"2026-10-24"},
@@ -43,7 +44,7 @@
     "06752423-eebb-472c-95b5-c7ff2559fd60": {"t":"Software Engineer - Branching","f":"2026-10-24"},
     "48950725-e0d9-4025-92d9-f75e1b60ce45": {"t":"Postgres Deployment Engineer","f":"2026-10-24"},
     "62945518-2468-4cf5-9f36-904b60f75183": {"t":"Database Support Engineer (APAC)","f":"2026-10-24"},
-    "a069c886-1107-408e-88b4-e1aa8d33d4bc": {"t":"Account Executive (EMEA)","f":"2026-10-24","g":"2026-10-30"},
+    "a069c886-1107-408e-88b4-e1aa8d33d4bc": {"t":"Account Executive DACH (German-Speaking)","f":"2026-10-24"},
     "a1320bbf-bfae-49a8-a1b7-12eeccaf39ca": {"t":"Developer Relations Engineer","f":"2026-10-24"},
     "ab8d1463-bc97-417f-97b1-bfc1fe619b3e": {"t":"Database Support Engineer (Japanese Speaking)","f":"2026-10-24"},
     "b4a2f5e5-5c51-4c1a-abde-a89de27451c7": {"t":"Engineering Manager, Billing","f":"2026-10-24"},
@@ -55,6 +56,7 @@
     "c6d89ec0-76ee-4de7-92d0-2e0262e9e025": {"t":"Engineering Manager - Spark","f":"2026-10-24"},
     "c9f78e74-fb9d-4cd0-af0b-b1cec4632331": {"t":"OrioleDB Deployment Engineer (AMER)","f":"2026-10-24"},
     "c16bd707-29f2-46fb-8409-7270ff00978b": {"t":"Postgres Engineer (AMER)","f":"2026-10-24"},
+    "c20228c2-45ff-4b77-ab77-906f39a06ca3": {"t":"Product Manager -  Administration & Governance","f":"2026-10-31"},
     "cb04ae3a-3a47-4e21-928f-c2456b7b214e": {"t":"Member of Technical Staff","f":"2026-10-24"},
     "d6af503b-acc4-40c9-83d8-d4fe0dcc2dd5": {"t":"Growth Marketer, Creators & Channels","f":"2026-10-24"},
     "d5573afa-636c-4219-832f-386f498243bf": {"t":"Customer Solution Architect (AMER)","f":"2026-10-24"},
@@ -68,6 +70,7 @@
     "f035bda1-b5d3-4c5b-8736-b9c335fe1c3b": {"t":"Multigres Deployment Engineer","f":"2026-10-24"},
     "f52fd120-5fbe-4e0d-949d-01e217ec77d6": {"t":"Technical Account Management (TAM) Leader","f":"2026-10-24"},
     "f6035bf8-4f44-4425-9944-d5509a3c8652": {"t":"Release Engineer","f":"2026-10-24"},
-    "fab1525f-3d89-4d1c-9094-84d21647415e": {"t":"FinOps Engineer","f":"2026-10-24"}
+    "fab1525f-3d89-4d1c-9094-84d21647415e": {"t":"FinOps Engineer","f":"2026-10-24"},
+    "fb0b563a-e541-43fd-8555-9eb6473aaa11": {"t":"Software Engineer - AI Tooling Infrastructure","f":"2026-10-31"}
   }
 }
