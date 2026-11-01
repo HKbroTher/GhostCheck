@@ -493,7 +493,7 @@
     "8608603002": {"t":"Solutions Architect","f":"2026-10-24"},
     "8609866002": {"t":"Sr. Solutions Engineer","f":"2026-10-24"},
     "8610773002": {"t":"Sr. Alliance Director","f":"2026-10-24"},
-    "8611106002": {"t":"Sr. Delivery Partner Manager, FDE","f":"2026-10-24"},
+    "8611106002": {"t":"Sr. Delivery Partner Manager, FDE","f":"2026-10-24","g":"2026-11-01"},
     "8611108002": {"t":"Forward Deployed Engineer (FDE) - Public Sector","f":"2026-10-24"},
     "8612863002": {"t":"Principal Security Field Engineer","f":"2026-10-24"},
     "8612865002": {"t":"Sr. Staff Security Software Engineer - Agentic Security Engineering","f":"2026-10-24"},
@@ -876,7 +876,7 @@
     "8879338002": {"t":"Strategic Account Executive - Travel, Transport and Logistics","f":"2026-10-27"},
     "8880391002": {"t":"Solutions Architect - Telco","f":"2026-10-24"},
     "8880400002": {"t":"Strategic Hunter Account Executive","f":"2026-10-24"},
-    "8880406002": {"t":"Strategic Core Account Executive","f":"2026-10-27"},
+    "8880406002": {"t":"Strategic Core Account Executive - Vietnam (Singapore Based)","f":"2026-10-27"},
     "8882379002": {"t":"Director, Enterprise Sales, Public Sector","f":"2026-10-24"},
     "8882485002": {"t":"Solutions Engineer","f":"2026-10-24"},
     "8882986002": {"t":"CustomerLake Sales Specialist","f":"2026-10-27"},
@@ -945,11 +945,14 @@
     "8908544002": {"t":"Emerging Enterprise Hunter Account Executive, France","f":"2026-10-26","g":"2026-10-29"},
     "8909305002": {"t":"Senior Staff Software Engineer, AI Runtime","f":"2026-10-24"},
     "8910840002": {"t":"Enterprise Account Executive","f":"2026-10-28"},
+    "8910842002": {"t":"Strategic Core Account Executive - Public Sector","f":"2026-11-01"},
     "8910846002": {"t":"Associate Forward Deployed Engineer","f":"2026-10-24","g":"2026-10-29"},
     "8910850002": {"t":"Forward Deployed Engineering Manager","f":"2026-10-27"},
+    "8910854002": {"t":"Strategic Core Account Executive - FSI","f":"2026-11-01"},
     "8910860002": {"t":"Solutions Architect","f":"2026-10-28"},
     "8910988002": {"t":"Sr. Specialist Solutions Architect - Platform Security and Cloud Infrastructure","f":"2026-10-24"},
     "8912711002": {"t":"Strategic Core Account Executive (Telco)","f":"2026-10-29"},
+    "8916466002": {"t":"Named Hunter Account Executive - Singapore","f":"2026-11-01"},
     "8916552002": {"t":"Senior Forward Deployed Engineer (Technical Data Architect)","f":"2026-10-27"},
     "8917482002": {"t":"Business Development Representative (UKI)","f":"2026-10-30"},
     "8917711002": {"t":"Solutions Architect - Digital Natives and Startups","f":"2026-10-30"},
@@ -968,6 +971,7 @@
     "8923269002": {"t":"Solutions Architect - Games","f":"2026-10-29"},
     "8923831002": {"t":"Staff Machine Learning Engineer, CustomerLake (ML/LLM)","f":"2026-10-30"},
     "8924302002": {"t":"Business Development Representative (German-speaking, DACH)","f":"2026-10-30"},
-    "8924844002": {"t":"Lakebase Sales Specialist (Greater China Region)","f":"2026-10-30"}
+    "8924844002": {"t":"Lakebase Sales Specialist (Greater China Region)","f":"2026-10-30"},
+    "8926307002": {"t":"Sr. Solutions Architect (Energy)","f":"2026-11-01"}
   }
 }
