@@ -28,6 +28,8 @@
     "8069983": {"t":"Sales Development Representative II, Local Independent Grocery - Boston","f":"2026-10-24","g":"2026-10-27"},
     "8077677": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24","g":"2026-10-31"},
     "8077679": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24","g":"2026-10-31"},
+    "8080512": {"t":"Detection Engineer II","f":"2026-11-02"},
+    "8080532": {"t":"Detection Engineer II","f":"2026-11-02"},
     "8084089": {"t":"Staff Experience Designer","f":"2026-10-24"},
     "8084090": {"t":"Staff Experience Designer","f":"2026-10-24"},
     "8084349": {"t":"Senior Engineering Manager, Core Picking","f":"2026-10-24"},
@@ -38,8 +40,8 @@
     "8115836": {"t":"Insights Lead, Instacart Business","f":"2026-10-24"},
     "8120469": {"t":"Senior Product Manager, Advertiser Experience","f":"2026-10-24"},
     "8120471": {"t":"Senior Product Manager, Advertiser Experience","f":"2026-10-24"},
-    "8141481": {"t":"Staff User Researcher - Consumer","f":"2026-10-24"},
-    "8141483": {"t":"Staff User Researcher - Consumer","f":"2026-10-24"},
+    "8141481": {"t":"Staff User Researcher - Consumer","f":"2026-10-24","g":"2026-11-02"},
+    "8141483": {"t":"Staff User Researcher - Consumer","f":"2026-10-24","g":"2026-11-02"},
     "8141533": {"t":"Senior Software Engineer II, Marketing Enablement & Technology","f":"2026-10-24"},
     "8141535": {"t":"Senior Software Engineer II, Marketing Enablement & Technology","f":"2026-10-24"},
     "8143270": {"t":"Senior Product Manager, Catalog","f":"2026-10-24","g":"2026-10-31"},
@@ -126,6 +128,8 @@
     "8315996": {"t":"Senior Software Engineer, Fulfillment","f":"2026-10-27"},
     "8336857": {"t":"Bilingual Customer Experience T3 Specialist (Spanish)","f":"2026-10-31"},
     "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31"},
+    "8337521": {"t":"Senior Manager, Technology Internal Audit","f":"2026-11-02"},
+    "8337522": {"t":"Senior Corporate Finance Manager","f":"2026-11-02"},
     "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"}
   }
 }

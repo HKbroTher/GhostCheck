@@ -173,9 +173,9 @@
     "8281533": {"t":"Staff Software Engineer - Hosting Services","f":"2026-10-24"},
     "8282322": {"t":"Product Manager, Social Features","f":"2026-10-24"},
     "8282333": {"t":"Market Manager","f":"2026-10-24"},
-    "8283730": {"t":"Supervisor, Hotels","f":"2026-10-26"},
+    "8283730": {"t":"Supervisor, Hotels","f":"2026-10-26","g":"2026-11-02"},
     "8284841": {"t":"Staff Data Engineer, Tech Foundations","f":"2026-10-24"},
-    "8285171": {"t":"Strategic Finance & Analytics Intern (MBA)","f":"2026-10-24"},
+    "8285171": {"t":"Strategic Finance & Analytics Intern (MBA)","f":"2026-10-24","g":"2026-11-02"},
     "8286207": {"t":"Staff Technical Program Manager, Infrastructure Security","f":"2026-10-24"},
     "8287849": {"t":"Senior Communications Manager, Spanish-Speaking South America","f":"2026-10-24"},
     "8288417": {"t":"Engineering Manager, Tech Foundations","f":"2026-10-24","g":"2026-10-26"},
@@ -215,7 +215,7 @@
     "8325603": {"t":"Senior Software Engineer, Experimentation Interfaces","f":"2026-10-27"},
     "8325753": {"t":"Staff Software Engineer, UI Tooling (Full Stack)","f":"2026-10-27"},
     "8325813": {"t":"Senior Software Engineer, UI Tooling (Full Stack iOS)","f":"2026-10-28"},
-    "8327049": {"t":"Supervisor - Trust and Safety Operations","f":"2026-10-28"},
+    "8327049": {"t":"Supervisor - Trust and Safety Operations","f":"2026-10-28","g":"2026-11-02"},
     "8327611": {"t":"Lead, Quality","f":"2026-10-28"},
     "8328748": {"t":"Market Manager","f":"2026-10-30"},
     "8329389": {"t":"Senior Growth Marketing Manager, Influencer Affiliates","f":"2026-10-30"},
@@ -231,6 +231,8 @@
     "8336861": {"t":"Delivery Excellence Manager","f":"2026-10-31"},
     "8336893": {"t":"Market Manager","f":"2026-10-31"},
     "8336959": {"t":"Senior Market Manager","f":"2026-10-31"},
-    "8337229": {"t":"Senior Manager, Community Policy","f":"2026-10-31"}
+    "8337229": {"t":"Senior Manager, Community Policy","f":"2026-10-31"},
+    "8345089": {"t":"Senior Program Manager, Design","f":"2026-11-02"},
+    "8345532": {"t":"AirCover Specialist, Claims Experience","f":"2026-11-02"}
   }
 }

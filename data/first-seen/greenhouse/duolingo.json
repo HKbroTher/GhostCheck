@@ -19,7 +19,7 @@
     "8602840002": {"t":"Executive Assistant to the CEO","f":"2026-10-24"},
     "8610345002": {"t":"Staff AI Research Engineer","f":"2026-10-24"},
     "8612120002": {"t":"Software Engineer II, iOS, Growth","f":"2026-10-24"},
-    "8625579002": {"t":"Consumer Product Lead","f":"2026-10-24"},
+    "8625579002": {"t":"Head of Merchandising, Japan","f":"2026-10-24"},
     "8628658002": {"t":"Senior/Software Engineer II, Android","f":"2026-10-24"},
     "8637185002": {"t":"Managing Editor","f":"2026-10-24"},
     "8638482002": {"t":"Staff Technical Program Manager, Developer Amplification","f":"2026-10-24"},
@@ -34,7 +34,7 @@
     "8722385002": {"t":"Senior Learning Designer, Indian Languages","f":"2026-10-24"},
     "8725638002": {"t":"Senior Engineering Manager, Product","f":"2026-10-24"},
     "8729596002": {"t":"Staff Product Designer, Monetization","f":"2026-10-24"},
-    "8733672002": {"t":"Senior Localization Program Manager","f":"2026-10-24"},
+    "8733672002": {"t":"Senior Localization Program Manager","f":"2026-10-24","g":"2026-11-02"},
     "8747077002": {"t":"VP of Product, Growth and Monetization","f":"2026-10-24"},
     "8747099002": {"t":"Senior Product Manager, Notifications","f":"2026-10-24"},
     "8747171002": {"t":"Senior Product Manager, Growth","f":"2026-10-24"},
@@ -65,6 +65,6 @@
     "8900546002": {"t":"Senior Engineering Manager, Data Platform","f":"2026-10-24"},
     "8906062002": {"t":"Social Media Content Creator","f":"2026-10-24","g":"2026-10-28"},
     "8917787002": {"t":"Performance Marketing Lead","f":"2026-10-27"},
-    "8922037002": {"t":"Illustrator","f":"2026-10-29"}
+    "8922037002": {"t":"Illustrator","f":"2026-10-29","g":"2026-11-02"}
   }
 }
