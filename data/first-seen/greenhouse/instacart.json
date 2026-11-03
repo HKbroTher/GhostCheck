@@ -7,7 +7,7 @@
     "6819435": {"t":"Retail Partner Manager","f":"2026-10-24"},
     "6819437": {"t":"Retail Partner Manager","f":"2026-10-24"},
     "7144697": {"t":"Activation Sales Development Representative II","f":"2026-10-24"},
-    "7361224": {"t":"Staff Software Engineer, FoodStorm","f":"2026-10-24"},
+    "7361224": {"t":"Staff Software Engineer, FoodStorm","f":"2026-10-24","g":"2026-11-03"},
     "7558978": {"t":"Sales Associate - New York","f":"2026-10-24"},
     "7560993": {"t":"Sales Associate - San Francisco/Los Angeles","f":"2026-10-24"},
     "7572155": {"t":"Sales Associate","f":"2026-10-24"},
@@ -59,8 +59,8 @@
     "8191763": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
     "8191765": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
     "8197990": {"t":"Senior SOX Manager - Business Processes","f":"2026-10-24"},
-    "8198159": {"t":"Senior Product Manager, AI Control Studio","f":"2026-10-24"},
-    "8198161": {"t":"Senior Product Manager, AI Control Studio","f":"2026-10-24"},
+    "8198159": {"t":"Senior Product Manager, AI Control Studio","f":"2026-10-24","g":"2026-11-03"},
+    "8198161": {"t":"Senior Product Manager, AI Control Studio","f":"2026-10-24","g":"2026-11-03"},
     "8198282": {"t":"Director of Product, Logistics","f":"2026-10-24"},
     "8198284": {"t":"Director of Product, Logistics","f":"2026-10-24"},
     "8202247": {"t":"Staff Software Engineer, Developer Experience","f":"2026-10-24","g":"2026-10-27"},
@@ -105,9 +105,9 @@
     "8263161": {"t":"Sales Executive, Mid Market","f":"2026-10-24"},
     "8265981": {"t":"Director, AI Solutions Strategy & Planning","f":"2026-10-24"},
     "8265982": {"t":"Director, AI Solutions Strategy & Planning","f":"2026-10-24"},
-    "8266401": {"t":"Senior Product Manager, Retailer App Platform & Insights","f":"2026-10-24"},
-    "8266403": {"t":"Senior Product Manager, Retailer App Platform & Insights","f":"2026-10-24"},
-    "8275263": {"t":"Senior Contracts Procurement Manager","f":"2026-10-24"},
+    "8266401": {"t":"Senior Product Manager, Retailer App Platform & Insights","f":"2026-10-24","g":"2026-11-03"},
+    "8266403": {"t":"Senior Product Manager, Retailer App Platform & Insights","f":"2026-10-24","g":"2026-11-03"},
+    "8275263": {"t":"Senior Contracts Procurement Manager","f":"2026-10-24","g":"2026-11-03"},
     "8275403": {"t":"Senior Manager, CPG Customer Success","f":"2026-10-24"},
     "8281405": {"t":"Senior Product Manager, Ad Formats","f":"2026-10-24"},
     "8281407": {"t":"Senior Product Manager, Ad Formats","f":"2026-10-24"},
@@ -130,6 +130,8 @@
     "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31"},
     "8337521": {"t":"Senior Manager, Technology Internal Audit","f":"2026-11-02"},
     "8337522": {"t":"Senior Corporate Finance Manager","f":"2026-11-02"},
-    "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"}
+    "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"},
+    "8347895": {"t":"Deal Desk Specialist","f":"2026-11-03"},
+    "8347897": {"t":"Deal Desk Specialist","f":"2026-11-03"}
   }
 }

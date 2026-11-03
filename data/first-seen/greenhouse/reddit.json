@@ -107,7 +107,7 @@
     "8186566": {"t":"Global Indirect Tax Manager","f":"2026-10-24"},
     "8187247": {"t":"Senior Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8187521": {"t":"Chief of Staff, Global Sales","f":"2026-10-24"},
-    "8187652": {"t":"Staff Machine Learning Engineer, App Ads Modeling","f":"2026-10-24"},
+    "8187652": {"t":"Staff Machine Learning Engineer, App Ads Modeling","f":"2026-10-24","g":"2026-11-03"},
     "8188275": {"t":"Trust and Safety Policy, Ads Policy,  Lead (Europe)","f":"2026-10-24"},
     "8189395": {"t":"Staff Threat Analyst, Ads Fraud","f":"2026-10-24"},
     "8189894": {"t":"Global Indirect Tax Manager","f":"2026-10-24"},
@@ -124,7 +124,7 @@
     "8205702": {"t":"Staff Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8211850": {"t":"Senior iOS Engineer, Media Experience","f":"2026-10-24"},
     "8212175": {"t":"Senior Product Manager, Go-To-Market Systems","f":"2026-10-24"},
-    "8214910": {"t":"Software Engineer, Ingestion Platform","f":"2026-10-24"},
+    "8214910": {"t":"Software Engineer, Ingestion Platform","f":"2026-10-24","g":"2026-11-03"},
     "8221539": {"t":"Senior Technical Solutions Manager","f":"2026-10-24"},
     "8226397": {"t":"Senior Director, Data Science","f":"2026-10-24"},
     "8234154": {"t":"International Payroll Analyst","f":"2026-10-24"},
@@ -151,6 +151,7 @@
     "8282187": {"t":"Technical Solutions Manager, App Ads","f":"2026-10-24"},
     "8282305": {"t":"Senior Product Business Development Manager","f":"2026-10-24","g":"2026-10-31"},
     "8282563": {"t":"Senior Ads Business Development & Partnership Manager","f":"2026-10-24","g":"2026-10-27"},
+    "8282748": {"t":"Senior Staff Applied Scientist, Science Platform","f":"2026-11-03"},
     "8282760": {"t":"Analytics Engineer","f":"2026-10-24"},
     "8283770": {"t":"Senior Machine Learning Systems Engineer, ML Platform","f":"2026-10-24"},
     "8287466": {"t":"Senior Frontend Engineer, Ads Formats","f":"2026-10-30"},
@@ -176,6 +177,7 @@
     "8330450": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"},
     "8330469": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"},
     "8331341": {"t":"Senior Software Engineer, Infrastructure Engineering","f":"2026-10-29"},
-    "8334138": {"t":"Staff Machine Learning Engineer, Ads Forecasting & Scenarios","f":"2026-10-30"}
+    "8334138": {"t":"Staff Machine Learning Engineer, Ads Forecasting & Scenarios","f":"2026-10-30"},
+    "8337444": {"t":"Software Engineer, Infrastructure Engineering","f":"2026-11-03"}
   }
 }
