@@ -4,6 +4,7 @@
   "slug": "asana",
   "since": "2026-10-24",
   "jobs": {
+    "6352958": {"t":"Senior Product Data Scientist (Analyst)","f":"2026-11-04"},
     "6981655": {"t":"Corporate Account Executive","f":"2026-10-24"},
     "7350641": {"t":"Staff Detection Engineer","f":"2026-10-24"},
     "7380414": {"t":"Senior Security Engineer, Threat Response","f":"2026-10-24"},
@@ -45,7 +46,7 @@
     "8075573": {"t":"Corporate Account Executive - Dutch Speaking","f":"2026-10-24","g":"2026-10-29"},
     "8078142": {"t":"Head of Digital and Scaled Customer Success","f":"2026-10-24"},
     "8092044": {"t":"Analytical Engineer","f":"2026-10-24"},
-    "8095543": {"t":"Developer Advocate","f":"2026-10-24"},
+    "8095543": {"t":"Developer Advocate","f":"2026-10-24","g":"2026-11-04"},
     "8095555": {"t":"Senior Staff Software Engineer, Developer Productivity","f":"2026-10-24"},
     "8098020": {"t":"Senior Staff Engineer, AI","f":"2026-10-24"},
     "8100429": {"t":"Head of Enterprise Sales, DACH","f":"2026-10-24"},
@@ -96,7 +97,7 @@
     "8244380": {"t":"Experience Researcher, PLG","f":"2026-10-24"},
     "8250135": {"t":"Enterprise Account Executive, Federal Civilian","f":"2026-10-24","g":"2026-10-27"},
     "8250168": {"t":"Designated Support Engineer","f":"2026-10-24","g":"2026-11-02"},
-    "8257456": {"t":"Developer Advocate","f":"2026-10-24"},
+    "8257456": {"t":"Developer Advocate","f":"2026-10-24","g":"2026-11-04"},
     "8257464": {"t":"Developer Advocate","f":"2026-10-24"},
     "8262890": {"t":"Senior Product Marketing Manager, IT and CIO Audiences","f":"2026-10-27"},
     "8264089": {"t":"Fullstack Engineer","f":"2026-10-24"},
@@ -119,6 +120,7 @@
     "8304535": {"t":"Implementation Manager","f":"2026-10-27"},
     "8304591": {"t":"Senior Implementation Manager","f":"2026-10-27"},
     "8304597": {"t":"Customer Enablement Manager","f":"2026-10-29"},
+    "8305286": {"t":"Administrative Business Partner","f":"2026-11-04"},
     "8311197": {"t":"Senior Implementation Manager","f":"2026-10-27"},
     "8311577": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-10-30"},
     "8311992": {"t":"Engineering Manager, Client Management","f":"2026-10-24"},
@@ -129,6 +131,7 @@
     "8324814": {"t":"Head of Web Strategy and Services","f":"2026-10-27"},
     "8326299": {"t":"Head of IT Systems Engineering","f":"2026-11-03"},
     "8326988": {"t":"CX Technical Enablement Partner","f":"2026-10-27"},
+    "8331605": {"t":"Product Owner - Netsuite","f":"2026-11-04"},
     "8337386": {"t":"Implementation Manager","f":"2026-10-31"},
     "8349347": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-11-03"}
   }

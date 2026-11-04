@@ -181,7 +181,7 @@
     "8903751002": {"t":"Coordonnateur des appels d'offres","f":"2026-10-27"},
     "8905092002": {"t":"Social Media Team Lead (Overnight)","f":"2026-10-24"},
     "8907156002": {"t":"Data Scientist, Decisions - Payments","f":"2026-10-24","g":"2026-10-27"},
-    "8908000002": {"t":"Senior Payroll Analyst","f":"2026-10-24"},
+    "8908000002": {"t":"Senior Payroll Analyst","f":"2026-10-24","g":"2026-11-04"},
     "8908002002": {"t":"Senior Manager, Global Workforce Planning","f":"2026-10-24"},
     "8908003002": {"t":"Senior Product Designer, Mapping","f":"2026-10-24"},
     "8908005002": {"t":"Data Scientist, Algorithms - Pricing - Rider Engagement","f":"2026-10-24"},
@@ -212,6 +212,16 @@
     "8925465002": {"t":"Fleet Operations Associate","f":"2026-10-31"},
     "8925486002": {"t":"Fleet Operations Associate (Day Shift)","f":"2026-10-31"},
     "8925493002": {"t":"Fleet Operations Associate (Overnight Shift)","f":"2026-10-31"},
-    "8925496002": {"t":"Fleet Operations Associate (Swing Shift)","f":"2026-10-31"}
+    "8925496002": {"t":"Fleet Operations Associate (Swing Shift)","f":"2026-10-31"},
+    "8927146002": {"t":"Staff Product Manager I, Base Pricing","f":"2026-11-04"},
+    "8927244002": {"t":"Digital Ad Ops Coordinator, Lyft Ads","f":"2026-11-04"},
+    "8927263002": {"t":"Senior Software Engineer, Forecasting & Real-Time Optimization","f":"2026-11-04"},
+    "8927265002": {"t":"Chief of Staff, Lyft Urban Solutions","f":"2026-11-04"},
+    "8927268002": {"t":"Software Engineer, Backend","f":"2026-11-04"},
+    "8927736002": {"t":"Growth Marketing Manager, Lifecycle","f":"2026-11-04"},
+    "8927794002": {"t":"Accountant, Lease & Fleet","f":"2026-11-04"},
+    "8927798002": {"t":"Accountant, Lease & Fleet","f":"2026-11-04"},
+    "8928721002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"},
+    "8928746002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"}
   }
 }

@@ -36,7 +36,8 @@
     "7995207": {"t":"Staff Technical Program Manager, Infrastructure","f":"2026-10-24","g":"2026-10-30"},
     "7996994": {"t":"Staff Product Manager, Community Builders","f":"2026-10-24"},
     "8010425": {"t":"Senior Program Manager, Business Process Transformation","f":"2026-10-24"},
-    "8017242": {"t":"Senior Client Account Manager, Global Strategic Accounts (Tech/AI)","f":"2026-10-24"},
+    "8011428": {"t":"Staff Backend Engineer, Moderation Enforcement","f":"2026-11-04"},
+    "8017242": {"t":"Senior Client Account Manager, Global Strategic Accounts (Tech/AI)","f":"2026-10-24","g":"2026-11-04"},
     "8018513": {"t":"Staff Machine Learning Engineer, Ads Foundational Representations","f":"2026-10-24"},
     "8018517": {"t":"Staff Machine Learning Engineer, Ads Foundational Representations","f":"2026-10-24"},
     "8022260": {"t":"Senior Business Engineer - Ads","f":"2026-10-24"},
@@ -72,7 +73,7 @@
     "8104403": {"t":"Senior Data Scientist, Ads","f":"2026-10-24"},
     "8106246": {"t":"Senior Software Engineer - Messaging","f":"2026-10-24"},
     "8110339": {"t":"Senior Data Scientist, Safety Enforcement","f":"2026-10-24"},
-    "8120503": {"t":"Senior Product Manager, Ads -  Shopping Catalogs","f":"2026-10-24"},
+    "8120503": {"t":"Senior Product Manager, Ads -  Shopping Catalogs","f":"2026-10-24","g":"2026-11-04"},
     "8120566": {"t":"Staff Product Designer, Presence","f":"2026-10-24"},
     "8121099": {"t":"Country Lead, Business Marketing, UK","f":"2026-10-24"},
     "8122606": {"t":"Senior Staff Machine Learning Engineer, Feed Relevance","f":"2026-10-24"},
@@ -178,6 +179,7 @@
     "8330469": {"t":"Engineering Manager, Product Catalogs","f":"2026-10-28"},
     "8331341": {"t":"Senior Software Engineer, Infrastructure Engineering","f":"2026-10-29"},
     "8334138": {"t":"Staff Machine Learning Engineer, Ads Forecasting & Scenarios","f":"2026-10-30"},
-    "8337444": {"t":"Software Engineer, Infrastructure Engineering","f":"2026-11-03"}
+    "8337444": {"t":"Software Engineer, Infrastructure Engineering","f":"2026-11-03"},
+    "8350749": {"t":"Senior Software Engineer, GRC","f":"2026-11-04"}
   }
 }

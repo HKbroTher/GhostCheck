@@ -99,7 +99,7 @@
     "6173031004": {"t":"Immigration Program Manager","f":"2026-10-24","g":"2026-11-03"},
     "6174190004": {"t":"Early Career, Inside Sales Representative (2027)","f":"2026-10-24"},
     "6178851004": {"t":"Data Engineer Intern (2027)","f":"2026-10-24"},
-    "6178857004": {"t":"Data Science Intern (2027)","f":"2026-10-24"},
+    "6178857004": {"t":"Data Science Intern (2027)","f":"2026-10-24","g":"2026-11-04"},
     "6180005004": {"t":"Product Design Intern (2027)","f":"2026-10-24"},
     "6180053004": {"t":"Early Career, Product Designer (2027)","f":"2026-10-24"},
     "6180172004": {"t":"Security Scientist","f":"2026-10-24"},
@@ -164,6 +164,8 @@
     "6237757004": {"t":"Manager, Software Engineering - UX Platform","f":"2026-10-29"},
     "6238015004": {"t":"PhD Intern, Security Engineer (2027)","f":"2026-10-29"},
     "6238252004": {"t":"Sales Recruiter (London, United Kingdom)","f":"2026-10-31"},
-    "6239628004": {"t":"Technical Recruiter (London, United Kingdom)","f":"2026-11-03"}
+    "6239153004": {"t":"People Partner","f":"2026-11-04"},
+    "6239628004": {"t":"Technical Recruiter (London, United Kingdom)","f":"2026-11-03"},
+    "6240900004": {"t":"People Operations Coordinator","f":"2026-11-04"}
   }
 }
