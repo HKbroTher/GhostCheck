@@ -58,7 +58,7 @@
     "8054055": {"t":"Senior IT Automation Engineer","f":"2026-10-24"},
     "8054153": {"t":"Staff Software Engineer, Customer Administration","f":"2026-10-24"},
     "8060577": {"t":"Senior Associate, FCM","f":"2026-10-24"},
-    "8060662": {"t":"Group Product Manager, Compliance Agent Experience","f":"2026-10-24"},
+    "8060662": {"t":"Group Product Manager, Compliance Agent Experience","f":"2026-10-24","g":"2026-11-05"},
     "8064692": {"t":"Compliance, Threat & Risk Assessment Manager","f":"2026-10-24"},
     "8070046": {"t":"GFCO Program Manager","f":"2026-10-24"},
     "8070386": {"t":"Senior Associate, Business Development","f":"2026-10-24"},
@@ -167,7 +167,7 @@
     "8212923": {"t":"Associate General Counsel, Privacy","f":"2026-10-24","g":"2026-10-27"},
     "8221238": {"t":"Internal Audit Analytics Intern","f":"2026-10-24"},
     "8221241": {"t":"Tax Information Reporting Intern","f":"2026-10-24"},
-    "8221985": {"t":"Senior Analyst, Compliance Technology","f":"2026-10-24"},
+    "8221985": {"t":"Senior Analyst, Compliance Technology","f":"2026-10-24","g":"2026-11-05"},
     "8222259": {"t":"Specialist, Market Operations","f":"2026-10-24"},
     "8222264": {"t":"Specialist, Market Operations","f":"2026-10-24"},
     "8222267": {"t":"Specialist, Market Operations","f":"2026-10-24"},
@@ -233,7 +233,7 @@
     "8302189": {"t":"Staff Software Enginer, Backend - Payments Platform","f":"2026-10-24"},
     "8304034": {"t":"Senior Software Engineer","f":"2026-10-24"},
     "8304038": {"t":"Software Engineer - Crypto Data Foundations","f":"2026-10-24"},
-    "8304052": {"t":"Senior Data Scientist, Platform","f":"2026-11-03"},
+    "8304052": {"t":"Senior Data Scientist, Platform","f":"2026-11-03","g":"2026-11-05"},
     "8311335": {"t":"Sr Manager, Infrastructure Sales","f":"2026-10-24"},
     "8311341": {"t":"Product Manager II, Wallets and DeFi","f":"2026-10-27"},
     "8312623": {"t":"Regional Security Manager, APAC","f":"2026-10-27"},
@@ -308,6 +308,10 @@
     "8350371": {"t":"Customer Support Specialist ll","f":"2026-11-04"},
     "8350374": {"t":"Customer Support Specialist ll","f":"2026-11-04"},
     "8351163": {"t":"Senior Software Engineer, Backend (Consumer - Risk)","f":"2026-11-04"},
-    "8351419": {"t":"Head of Creative Operations","f":"2026-11-04"}
+    "8351170": {"t":"Senior Product Manager, Payments","f":"2026-11-05"},
+    "8351400": {"t":"Senior Operations Associate","f":"2026-11-05"},
+    "8351419": {"t":"Head of Creative Operations","f":"2026-11-04","g":"2026-11-05"},
+    "8351568": {"t":"Prime Financing Trading Analyst","f":"2026-11-05"},
+    "8352329": {"t":"Customer Support Specialist II","f":"2026-11-05"}
   }
 }
