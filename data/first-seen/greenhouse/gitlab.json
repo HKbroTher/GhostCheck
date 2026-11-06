@@ -27,7 +27,7 @@
     "8621733002": {"t":"Senior Backend Engineer, AI Engineering: Chat","f":"2026-10-24"},
     "8622433002": {"t":"Senior Professional Services Project Manager (EMEA)","f":"2026-10-31"},
     "8623389002": {"t":"Site Reliability Engineer, Infrastructure Platforms — AMER (Intermediate to Senior Staff)","f":"2026-10-24"},
-    "8623592002": {"t":"Principal Site Reliability Engineer, Platform Engineering: Dedicated","f":"2026-10-24"},
+    "8623592002": {"t":"Principal Site Reliability Engineer, Platform Engineering: Dedicated","f":"2026-10-24","g":"2026-11-06"},
     "8626740002": {"t":"Engineering Manager - Git & Gitaly Operations","f":"2026-10-24","g":"2026-11-02"},
     "8627768002": {"t":"Senior Solutions Architect (Singapore)","f":"2026-10-24"},
     "8628447002": {"t":"Senior Security Engineer, Security Incident Response Team (SIRT) - EMEA","f":"2026-10-24","g":"2026-10-27"},
@@ -242,6 +242,7 @@
     "8891730002": {"t":"Public Sector Account Executive, Canada - Local Governments","f":"2026-11-05"},
     "8891827002": {"t":"Lead Customer Advocacy Manager, APJ","f":"2026-10-24"},
     "8891836002": {"t":"Intermediate Fullstack Engineer (Ruby/Vue.js), Growth","f":"2026-10-24"},
+    "8893054002": {"t":"Director of Product Management, Platforms","f":"2026-11-06"},
     "8894457002": {"t":"Senior Solutions Architect - UAE","f":"2026-10-24"},
     "8894806002": {"t":"Senior Product Manager, Switchboard","f":"2026-10-24"},
     "8895451002": {"t":"Lead Investor Relations","f":"2026-10-27"},
@@ -278,6 +279,7 @@
     "8920177002": {"t":"Staff Regional Marketing Manager, West","f":"2026-11-03"},
     "8920912002": {"t":"Customer Experience Enablement Lead","f":"2026-10-31"},
     "8921380002": {"t":"Engineering Manager, Architecture Engineering: Async","f":"2026-10-29"},
+    "8921443002": {"t":"Commercial Account Executive, Netherlands","f":"2026-11-06"},
     "8922013002": {"t":"Data Scientist, Enterprise Analytics","f":"2026-10-31"},
     "8922062002": {"t":"Senior Manager, Data Science","f":"2026-10-31"},
     "8922249002": {"t":"Intermediate Fullstack Engineer, Subscription Lifecycle","f":"2026-11-04"},
@@ -292,11 +294,16 @@
     "8924923002": {"t":"Intermediate Data Engineer","f":"2026-11-02"},
     "8926435002": {"t":"Senior Ecosystems Sales Manager: Scale, India","f":"2026-11-03"},
     "8927560002": {"t":"Senior Journey Architect","f":"2026-11-05"},
-    "8927630002": {"t":"Principal Field Security Engineer","f":"2026-11-05"},
+    "8927630002": {"t":"Principal Field Security Engineer (US)","f":"2026-11-05"},
+    "8928280002": {"t":"New Business Account Executive - East","f":"2026-11-06"},
     "8928675002": {"t":"Senior Backend Engineer, Development Health","f":"2026-11-04"},
+    "8928711002": {"t":"Senior Security Technical Program Manager, Fraud & Abuse","f":"2026-11-06"},
     "8928762002": {"t":"Senior Website Manager, about.gitlab.com","f":"2026-11-05"},
     "8929004002": {"t":"Lead Journey Architect","f":"2026-11-05"},
     "8929477002": {"t":"Manager, Customer Success Manager (PubSec)","f":"2026-11-05"},
-    "8929514002": {"t":"Senior Renewals Manager, Public Sector","f":"2026-11-05"}
+    "8929514002": {"t":"Senior Renewals Manager, Public Sector","f":"2026-11-05"},
+    "8931298002": {"t":"Senior Corporate Security Engineer","f":"2026-11-06"},
+    "8931347002": {"t":"Customer Success Engineer","f":"2026-11-06"},
+    "8931768002": {"t":"Director, Data Science","f":"2026-11-06"}
   }
 }

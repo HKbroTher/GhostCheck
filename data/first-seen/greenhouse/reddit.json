@@ -81,7 +81,7 @@
     "8125507": {"t":"Senior Machine Learning Manager, Video Ranking","f":"2026-10-24"},
     "8125836": {"t":"Senior Principal Program Manager, GTM Excellence","f":"2026-10-24"},
     "8126946": {"t":"Senior Data Scientist - Consumer","f":"2026-10-28"},
-    "8127002": {"t":"Staff Android Engineer, Brand Ad Formats","f":"2026-10-24"},
+    "8127002": {"t":"Staff Android Engineer, Brand Ad Formats","f":"2026-10-24","g":"2026-11-06"},
     "8128860": {"t":"Senior Backend Engineer, Compliance Engineering","f":"2026-10-24"},
     "8130697": {"t":"Senior Litigation Paralegal","f":"2026-10-24","g":"2026-10-30"},
     "8131228": {"t":"Staff Software Engineer , Observability","f":"2026-10-24"},
@@ -135,10 +135,10 @@
     "8240716": {"t":"Frontend Engineer, Ads Campaign Manager","f":"2026-10-24"},
     "8243010": {"t":"Senior Staff Machine Learning Engineer, ML Understanding","f":"2026-10-24"},
     "8244067": {"t":"Strategic Finance Senior Manager","f":"2026-10-24"},
-    "8244090": {"t":"Senior Client Partner, Large Customer Sales (Tech)","f":"2026-10-24"},
+    "8244090": {"t":"Senior Client Partner, Large Customer Sales (Tech)","f":"2026-10-24","g":"2026-11-06"},
     "8247280": {"t":"Staff Machine Learning Engineer, Ads ML Efficiency","f":"2026-10-24"},
     "8249259": {"t":"Chief of Staff, Global Sales","f":"2026-10-24"},
-    "8249469": {"t":"Lead Client Partner, Global Strategic Accounts (Tech)","f":"2026-10-24"},
+    "8249469": {"t":"Lead Client Partner, Global Strategic Accounts (Tech)","f":"2026-10-24","g":"2026-11-06"},
     "8250389": {"t":"Staff Machine Learning Engineer, Ads Creative Effectiveness","f":"2026-10-24"},
     "8256326": {"t":"Engineering Manager, Knowledge Graph Platform","f":"2026-10-24"},
     "8257083": {"t":"Lead Client Partner, Large Customer Sales (Restaurants & Drinks)","f":"2026-10-24"},
@@ -171,7 +171,7 @@
     "8311209": {"t":"Staff Software Engineer, iOS Platform","f":"2026-10-24"},
     "8316086": {"t":"Staff Machine Learning Engineer, Retrieval & Targeting","f":"2026-10-24"},
     "8318010": {"t":"Manager, EMEA Community (Contract)","f":"2026-10-24"},
-    "8319536": {"t":"Machine Learning Engineering Manager -  Core Ads Ranking","f":"2026-10-27"},
+    "8319536": {"t":"Machine Learning Engineering Manager -  Core Ads Ranking","f":"2026-10-27","g":"2026-11-06"},
     "8319655": {"t":"Software Engineer, Ad Signals","f":"2026-10-25"},
     "8319764": {"t":"Staff Program Manager, Human & LLM Data Annotation Operations","f":"2026-10-31"},
     "8329278": {"t":"Client Partner, Mid-Market Sales (B2B Services - Acquisitions)","f":"2026-10-29"},
@@ -181,6 +181,9 @@
     "8334138": {"t":"Staff Machine Learning Engineer, Ads Forecasting & Scenarios","f":"2026-10-30"},
     "8337323": {"t":"Agency Partner Manager","f":"2026-11-05"},
     "8337444": {"t":"Software Engineer, Infrastructure Engineering","f":"2026-11-03"},
-    "8350749": {"t":"Senior Software Engineer, GRC","f":"2026-11-04"}
+    "8349881": {"t":"Business Analyst","f":"2026-11-06"},
+    "8349916": {"t":"Machine Learning Engineer","f":"2026-11-06"},
+    "8350749": {"t":"Senior Software Engineer, GRC","f":"2026-11-04"},
+    "8355688": {"t":"Senior Data Scientist","f":"2026-11-06"}
   }
 }

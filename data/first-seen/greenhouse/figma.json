@@ -124,7 +124,7 @@
     "6208999004": {"t":"Manager, Tech & Ecosystem Partnerships","f":"2026-10-24"},
     "6211088004": {"t":"Director, Governance Risk & Compliance","f":"2026-10-24"},
     "6211119004": {"t":"Account Executive, Strategic (São Paulo, Brazil)","f":"2026-10-24"},
-    "6211910004": {"t":"Technical Program Manager - AI Tooling","f":"2026-10-24"},
+    "6211910004": {"t":"Technical Program Manager - AI Tooling","f":"2026-10-24","g":"2026-11-06"},
     "6212642004": {"t":"Researcher, Figma Design","f":"2026-10-24"},
     "6215865004": {"t":"Business Systems Analyst","f":"2026-10-24"},
     "6216211004": {"t":"Brand Designer, Web","f":"2026-10-24"},
@@ -167,6 +167,7 @@
     "6239153004": {"t":"People Partner","f":"2026-11-04"},
     "6239628004": {"t":"Technical Recruiter (London, United Kingdom)","f":"2026-11-03"},
     "6240900004": {"t":"People Operations Coordinator","f":"2026-11-04"},
-    "6241542004": {"t":"PhD Intern, Software Engineer - Interaction Design (2027)","f":"2026-11-05"}
+    "6241542004": {"t":"PhD Intern, Software Engineer - Interaction Design (2027)","f":"2026-11-05"},
+    "6243897004": {"t":"Account Executive - Figma Weave (London, United Kingdom)","f":"2026-11-06"}
   }
 }

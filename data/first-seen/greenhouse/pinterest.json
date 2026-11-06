@@ -23,7 +23,7 @@
     "7494650": {"t":"Staff Technical Program Manager, Security","f":"2026-10-24"},
     "7494668": {"t":"Staff Software Engineer, Capacity Engineering","f":"2026-10-24"},
     "7494740": {"t":"Principal Engineer, Shopping & Delivery Infra","f":"2026-10-24","g":"2026-10-27"},
-    "7507652": {"t":"Sales Finance Analyst II","f":"2026-10-24"},
+    "7507652": {"t":"Sales Finance Analyst II","f":"2026-10-24","g":"2026-11-06"},
     "7577227": {"t":"Sr. Staff Software Engineer, AI Platform","f":"2026-10-24"},
     "7656243": {"t":"Sr. Client Account Manager, Financial Services","f":"2026-10-24"},
     "7678372": {"t":"Insights Solutions Partner II","f":"2026-10-24"},
@@ -160,7 +160,7 @@
     "8260075": {"t":"Sr. SMB & Channel Sales Program Manager","f":"2026-10-24"},
     "8263122": {"t":"Staff Technical Program Manager, Advanced Technology Group","f":"2026-10-24"},
     "8265119": {"t":"Lead Client Partner, Financial Services","f":"2026-10-24"},
-    "8267923": {"t":"Brand Marketing Manager","f":"2026-10-24"},
+    "8267923": {"t":"Brand Marketing Manager","f":"2026-10-24","g":"2026-11-06"},
     "8267930": {"t":"University Grad Machine Learning Engineer 2027 (Zurich)","f":"2026-10-24","g":"2026-10-28"},
     "8268312": {"t":"UK Brand Partnerships Manager","f":"2026-10-28"},
     "8268316": {"t":"Brand Partnerships Manager, Europe","f":"2026-11-04"},
@@ -169,7 +169,7 @@
     "8268325": {"t":"Integrated Marketing Specialist (B2B)","f":"2026-10-24"},
     "8268329": {"t":"Integrated Marketing Lead, UCAN Programming & Industry","f":"2026-10-24","g":"2026-11-05"},
     "8268331": {"t":"B2B Growth Marketing Manager","f":"2026-10-30"},
-    "8268336": {"t":"Designer, PPM SMB","f":"2026-10-25"},
+    "8268336": {"t":"Designer, PPM","f":"2026-10-25"},
     "8268338": {"t":"Lead Creative Producer, Marketing","f":"2026-10-30"},
     "8268340": {"t":"Lead Art Director","f":"2026-10-24"},
     "8268342": {"t":"Motion Designer, PPM SMB","f":"2026-11-04"},
@@ -201,6 +201,7 @@
     "8331501": {"t":"Sr. Industry Manager, Food","f":"2026-10-30","g":"2026-11-03"},
     "8334884": {"t":"Content Enablement Intern 2027 (USA)","f":"2026-11-05"},
     "8346364": {"t":"Sr. Client Partner, Tech","f":"2026-11-03"},
-    "8350415": {"t":"Sr. Business Analyst, Strategy & Operations (12 month contract)","f":"2026-11-05"}
+    "8350415": {"t":"Sr. Business Analyst, Strategy & Operations (12 month contract)","f":"2026-11-05"},
+    "8351619": {"t":"Sr. Industry Manager, Travel","f":"2026-11-06"}
   }
 }

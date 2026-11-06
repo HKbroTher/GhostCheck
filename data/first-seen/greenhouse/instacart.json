@@ -41,7 +41,7 @@
     "8120469": {"t":"Senior Product Manager, Advertiser Experience","f":"2026-10-24"},
     "8120471": {"t":"Senior Product Manager, Advertiser Experience","f":"2026-10-24"},
     "8120705": {"t":"Director IT, Internal Audit","f":"2026-11-05"},
-    "8120707": {"t":"Director IT, Internal Audit","f":"2026-11-05"},
+    "8120707": {"t":"Director IT, Internal Audit","f":"2026-11-05","g":"2026-11-06"},
     "8141481": {"t":"Staff User Researcher - Consumer","f":"2026-10-24","g":"2026-11-02"},
     "8141483": {"t":"Staff User Researcher - Consumer","f":"2026-10-24","g":"2026-11-02"},
     "8141533": {"t":"Senior Software Engineer II, Marketing Enablement & Technology","f":"2026-10-24"},
@@ -51,8 +51,8 @@
     "8154300": {"t":"Senior Detection Engineer II","f":"2026-10-24","g":"2026-10-26"},
     "8154308": {"t":"Senior Detection Engineer II","f":"2026-10-24","g":"2026-10-26"},
     "8155140": {"t":"Principal Computer Vision Engineer","f":"2026-10-24"},
-    "8157736": {"t":"Senior Machine Learning Engineer, Economist","f":"2026-10-24"},
-    "8157738": {"t":"Senior Machine Learning Engineer, Economist","f":"2026-10-24"},
+    "8157736": {"t":"Senior Machine Learning Engineer, Economist","f":"2026-10-24","g":"2026-11-06"},
+    "8157738": {"t":"Senior Machine Learning Engineer, Economist","f":"2026-10-24","g":"2026-11-06"},
     "8157774": {"t":"Bilingual Customer Experience Specialist (Spanish)","f":"2026-10-24"},
     "8157831": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
     "8157911": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
@@ -134,6 +134,11 @@
     "8337522": {"t":"Senior Corporate Finance Manager","f":"2026-11-02","g":"2026-11-05"},
     "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"},
     "8347895": {"t":"Deal Desk Specialist","f":"2026-11-03"},
-    "8347897": {"t":"Deal Desk Specialist","f":"2026-11-03"}
+    "8347897": {"t":"Deal Desk Specialist","f":"2026-11-03"},
+    "8355990": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
+    "8355992": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
+    "8356128": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
+    "8356130": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
+    "8356881": {"t":"Senior Data Scientist","f":"2026-11-06"}
   }
 }

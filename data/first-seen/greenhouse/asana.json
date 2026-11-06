@@ -19,7 +19,7 @@
     "7821585": {"t":"Third Party Risk Management Lead","f":"2026-10-24"},
     "7839280": {"t":"IT Systems Engineer - Identity","f":"2026-10-24"},
     "7867211": {"t":"People Partner, GTM","f":"2026-10-24"},
-    "7950767": {"t":"Security Risk Engineer","f":"2026-11-05"},
+    "7950767": {"t":"Security Risk Engineer","f":"2026-11-05","g":"2026-11-06"},
     "7952123": {"t":"Product Designer","f":"2026-10-24","g":"2026-10-27"},
     "7959069": {"t":"Senior Security Technical Program Manager","f":"2026-10-24","g":"2026-11-05"},
     "7961454": {"t":"Software Engineer, Product","f":"2026-10-24"},
@@ -37,7 +37,7 @@
     "7979918": {"t":"Engineering Manager, Reporting Horizons","f":"2026-11-02"},
     "8017552": {"t":"Product Manager, Adapt","f":"2026-10-24"},
     "8024052": {"t":"Product Designer","f":"2026-10-24"},
-    "8027399": {"t":"Senior Solutions Architect","f":"2026-10-24"},
+    "8027399": {"t":"Solutions Architect","f":"2026-10-24"},
     "8031595": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
     "8044789": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
     "8044811": {"t":"Senior Analytical Engineering Manager","f":"2026-10-24"},
@@ -78,7 +78,7 @@
     "8201809": {"t":"Customer Success Manager - Named Accounts","f":"2026-10-24"},
     "8204614": {"t":"Lead Product Manager, Enterprise Services Management","f":"2026-10-24"},
     "8212172": {"t":"Senior Staff Software Engineer, Developer Productivity","f":"2026-10-24"},
-    "8212344": {"t":"IT Support Specialist","f":"2026-10-24"},
+    "8212344": {"t":"IT Support Specialist","f":"2026-10-24","g":"2026-11-06"},
     "8213887": {"t":"Lead Product Manager, Enterprise Services Management","f":"2026-10-24"},
     "8214792": {"t":"Workday Integration Developer","f":"2026-10-24"},
     "8214906": {"t":"Pricing Strategy Director","f":"2026-10-24"},
@@ -115,7 +115,7 @@
     "8282518": {"t":"Legal Operations Analyst","f":"2026-10-31"},
     "8282522": {"t":"Corporate and Strategic Finance, FP&A","f":"2026-10-25"},
     "8282574": {"t":"Product Manager, Coordinate","f":"2026-10-24"},
-    "8282680": {"t":"Renewal Manager","f":"2026-10-27"},
+    "8282680": {"t":"Renewal Manager","f":"2026-10-27","g":"2026-11-06"},
     "8282814": {"t":"Senior Analytics Engineer","f":"2026-10-24"},
     "8293698": {"t":"Commercial Counsel","f":"2026-10-24"},
     "8303385": {"t":"Head of Global Campaigns","f":"2026-10-24"},
@@ -134,7 +134,10 @@
     "8326299": {"t":"Head of IT Systems Engineering","f":"2026-11-03"},
     "8326988": {"t":"CX Technical Enablement Partner","f":"2026-10-27"},
     "8331605": {"t":"Product Owner - Netsuite","f":"2026-11-04"},
+    "8335947": {"t":"Senior Analyst, Channel Strategy & Operations","f":"2026-11-06"},
     "8337386": {"t":"Implementation Manager","f":"2026-10-31"},
-    "8349347": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-11-03"}
+    "8338202": {"t":"Lead Product Manager, APIs and MCP","f":"2026-11-06"},
+    "8349347": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-11-03"},
+    "8355820": {"t":"Security Risk Engineer","f":"2026-11-06"}
   }
 }
