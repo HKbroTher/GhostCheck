@@ -53,7 +53,7 @@
     "8851677002": {"t":"Ad Sales Lead, Programmatic","f":"2026-10-24"},
     "8858331002": {"t":"Proctor Quality and Learning Manager, Scaling Operations","f":"2026-10-24"},
     "8858333002": {"t":"Proctor Quality and Learning Manager, Scaling Operations","f":"2026-10-24"},
-    "8863967002": {"t":"Illustrator, Intern","f":"2026-10-24"},
+    "8863967002": {"t":"Illustrator, Intern","f":"2026-10-24","g":"2026-11-07"},
     "8875080002": {"t":"Staff Technical Program Manager","f":"2026-10-24"},
     "8881612002": {"t":"AI Research Engineer, New PhD Graduate","f":"2026-10-24"},
     "8883563002": {"t":"General Manager, India","f":"2026-10-24"},
@@ -67,8 +67,11 @@
     "8917787002": {"t":"Performance Marketing Lead","f":"2026-10-27"},
     "8922037002": {"t":"Illustrator","f":"2026-10-29","g":"2026-11-02"},
     "8927565002": {"t":"QA Specialist I, Recent Graduate","f":"2026-11-04"},
+    "8928712002": {"t":"AI Research Intern (PhD)","f":"2026-11-07"},
     "8929982002": {"t":"VP of Learning Design","f":"2026-11-05"},
     "8932477002": {"t":"Staff Product Manager, Core App Experience","f":"2026-11-06"},
-    "8932683002": {"t":"Staff AI Research Engineer","f":"2026-11-06"}
+    "8932683002": {"t":"Staff AI Research Engineer","f":"2026-11-06"},
+    "8933266002": {"t":"Senior Recruiter, Leadership","f":"2026-11-07"},
+    "8933285002": {"t":"Senior Business Development Manager, China","f":"2026-11-07"}
   }
 }

@@ -61,7 +61,7 @@
     "8074846": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24"},
     "8074860": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24"},
     "8075185": {"t":"Group Product Manager, Finance Technology","f":"2026-10-24"},
-    "8077785": {"t":"Senior GTM Insights Automation Manager","f":"2026-10-24"},
+    "8077785": {"t":"Senior GTM Insights Automation Manager","f":"2026-10-24","g":"2026-11-07"},
     "8088710": {"t":"Staff Product Manager, Moderation","f":"2026-10-24"},
     "8089959": {"t":"3rd Party Partnerships Manager - Signals","f":"2026-10-24","g":"2026-10-27"},
     "8090680": {"t":"Senior Site Reliability Engineer, Ads","f":"2026-10-24"},
@@ -96,7 +96,7 @@
     "8148089": {"t":"Associate General Counsel, Ads Product","f":"2026-10-30"},
     "8153017": {"t":"Account Executive, Mid-Market (DACH)","f":"2026-10-24"},
     "8157275": {"t":"Senior Staff Machine Learning Systems Engineer, Ads ML Platform","f":"2026-10-24"},
-    "8157580": {"t":"Senior Data Scientist, Ads Integrity","f":"2026-10-24"},
+    "8157580": {"t":"Senior Data Scientist, Ads Integrity","f":"2026-10-24","g":"2026-11-07"},
     "8167412": {"t":"Staff Product Manager, Ads Formats","f":"2026-10-24"},
     "8168390": {"t":"Senior Community Lifecycle Manager","f":"2026-10-24"},
     "8171546": {"t":"Senior Client Account Manager, App Dev Enterprise","f":"2026-10-24"},
@@ -119,6 +119,7 @@
     "8192369": {"t":"International Payroll Analyst","f":"2026-10-24"},
     "8194576": {"t":"Frontend Engineer, Ads","f":"2026-10-24"},
     "8198102": {"t":"Front End Software Engineer, Media Player","f":"2026-10-24"},
+    "8201913": {"t":"Senior Product Designer, Ads","f":"2026-11-07"},
     "8203478": {"t":"Staff Machine Learning Engineer, AI Security","f":"2026-10-24"},
     "8204924": {"t":"Staff Backend Engineer, User Safety","f":"2026-10-24"},
     "8205402": {"t":"Staff Software Engineer - Ingestion Platform","f":"2026-10-24"},
@@ -184,6 +185,8 @@
     "8349881": {"t":"Business Analyst","f":"2026-11-06"},
     "8349916": {"t":"Machine Learning Engineer","f":"2026-11-06"},
     "8350749": {"t":"Senior Software Engineer, GRC","f":"2026-11-04"},
-    "8355688": {"t":"Senior Data Scientist","f":"2026-11-06"}
+    "8355688": {"t":"Senior Data Scientist","f":"2026-11-06"},
+    "8359289": {"t":"Senior Product Manager, Finance Technology (Procure-to-Pay & Record-to-Report)","f":"2026-11-07"},
+    "8360267": {"t":"Senior Client Partner, Mid-Market Sales (Goods)","f":"2026-11-07"}
   }
 }

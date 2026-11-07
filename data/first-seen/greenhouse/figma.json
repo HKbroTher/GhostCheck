@@ -108,7 +108,7 @@
     "6187903004": {"t":"Inside Sales Representative (Paris, France)","f":"2026-10-24"},
     "6189444004": {"t":"Manager, Technical Support (London, United Kingdom)","f":"2026-10-24"},
     "6191697004": {"t":"Manager, Recruiting - Sales","f":"2026-10-24"},
-    "6193686004": {"t":"Product Designer, Roundtripping (London, United Kingdom)","f":"2026-10-24"},
+    "6193686004": {"t":"Product Designer, Roundtripping (London, United Kingdom)","f":"2026-10-24","g":"2026-11-07"},
     "6199185004": {"t":"Executive Assistant, Growth Marketing","f":"2026-10-24"},
     "6200626004": {"t":"PhD Intern, Data Science (2027)","f":"2026-10-24"},
     "6201114004": {"t":"Director, Product Design - AI & Context","f":"2026-10-24"},
@@ -138,7 +138,7 @@
     "6224085004": {"t":"Senior Counsel (London, United Kingdom)","f":"2026-11-02"},
     "6224661004": {"t":"Manager, Software Engineering - External Platform","f":"2026-10-24"},
     "6225172004": {"t":"Senior Solutions Consultant (Seoul, South Korea)","f":"2026-10-24"},
-    "6225818004": {"t":"Distribution Partner Manager, LATAM","f":"2026-10-24"},
+    "6225818004": {"t":"Distribution Partner Manager, LATAM","f":"2026-10-24","g":"2026-11-07"},
     "6226427004": {"t":"Manager, Recruiting (London, United Kingdom)","f":"2026-10-24"},
     "6227402004": {"t":"Product Builder, AI Insights","f":"2026-10-24"},
     "6228774004": {"t":"Product Manager, Figma Pattern Library","f":"2026-10-24"},
@@ -166,8 +166,11 @@
     "6238252004": {"t":"Sales Recruiter (London, United Kingdom)","f":"2026-10-31"},
     "6239153004": {"t":"People Partner","f":"2026-11-04"},
     "6239628004": {"t":"Technical Recruiter (London, United Kingdom)","f":"2026-11-03"},
+    "6239959004": {"t":"Senior Account Executive - Figma Weave","f":"2026-11-07"},
     "6240900004": {"t":"People Operations Coordinator","f":"2026-11-04"},
     "6241542004": {"t":"PhD Intern, Software Engineer - Interaction Design (2027)","f":"2026-11-05"},
-    "6243897004": {"t":"Account Executive - Figma Weave (London, United Kingdom)","f":"2026-11-06"}
+    "6242561004": {"t":"Software Engineer - Application Platform","f":"2026-11-07"},
+    "6243897004": {"t":"Account Executive - Figma Weave (London, United Kingdom)","f":"2026-11-06"},
+    "6245293004": {"t":"Manager, Sales - Figma Weave (London, United Kingdom)","f":"2026-11-07"}
   }
 }

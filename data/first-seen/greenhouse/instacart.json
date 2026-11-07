@@ -56,7 +56,7 @@
     "8157774": {"t":"Bilingual Customer Experience Specialist (Spanish)","f":"2026-10-24"},
     "8157831": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
     "8157911": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
-    "8177972": {"t":"Growth Media Marketing Manager, Paid Search","f":"2026-10-24"},
+    "8177972": {"t":"Growth Media Marketing Manager, Paid Search","f":"2026-10-24","g":"2026-11-07"},
     "8190576": {"t":"Government Affairs Manager II, Northwest","f":"2026-10-24"},
     "8191763": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
     "8191765": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
@@ -102,7 +102,7 @@
     "8249753": {"t":"Senior Design Program Manager II","f":"2026-10-24"},
     "8250324": {"t":"Account Manager","f":"2026-10-24"},
     "8250361": {"t":"Commercial Counsel","f":"2026-10-24"},
-    "8257641": {"t":"Bilingual CX Specialist (French)","f":"2026-10-24"},
+    "8257641": {"t":"Bilingual CX Specialist (French)","f":"2026-10-24","g":"2026-11-07"},
     "8263109": {"t":"Senior Manager, Machine Learning Engineering","f":"2026-10-31"},
     "8263161": {"t":"Sales Executive, Mid Market","f":"2026-10-24"},
     "8265981": {"t":"Director, AI Solutions Strategy & Planning","f":"2026-10-24"},
@@ -111,8 +111,8 @@
     "8266403": {"t":"Senior Product Manager, Retailer App Platform & Insights","f":"2026-10-24","g":"2026-11-03"},
     "8275263": {"t":"Senior Contracts Procurement Manager","f":"2026-10-24","g":"2026-11-03"},
     "8275403": {"t":"Senior Manager, CPG Customer Success","f":"2026-10-24"},
-    "8281405": {"t":"Senior Product Manager, Ad Formats","f":"2026-10-24"},
-    "8281407": {"t":"Senior Product Manager, Ad Formats","f":"2026-10-24"},
+    "8281405": {"t":"Product Manager, Ad Formats","f":"2026-10-24"},
+    "8281407": {"t":"Product Manager, Ad Formats","f":"2026-10-24"},
     "8281965": {"t":"Senior Software Engineer II, Ads Data Solutions Engineering","f":"2026-10-24"},
     "8282526": {"t":"Senior Financial Insights Analyst","f":"2026-10-24","g":"2026-11-04"},
     "8282591": {"t":"Senior Financial Insights Analyst","f":"2026-10-24","g":"2026-11-04"},
@@ -139,6 +139,8 @@
     "8355992": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
     "8356128": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
     "8356130": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
-    "8356881": {"t":"Senior Data Scientist","f":"2026-11-06"}
+    "8356881": {"t":"Senior Data Scientist","f":"2026-11-06"},
+    "8359775": {"t":"Senior Global Mobility and Immigration Specialist","f":"2026-11-07"},
+    "8359777": {"t":"Senior Global Mobility and Immigration Specialist","f":"2026-11-07"}
   }
 }
