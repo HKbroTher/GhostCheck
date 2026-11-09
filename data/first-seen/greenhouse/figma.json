@@ -56,7 +56,7 @@
     "5996930004": {"t":"Manager, Enterprise Sales","f":"2026-10-24"},
     "6008343004": {"t":"Voice of the Customer Program Manager","f":"2026-10-24"},
     "6008752004": {"t":"Manager, Software Engineering - DevEx AI Tools","f":"2026-10-24"},
-    "6010279004": {"t":"Manager, Software Engineering - Growth Platform","f":"2026-10-24"},
+    "6010279004": {"t":"Manager, Software Engineering - Growth Platform","f":"2026-10-24","g":"2026-11-09"},
     "6010992004": {"t":"Manager, Inside Sales (London, United Kingdom)","f":"2026-10-24","g":"2026-11-05"},
     "6015609004": {"t":"Manager, Security Operations","f":"2026-10-24","g":"2026-10-31"},
     "6019394004": {"t":"Director, Business Systems","f":"2026-10-24","g":"2026-10-29"},
@@ -170,6 +170,7 @@
     "6240900004": {"t":"People Operations Coordinator","f":"2026-11-04"},
     "6241542004": {"t":"PhD Intern, Software Engineer - Interaction Design (2027)","f":"2026-11-05"},
     "6242561004": {"t":"Software Engineer - Application Platform","f":"2026-11-07"},
+    "6242701004": {"t":"Researcher, AI Evaluations","f":"2026-11-09"},
     "6243897004": {"t":"Account Executive - Figma Weave (London, United Kingdom)","f":"2026-11-06"},
     "6245293004": {"t":"Manager, Sales - Figma Weave (London, United Kingdom)","f":"2026-11-07"}
   }

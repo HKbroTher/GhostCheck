@@ -50,7 +50,7 @@
     "6936994002": {"t":"Senior Software Engineer - Distributed Data Systems","f":"2026-10-24"},
     "6937001002": {"t":"Staff Software Engineer - Distributed Data Systems","f":"2026-10-24"},
     "7006090002": {"t":"Engineering Manager - Core Experiences","f":"2026-10-24"},
-    "7011263002": {"t":"PhD GenAI Research Scientist Intern","f":"2026-10-24"},
+    "7011263002": {"t":"PhD GenAI Research Scientist Intern","f":"2026-10-24","g":"2026-11-09"},
     "7069793002": {"t":"Staff Data Scientist - Infrastructure","f":"2026-10-24"},
     "7110499002": {"t":"Staff Product Manager, Security","f":"2026-10-24"},
     "7110509002": {"t":"Staff Product Manager, Security","f":"2026-10-24"},
@@ -101,6 +101,7 @@
     "7795026002": {"t":"Director, Strategic Partnerships","f":"2026-10-24"},
     "7803651002": {"t":"AI Transformation Leader","f":"2026-10-24"},
     "7807722002": {"t":"Senior Staff Software Engineer - App and Partner Ecosystem","f":"2026-10-24"},
+    "7827370002": {"t":"Evergreen Solutions Architect","f":"2026-11-09"},
     "7839474002": {"t":"Sr Designated Support Engineer","f":"2026-10-24"},
     "7841080002": {"t":"Enterprise Account Executive - Media","f":"2026-10-24","g":"2026-10-28"},
     "7841778002": {"t":"Staff Software Engineer - Search Platform","f":"2026-10-24"},
@@ -318,7 +319,7 @@
     "8482037002": {"t":"Systems PhD - Software Engineer","f":"2026-10-24"},
     "8482086002": {"t":"Systems PhD - Software Engineer","f":"2026-10-24"},
     "8482368002": {"t":"Manager, Strategy & Operations","f":"2026-10-24","g":"2026-11-05"},
-    "8486165002": {"t":"Leader of GTM Technical & Product Execution Excellence","f":"2026-10-24"},
+    "8486165002": {"t":"Leader of GTM Technical & Product Execution Excellence","f":"2026-10-24","g":"2026-11-09"},
     "8487145002": {"t":"Director, Product Marketing, AI","f":"2026-10-24"},
     "8487325002": {"t":"Sr. Executive Assistant","f":"2026-10-24"},
     "8487768002": {"t":"Solutions Architect - Communications, Media, Entertainment and Games","f":"2026-10-24"},
@@ -1040,6 +1041,7 @@
     "8931716002": {"t":"Senior Delivery Partner Manager, Services","f":"2026-11-07"},
     "8932117002": {"t":"Solutions Architect – Digital Sovereignty","f":"2026-11-06"},
     "8932679002": {"t":"Director of Engineering - Databricks Commercialization & Marketplace","f":"2026-11-06"},
+    "8932854002": {"t":"Geo Core Account Executive-FINS","f":"2026-11-09"},
     "8932964002": {"t":"Senior Solutions Architect - Lakebase","f":"2026-11-06"},
     "8933236002": {"t":"Senior Delivery Partner Manager, Services","f":"2026-11-07"}
   }

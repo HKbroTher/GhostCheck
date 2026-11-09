@@ -114,7 +114,7 @@
     "8202802": {"t":"Senior Market Manager","f":"2026-10-24","g":"2026-10-31"},
     "8202878": {"t":"Staff Workday Integration Engineer, Tech Foundations","f":"2026-10-24"},
     "8207084": {"t":"Lead Advanced Analyst, Integrated Marketing","f":"2026-10-24","g":"2026-10-27"},
-    "8207095": {"t":"Staff Advanced Analytics, Community Blueprint & Quality","f":"2026-10-24"},
+    "8207095": {"t":"Staff Advanced Analytics, Community Blueprint & Quality","f":"2026-10-24","g":"2026-11-09"},
     "8207342": {"t":"Senior Business Operations and Growth Lead","f":"2026-10-24"},
     "8209244": {"t":"Senior Software Engineer, Tech Foundations","f":"2026-10-24"},
     "8209984": {"t":"Principal, Strategic Finance & Analytics, Acquisition","f":"2026-10-24","g":"2026-11-06"},
@@ -191,7 +191,7 @@
     "8290025": {"t":"Senior Manager, Content & Knowledge Architecture","f":"2026-10-24"},
     "8299386": {"t":"Office Manager, China (Executive Administration and Workplace)","f":"2026-10-24"},
     "8299396": {"t":"Head of Homes Supply, Thailand & Vietnam","f":"2026-10-28"},
-    "8300382": {"t":"Support Specialist, R1","f":"2026-10-26"},
+    "8300382": {"t":"Support Specialist, R1","f":"2026-10-26","g":"2026-11-09"},
     "8300839": {"t":"Market Associate","f":"2026-10-24"},
     "8301515": {"t":"Senior Data Scientist, People Analytics & Research","f":"2026-10-24"},
     "8303047": {"t":"Product Manager, LATAM (Miami or San Francisco)","f":"2026-10-24"},
@@ -267,6 +267,7 @@
     "8356755": {"t":"Senior Executive Assistant","f":"2026-11-07"},
     "8357059": {"t":"Business Operations and Growth Lead - DACH & CEE","f":"2026-11-06"},
     "8358646": {"t":"Regulatory Operations Lead","f":"2026-11-07"},
-    "8358671": {"t":"Regulatory Operations Lead","f":"2026-11-07"}
+    "8358671": {"t":"Regulatory Operations Lead","f":"2026-11-07"},
+    "8364499": {"t":"Senior Communications Manager, Korea","f":"2026-11-09"}
   }
 }

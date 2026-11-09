@@ -88,7 +88,7 @@
     "8783214002": {"t":"Senior Product Manager, Customer Care AI","f":"2026-10-24"},
     "8783345002": {"t":"Security Assurance Analyst, Security and Privacy","f":"2026-10-24","g":"2026-11-03"},
     "8790623002": {"t":"Business Systems Engineer, Intelligent Automation","f":"2026-10-24","g":"2026-10-31"},
-    "8790686002": {"t":"Software Engineer, Telematics","f":"2026-10-24"},
+    "8790686002": {"t":"Software Engineer, Telematics","f":"2026-10-24","g":"2026-11-09"},
     "8790689002": {"t":"Senior Business Systems Engineer - Integrations & AI","f":"2026-10-24","g":"2026-10-30"},
     "8790999002": {"t":"Firmware Engineer, LUS","f":"2026-10-24","g":"2026-11-06"},
     "8791500002": {"t":"Account Manager, Automotive Vertical","f":"2026-10-24","g":"2026-10-31"},
@@ -123,7 +123,7 @@
     "8828273002": {"t":"Software Engineer, Driver Experience","f":"2026-10-24"},
     "8831430002": {"t":"Senior Software Engineer, Rider","f":"2026-10-24"},
     "8834157002": {"t":"VP, People","f":"2026-10-24"},
-    "8838923002": {"t":"Sr. Manager, GTM Strategy & Sales Packaging","f":"2026-10-24"},
+    "8838923002": {"t":"Sr. Manager, GTM Strategy & Sales Packaging","f":"2026-10-24","g":"2026-11-09"},
     "8839156002": {"t":"AV Program Manager","f":"2026-10-24"},
     "8840187002": {"t":"Repair Operations Lead","f":"2026-10-24"},
     "8843341002": {"t":"Applied Scientist Intern, PhD (Summer 2027)","f":"2026-10-24"},
@@ -152,7 +152,7 @@
     "8872290002": {"t":"Senior PBP, Finance","f":"2026-10-24"},
     "8880066002": {"t":"Operations Associate - Flexdrive","f":"2026-10-24"},
     "8880839002": {"t":"Data Curation Associate","f":"2026-10-24"},
-    "8881573002": {"t":"Finance Analyst","f":"2026-10-24"},
+    "8881573002": {"t":"Finance Analyst","f":"2026-10-24","g":"2026-11-09"},
     "8883412002": {"t":"Risk Analyst","f":"2026-10-24"},
     "8883423002": {"t":"Risk Analyst","f":"2026-10-24"},
     "8883515002": {"t":"Software Engineer, Supply Platform","f":"2026-10-24","g":"2026-11-06"},
@@ -225,7 +225,7 @@
     "8927798002": {"t":"Accountant, Lease & Fleet","f":"2026-11-04"},
     "8928721002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"},
     "8928746002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"},
-    "8930012002": {"t":"Sr. Manager, GTM Strategy & Sales Packaging","f":"2026-11-05"},
+    "8930012002": {"t":"Sr. Manager, GTM Strategy & Sales Packaging","f":"2026-11-05","g":"2026-11-09"},
     "8930438002": {"t":"Growth Marketing Manager, Lifecycle","f":"2026-11-05"}
   }
 }
