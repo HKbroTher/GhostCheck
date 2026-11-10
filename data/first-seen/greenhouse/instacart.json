@@ -57,7 +57,7 @@
     "8157831": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
     "8157911": {"t":"Oracle Fusion ERP Technical Analyst","f":"2026-10-24","g":"2026-10-27"},
     "8177972": {"t":"Growth Media Marketing Manager, Paid Search","f":"2026-10-24","g":"2026-11-07"},
-    "8190576": {"t":"Government Affairs Manager II, Northwest","f":"2026-10-24"},
+    "8190576": {"t":"Government Affairs Manager II, Northwest","f":"2026-10-24","g":"2026-11-10"},
     "8191763": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
     "8191765": {"t":"Senior Product Designer II - Growth Systems & AI Workflows","f":"2026-10-24"},
     "8197990": {"t":"Senior SOX Manager - Business Processes","f":"2026-10-24"},
@@ -129,7 +129,7 @@
     "8304832": {"t":"Social Content Producer","f":"2026-10-24","g":"2026-10-28"},
     "8315996": {"t":"Senior Software Engineer, Fulfillment","f":"2026-10-27"},
     "8336857": {"t":"Bilingual Customer Experience T3 Specialist (Spanish)","f":"2026-10-31"},
-    "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31"},
+    "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31","g":"2026-11-10"},
     "8337521": {"t":"Senior Manager, Technology Internal Audit","f":"2026-11-02"},
     "8337522": {"t":"Senior Corporate Finance Manager","f":"2026-11-02","g":"2026-11-05"},
     "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"},
@@ -141,6 +141,9 @@
     "8356130": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
     "8356881": {"t":"Senior Data Scientist","f":"2026-11-06","g":"2026-11-09"},
     "8359775": {"t":"Senior Global Mobility and Immigration Specialist","f":"2026-11-07"},
-    "8359777": {"t":"Senior Global Mobility and Immigration Specialist","f":"2026-11-07"}
+    "8359777": {"t":"Senior Global Mobility and Immigration Specialist","f":"2026-11-07"},
+    "8368675": {"t":"Senior Enterprise Account Executive","f":"2026-11-10"},
+    "8368677": {"t":"Senior Enterprise Account Executive","f":"2026-11-10"},
+    "8368861": {"t":"Measurement Science Manager","f":"2026-11-10"}
   }
 }
