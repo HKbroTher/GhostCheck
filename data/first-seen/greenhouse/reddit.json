@@ -59,8 +59,8 @@
     "8049901": {"t":"Staff Software Engineer, DevPlatform","f":"2026-10-24"},
     "8060775": {"t":"Senior Staff Software Engineer, Client Architecture","f":"2026-10-24"},
     "8072076": {"t":"Staff Data Scientist - Ads Measurement, Signals, Privacy","f":"2026-10-24"},
-    "8074846": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24"},
-    "8074860": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24"},
+    "8074846": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24","g":"2026-11-11"},
+    "8074860": {"t":"Senior, Business Risk & AI Automation","f":"2026-10-24","g":"2026-11-11"},
     "8075185": {"t":"Group Product Manager, Finance Technology","f":"2026-10-24"},
     "8077785": {"t":"Senior GTM Insights Automation Manager","f":"2026-10-24","g":"2026-11-07"},
     "8088710": {"t":"Staff Product Manager, Moderation","f":"2026-10-24"},
@@ -183,6 +183,7 @@
     "8331370": {"t":"Product Manager, Developer Ecosystem","f":"2026-11-10"},
     "8334138": {"t":"Staff Machine Learning Engineer, Ads Forecasting & Scenarios","f":"2026-10-30"},
     "8337323": {"t":"Agency Partner Manager","f":"2026-11-05"},
+    "8337440": {"t":"Client Account Manager, Large Customer Sales (Big Box Retail)","f":"2026-11-11"},
     "8337444": {"t":"Software Engineer, Infrastructure Engineering","f":"2026-11-03"},
     "8349881": {"t":"Business Analyst","f":"2026-11-06"},
     "8349916": {"t":"Machine Learning Engineer","f":"2026-11-06"},
@@ -191,6 +192,7 @@
     "8359289": {"t":"Senior Product Manager, Finance Technology (Procure-to-Pay & Record-to-Report)","f":"2026-11-07"},
     "8360267": {"t":"Senior Client Partner, Mid-Market Sales (Goods)","f":"2026-11-07"},
     "8369169": {"t":"Senior Staff SRE, Site Experience","f":"2026-11-10"},
-    "8369767": {"t":"Senior SRE, Site Experience","f":"2026-11-10"}
+    "8369767": {"t":"Senior SRE, Site Experience","f":"2026-11-10"},
+    "8372525": {"t":"Senior Manager, Mid-Market Sales (Signature Goods)","f":"2026-11-11"}
   }
 }

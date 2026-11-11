@@ -15,7 +15,7 @@
     "8067367": {"t":"Vice President, Revenue Operations","f":"2026-10-24","g":"2026-10-29"},
     "8075216": {"t":"EMEA Sales Operations Manager - GTM","f":"2026-10-24"},
     "8159652": {"t":"Account Executive","f":"2026-10-24"},
-    "8159659": {"t":"Senior Account Executive - LATAM","f":"2026-10-24"},
+    "8159659": {"t":"Senior Account Executive - LATAM","f":"2026-10-24","g":"2026-11-11"},
     "8159670": {"t":"Senior Account Executive","f":"2026-10-24"},
     "8177609": {"t":"Program Manager, Customer Programs","f":"2026-11-03"},
     "8177610": {"t":"Program Manager, Customer Programs","f":"2026-11-03"},
@@ -42,6 +42,12 @@
     "8328469": {"t":"Legal Operations Associate","f":"2026-11-04"},
     "8328470": {"t":"Legal Operations Associate","f":"2026-11-06"},
     "8328476": {"t":"Stock Administrator","f":"2026-11-04"},
-    "8356282": {"t":"Director, Data Science & Engineering, Finance","f":"2026-11-06"}
+    "8328534": {"t":"Security Engineer, IAM","f":"2026-11-11"},
+    "8328537": {"t":"Security Engineer, IAM","f":"2026-11-11"},
+    "8328546": {"t":"Senior Security Engineer, AI Security","f":"2026-11-11"},
+    "8328549": {"t":"Senior Security Engineer, AI Security","f":"2026-11-11"},
+    "8356282": {"t":"Director, Data Science & Engineering, Finance","f":"2026-11-06"},
+    "8356674": {"t":"GTM Program Manager","f":"2026-11-11"},
+    "8356675": {"t":"GTM Program Manager","f":"2026-11-11"}
   }
 }

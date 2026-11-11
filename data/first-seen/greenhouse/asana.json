@@ -39,7 +39,7 @@
     "7978671": {"t":"Staff Software Engineer, AI","f":"2026-10-24","g":"2026-11-10"},
     "7979918": {"t":"Engineering Manager, Reporting Horizons","f":"2026-11-02"},
     "8017552": {"t":"Product Manager, Adapt","f":"2026-10-24"},
-    "8024052": {"t":"Product Designer","f":"2026-10-24"},
+    "8024052": {"t":"Product Designer","f":"2026-10-24","g":"2026-11-11"},
     "8027399": {"t":"Solutions Architect","f":"2026-10-24"},
     "8031595": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
     "8044789": {"t":"Forward Deployed Engineer, Command by Asana","f":"2026-10-24","g":"2026-10-31"},
@@ -61,7 +61,7 @@
     "8129531": {"t":"Social Media Lead","f":"2026-10-24","g":"2026-11-05"},
     "8131896": {"t":"Data Engineer","f":"2026-10-24"},
     "8137748": {"t":"Benefits Manager, NAMER","f":"2026-10-24"},
-    "8137817": {"t":"Product Security Engineer","f":"2026-10-24"},
+    "8137817": {"t":"Senior Product Security Engineer","f":"2026-10-24"},
     "8140029": {"t":"Software Engineer, Development Infrastructure","f":"2026-10-24"},
     "8154796": {"t":"Design Leader, Emerging Products","f":"2026-10-29"},
     "8161860": {"t":"Channel Account Executive, LATAM","f":"2026-10-24","g":"2026-10-29"},
@@ -145,7 +145,7 @@
     "8338198": {"t":"Technical Account Manager","f":"2026-11-10"},
     "8338202": {"t":"Lead Product Manager, APIs and MCP","f":"2026-11-06"},
     "8349347": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-11-03"},
-    "8355820": {"t":"Security Risk Engineer","f":"2026-11-06"},
+    "8355820": {"t":"Senior Security Risk Engineer","f":"2026-11-06"},
     "8357119": {"t":"Workplace Lead","f":"2026-11-10"}
   }
 }

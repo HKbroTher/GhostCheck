@@ -153,8 +153,8 @@
     "8880066002": {"t":"Operations Associate - Flexdrive","f":"2026-10-24"},
     "8880839002": {"t":"Data Curation Associate","f":"2026-10-24","g":"2026-11-10"},
     "8881573002": {"t":"Finance Analyst","f":"2026-10-24","g":"2026-11-09"},
-    "8883412002": {"t":"Risk Analyst","f":"2026-10-24"},
-    "8883423002": {"t":"Risk Analyst","f":"2026-10-24"},
+    "8883412002": {"t":"Risk Analyst","f":"2026-10-24","g":"2026-11-11"},
+    "8883423002": {"t":"Risk Analyst","f":"2026-10-24","g":"2026-11-11"},
     "8883515002": {"t":"Software Engineer, Supply Platform","f":"2026-10-24","g":"2026-11-06"},
     "8885206002": {"t":"Accountant","f":"2026-10-24"},
     "8888403002": {"t":"ML Software Engineer, Routing","f":"2026-10-24"},
@@ -194,7 +194,7 @@
     "8909350002": {"t":"Director, Global B2B TPM","f":"2026-10-24","g":"2026-10-30"},
     "8910495002": {"t":"Fleet Operations Lead","f":"2026-10-27"},
     "8916916002": {"t":"Senior Actuarial Analyst","f":"2026-11-03"},
-    "8916920002": {"t":"Influencer Manager, Social & Culture","f":"2026-10-30"},
+    "8916920002": {"t":"Influencer Manager, Social & Culture","f":"2026-10-30","g":"2026-11-11"},
     "8916924002": {"t":"Senior Product Manager, Rider ML/AI","f":"2026-10-27"},
     "8916976002": {"t":"Senior Actuarial Analyst","f":"2026-11-03"},
     "8916983002": {"t":"Senior Actuarial Analyst","f":"2026-11-03"},
@@ -227,6 +227,8 @@
     "8928721002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"},
     "8928746002": {"t":"Lyft Business Customer Success Associate","f":"2026-11-04"},
     "8930012002": {"t":"Sr. Manager, GTM Strategy & Sales Packaging","f":"2026-11-05","g":"2026-11-09"},
-    "8930438002": {"t":"Growth Marketing Manager, Lifecycle","f":"2026-11-05"}
+    "8930438002": {"t":"Growth Marketing Manager, Lifecycle","f":"2026-11-05"},
+    "8931413002": {"t":"Data Engineer","f":"2026-11-11"},
+    "8936180002": {"t":"Senior Tax Analyst, Indirect Tax","f":"2026-11-11"}
   }
 }
