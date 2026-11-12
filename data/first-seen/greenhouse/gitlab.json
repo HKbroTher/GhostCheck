@@ -107,7 +107,7 @@
     "8773546002": {"t":"Site Reliability Engineer, Infrastructure Platforms — UK (Intermediate to Senior Staff)","f":"2026-10-24"},
     "8775136002": {"t":"Staff Backend Engineer, India","f":"2026-10-24"},
     "8775507002": {"t":"Intermediate Backend Engineer, India","f":"2026-10-24"},
-    "8778943002": {"t":"Senior Backend Engineer, Database Excellence (Ruby)","f":"2026-10-24"},
+    "8778943002": {"t":"Senior Backend Engineer, Database Excellence (Ruby)","f":"2026-10-24","g":"2026-11-12"},
     "8781299002": {"t":"Staff Software Engineer - NLP","f":"2026-11-02"},
     "8782153002": {"t":"Staff Security Researcher","f":"2026-10-24","g":"2026-10-28"},
     "8782306002": {"t":"Intermediate Security Engineer, Security Incident Response Team (SIRT)","f":"2026-10-24","g":"2026-10-27"},
@@ -303,6 +303,7 @@
     "8924789002": {"t":"Principal Executive Recruiter","f":"2026-11-04"},
     "8924841002": {"t":"Incident & Escalation Lead- Enterprise Customers","f":"2026-11-04"},
     "8924923002": {"t":"Intermediate Data Engineer","f":"2026-11-02"},
+    "8926105002": {"t":"Staff Backend Engineer, Performance Enablement","f":"2026-11-12"},
     "8926435002": {"t":"Senior Ecosystems Sales Manager: Scale, India","f":"2026-11-03"},
     "8927560002": {"t":"Senior Journey Architect","f":"2026-11-05"},
     "8927630002": {"t":"Principal Security GRC Manager, Legal Assurance (USA)","f":"2026-11-05"},
@@ -328,6 +329,10 @@
     "8932282002": {"t":"Business Development Representative, SLED - West","f":"2026-11-10"},
     "8933640002": {"t":"Principal Growth Marketing Strategist","f":"2026-11-07"},
     "8935860002": {"t":"Principal Revenue Strategist","f":"2026-11-11"},
+    "8936091002": {"t":"Senior Professional Services Project Manager, Paris","f":"2026-11-12"},
+    "8936142002": {"t":"Strategic Account Executive - Spain","f":"2026-11-12"},
+    "8936153002": {"t":"Staff Forward Deployed Engineer, EMEA","f":"2026-11-12"},
+    "8936156002": {"t":"Strategic Account Executive - Spain","f":"2026-11-12"},
     "8936287002": {"t":"Senior Lifecycle Marketing Manager","f":"2026-11-11"}
   }
 }
