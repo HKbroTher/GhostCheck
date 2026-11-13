@@ -30,8 +30,8 @@
     "8077679": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24"},
     "8080512": {"t":"Detection Engineer II","f":"2026-11-02"},
     "8080532": {"t":"Detection Engineer II","f":"2026-11-02"},
-    "8084089": {"t":"Staff Experience Designer","f":"2026-10-24"},
-    "8084090": {"t":"Staff Experience Designer","f":"2026-10-24"},
+    "8084089": {"t":"Staff Experience Designer","f":"2026-10-24","g":"2026-11-13"},
+    "8084090": {"t":"Staff Experience Designer","f":"2026-10-24","g":"2026-11-13"},
     "8084349": {"t":"Senior Engineering Manager, Core Picking","f":"2026-10-24","g":"2026-11-11"},
     "8084350": {"t":"Senior Engineering Manager, Core Picking","f":"2026-10-24","g":"2026-11-11"},
     "8112136": {"t":"Chief of Staff, Online Grocery","f":"2026-10-24","g":"2026-11-12"},
@@ -135,7 +135,7 @@
     "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"},
     "8347895": {"t":"Deal Desk Specialist","f":"2026-11-03"},
     "8347897": {"t":"Deal Desk Specialist","f":"2026-11-03"},
-    "8355990": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06","g":"2026-11-11"},
+    "8355990": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
     "8355992": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
     "8356128": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
     "8356130": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
@@ -150,7 +150,12 @@
     "8373034": {"t":"Senior Product Manager, Instacart Business - Growth","f":"2026-11-11"},
     "8373036": {"t":"Senior Product Manager, Instacart Business - Growth","f":"2026-11-11"},
     "8374809": {"t":"Principal Creative, Growth Production","f":"2026-11-11","g":"2026-11-12"},
+    "8374889": {"t":"Senior Customer Success Associate","f":"2026-11-13"},
     "8379400": {"t":"Senior IT Support Specialist","f":"2026-11-12"},
-    "8379682": {"t":"Senior Software Engineer, Catalog Store","f":"2026-11-12"}
+    "8379682": {"t":"Senior Software Engineer, Catalog Store","f":"2026-11-12"},
+    "8383331": {"t":"Security Incident Manager","f":"2026-11-13"},
+    "8383333": {"t":"Security Incident Manager","f":"2026-11-13"},
+    "8383513": {"t":"Sr Software Engineer II - Ads Manager (Front End)","f":"2026-11-13"},
+    "8384511": {"t":"Measurement Science Manager II","f":"2026-11-13"}
   }
 }

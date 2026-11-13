@@ -113,7 +113,7 @@
     "6200626004": {"t":"PhD Intern, Data Science (2027)","f":"2026-10-24"},
     "6201114004": {"t":"Director, Product Design - AI & Context","f":"2026-10-24"},
     "6201385004": {"t":"HRIS Analyst","f":"2026-10-24"},
-    "6201407004": {"t":"Data Platform Engineer","f":"2026-10-24"},
+    "6201407004": {"t":"Data Platform Engineer","f":"2026-10-24","g":"2026-11-13"},
     "6203089004": {"t":"Designer Advocate (Berlin, Germany)","f":"2026-10-24"},
     "6203783004": {"t":"Office Manager (São Paulo, Brazil)","f":"2026-10-24","g":"2026-10-29"},
     "6204360004": {"t":"Researcher - Rapid Research","f":"2026-10-24"},
@@ -147,11 +147,11 @@
     "6230952004": {"t":"Account Executive, Public Sector - State & Local","f":"2026-10-24"},
     "6231027004": {"t":"Product Designer, Core Experience","f":"2026-10-27"},
     "6231582004": {"t":"Developer Advocate, Payload","f":"2026-11-03"},
-    "6231832004": {"t":"Onboarding Manager, Customer Experience (Tokyo, Japan)","f":"2026-10-27"},
+    "6231832004": {"t":"Customer Activation Manager (Tokyo, Japan)","f":"2026-10-27"},
     "6231956004": {"t":"Account Executive, Enterprise (São Paulo, Brazil)","f":"2026-10-30"},
     "6232410004": {"t":"Business Systems Architect","f":"2026-10-27"},
     "6232422004": {"t":"Manager, Customer Enablement - Figma Weave (New York, United States)","f":"2026-10-27"},
-    "6232528004": {"t":"Director, Creative Brand Expression","f":"2026-11-10"},
+    "6232528004": {"t":"Creative Director, Brand Experience","f":"2026-11-10"},
     "6232541004": {"t":"Customer Success Manager - Figma Weave (New York, United States)","f":"2026-10-28"},
     "6232584004": {"t":"Customer Success Manager - Figma Weave  (London, United Kingdom)","f":"2026-10-27"},
     "6233040004": {"t":"Data & Integration Engineer, Business Systems","f":"2026-10-28"},
@@ -165,6 +165,7 @@
     "6237757004": {"t":"Manager, Software Engineering - UX Platform","f":"2026-10-29"},
     "6238015004": {"t":"PhD Intern, Security Engineer (2027)","f":"2026-10-29"},
     "6238252004": {"t":"Sales Recruiter (London, United Kingdom)","f":"2026-10-31"},
+    "6238480004": {"t":"Applied Data Researcher","f":"2026-11-13"},
     "6239153004": {"t":"People Partner","f":"2026-11-04"},
     "6239628004": {"t":"Technical Recruiter (London, United Kingdom)","f":"2026-11-03"},
     "6239959004": {"t":"Senior Account Executive - Figma Weave","f":"2026-11-07"},
@@ -177,6 +178,8 @@
     "6247174004": {"t":"Product Designer - Figma Weave (Tel Aviv, Israel)","f":"2026-11-10"},
     "6249978004": {"t":"Technical Operations & Insights Analyst","f":"2026-11-11"},
     "6250826004": {"t":"Senior Inside Sales Representative","f":"2026-11-11"},
-    "6251998004": {"t":"Strategic Finance","f":"2026-11-11"}
+    "6251998004": {"t":"Strategic Finance","f":"2026-11-11"},
+    "6253326004": {"t":"Manager, Recruiting - Engineering","f":"2026-11-13"},
+    "6256957004": {"t":"Executive Assistant, CEO","f":"2026-11-13"}
   }
 }

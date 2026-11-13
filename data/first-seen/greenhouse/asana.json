@@ -29,6 +29,7 @@
     "7962412": {"t":"Software Engineer, Data Loading Infrastructure","f":"2026-10-24","g":"2026-11-03"},
     "7964297": {"t":"Backend Software Engineer","f":"2026-10-24"},
     "7964316": {"t":"Senior Infrastructure Engineer (Software-Focused)","f":"2026-10-24"},
+    "7964317": {"t":"Senior Software Engineer, Platform Reliability","f":"2026-11-13"},
     "7964361": {"t":"Senior Backend Software Engineer","f":"2026-10-24"},
     "7964388": {"t":"Staff Software Engineer, AI Developer Experience","f":"2026-10-24"},
     "7964420": {"t":"Staff Software Engineer, Query and Access Control","f":"2026-10-24"},
@@ -79,7 +80,7 @@
     "8194506": {"t":"Senior Product Marketing Manager, Marketing & Operations Audiences","f":"2026-10-27"},
     "8194522": {"t":"Software Engineer - AI Teammates Platform","f":"2026-10-24","g":"2026-11-07"},
     "8201809": {"t":"Customer Success Manager - Named Accounts","f":"2026-10-24","g":"2026-11-10"},
-    "8204614": {"t":"Lead Product Manager, Enterprise Services Management","f":"2026-10-24"},
+    "8204614": {"t":"Lead Product Manager, Enterprise Services Management","f":"2026-10-24","g":"2026-11-13"},
     "8212172": {"t":"Senior Staff Software Engineer, Developer Productivity","f":"2026-10-24"},
     "8212344": {"t":"IT Support Specialist","f":"2026-10-24","g":"2026-11-06"},
     "8213887": {"t":"Lead Product Manager, Enterprise Services Management","f":"2026-10-24"},
@@ -108,7 +109,7 @@
     "8264096": {"t":"Senior Software Engineer","f":"2026-10-24"},
     "8268877": {"t":"Emerging Enterprise Account Executive, Healthcare","f":"2026-11-05"},
     "8275101": {"t":"Customer Enablement Manager","f":"2026-10-24"},
-    "8275149": {"t":"Data Scientist","f":"2026-10-24"},
+    "8275149": {"t":"Senior Data Scientist","f":"2026-10-24"},
     "8275152": {"t":"Senior Manager, Payroll","f":"2026-10-24"},
     "8279050": {"t":"Enterprise Account Executive (Korean Market)","f":"2026-10-24"},
     "8279085": {"t":"Emerging Enterprise Account Executive","f":"2026-10-24"},
@@ -146,8 +147,11 @@
     "8338202": {"t":"Lead Product Manager, APIs and MCP","f":"2026-11-06"},
     "8349347": {"t":"Customer Success Manager (AI Success Architect)","f":"2026-11-03"},
     "8355820": {"t":"Security Risk Engineer","f":"2026-11-06"},
-    "8356878": {"t":"Customer Marketing & Advocacy Manager","f":"2026-11-12"},
+    "8356878": {"t":"Customer Marketing & Advocacy Manager","f":"2026-11-12","g":"2026-11-13"},
     "8357119": {"t":"Workplace Lead","f":"2026-11-10"},
-    "8379094": {"t":"Customer Marketing & Advocacy Manager","f":"2026-11-12"}
+    "8369132": {"t":"Staff Product Designer, AI","f":"2026-11-13"},
+    "8379094": {"t":"Customer Marketing & Advocacy Manager","f":"2026-11-12"},
+    "8383867": {"t":"Partner Program Operations Manager","f":"2026-11-13"},
+    "8383870": {"t":"Partner Program Operations Manager","f":"2026-11-13"}
   }
 }
