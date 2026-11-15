@@ -275,7 +275,7 @@
     "8907694002": {"t":"Ecosystem Operations Specialist","f":"2026-10-24"},
     "8909192002": {"t":"Senior Manager, Total Rewards Operations","f":"2026-10-27"},
     "8909618002": {"t":"Staff Product Manager, Agentic Planning","f":"2026-10-24"},
-    "8911335002": {"t":"Senior Engagement Manager, PS Sales - EMEA","f":"2026-10-24"},
+    "8911335002": {"t":"Senior Engagement Manager, PS Sales - EMEA","f":"2026-10-24","g":"2026-11-15"},
     "8911684002": {"t":"Intermediate Fullstack Engineer (Ruby/Vue.js), Growth","f":"2026-10-24"},
     "8912709002": {"t":"Backend Engineer, Source Code: Repository Services (Ruby)","f":"2026-10-30"},
     "8912969002": {"t":"Recruiter, GTM (EMEA)","f":"2026-11-04"},
@@ -338,6 +338,10 @@
     "8936153002": {"t":"Staff Forward Deployed Engineer, EMEA","f":"2026-11-12"},
     "8936156002": {"t":"Strategic Account Executive - Spain","f":"2026-11-12"},
     "8936287002": {"t":"Senior Lifecycle Marketing Manager","f":"2026-11-11"},
-    "8937425002": {"t":"Senior Backend Engineer (Go), Tenant Scales: Gitaly","f":"2026-11-13"}
+    "8937425002": {"t":"Senior Backend Engineer (Go), Tenant Scales: Gitaly","f":"2026-11-13"},
+    "8937797002": {"t":"Customer Success Architect, NEUR","f":"2026-11-15"},
+    "8937803002": {"t":"Customer Success Architect, France","f":"2026-11-15"},
+    "8937825002": {"t":"Customer Success Engineer, EMEA","f":"2026-11-15"},
+    "8937862002": {"t":"Senior Engagement Manager - Professional Services Sales,  EMEA","f":"2026-11-15"}
   }
 }

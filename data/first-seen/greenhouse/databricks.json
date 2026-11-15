@@ -32,7 +32,7 @@
     "6545547002": {"t":"Solutions Architect - Manufacturing","f":"2026-10-24"},
     "6704975002": {"t":"Staff Fullstack Engineer","f":"2026-10-24"},
     "6709301002": {"t":"Senior Software Engineer (Backend)","f":"2026-10-24"},
-    "6716344002": {"t":"Staff Software Engineer (Core Experiences)","f":"2026-10-24"},
+    "6716344002": {"t":"Staff Software Engineer (Core Experiences)","f":"2026-10-24","g":"2026-11-15"},
     "6736119002": {"t":"Engineering Manager - Compute Infra","f":"2026-10-24"},
     "6779084002": {"t":"Senior Software Engineer - Backend","f":"2026-10-24"},
     "6779232002": {"t":"Staff Software Engineer - Backend","f":"2026-10-24"},
@@ -783,7 +783,7 @@
     "8807081002": {"t":"Sr. Forward Deployed Engineer (FDE) - Digital Native Business","f":"2026-10-24"},
     "8807797002": {"t":"Sr. Partner Solutions Architect - Customer Lake & Lakewatch","f":"2026-11-04"},
     "8808527002": {"t":"Enterprise Account Executive - Telecommunications","f":"2026-10-24"},
-    "8811059002": {"t":"Tech Sourcer (Contract)","f":"2026-11-07"},
+    "8811059002": {"t":"Tech Sourcer (Contract)","f":"2026-11-07","g":"2026-11-15"},
     "8811265002": {"t":"Sr. Product Manager, Lakebase/Lakehouse","f":"2026-10-24"},
     "8811713002": {"t":"Deputy Facility Security Officer","f":"2026-10-24"},
     "8813191002": {"t":"Enterprise Account Executive - China","f":"2026-10-24"},
@@ -1079,6 +1079,7 @@
     "8939231002": {"t":"Director, Enterprise (NSW)","f":"2026-11-13"},
     "8940421002": {"t":"Sr. Research Scientist - Agent Flywheel","f":"2026-11-13"},
     "8940488002": {"t":"Engineering Manager - Notebook Dataplane","f":"2026-11-13"},
-    "8940907002": {"t":"Sr. Engineering Manager - Developer Ecosystem","f":"2026-11-13"}
+    "8940907002": {"t":"Sr. Engineering Manager - Developer Ecosystem","f":"2026-11-13"},
+    "8944097002": {"t":"Staff Software Engineer (App-Framework)","f":"2026-11-15"}
   }
 }
