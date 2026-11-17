@@ -84,8 +84,8 @@
     "8236906": {"t":"Senior Data Scientist I - Meals","f":"2026-10-24","g":"2026-10-27"},
     "8237075": {"t":"Senior Data Scientist II - Ads Optimization","f":"2026-10-24","g":"2026-10-27"},
     "8237079": {"t":"Senior Data Scientist II - Ads Optimization","f":"2026-10-24","g":"2026-10-27"},
-    "8237126": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24"},
-    "8237127": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24"},
+    "8237126": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24","g":"2026-11-17"},
+    "8237127": {"t":"Senior Manager, Marketing Decision Science","f":"2026-10-24","g":"2026-11-17"},
     "8237393": {"t":"Sr Software Engineer II - Ads Manager (Front End)","f":"2026-10-24"},
     "8237985": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24","g":"2026-10-28"},
     "8237987": {"t":"Staff Android Engineer, Pick & Deliver","f":"2026-10-24","g":"2026-10-28"},
@@ -130,13 +130,13 @@
     "8315996": {"t":"Senior Software Engineer, Fulfillment","f":"2026-10-27"},
     "8336857": {"t":"Bilingual Customer Experience T3 Specialist (Spanish)","f":"2026-10-31"},
     "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31","g":"2026-11-10"},
-    "8337521": {"t":"Senior Manager, Technology Internal Audit","f":"2026-11-02"},
+    "8337521": {"t":"Senior Manager, Technology Internal Audit","f":"2026-11-02","g":"2026-11-17"},
     "8337522": {"t":"Senior Corporate Finance Manager","f":"2026-11-02","g":"2026-11-05"},
     "8337981": {"t":"Program Manager, Escalation Management","f":"2026-10-31"},
     "8347895": {"t":"Deal Desk Specialist","f":"2026-11-03"},
     "8347897": {"t":"Deal Desk Specialist","f":"2026-11-03"},
-    "8355990": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
-    "8355992": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06"},
+    "8355990": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06","g":"2026-11-17"},
+    "8355992": {"t":"Lifecycle Marketing Coordinator, CRM","f":"2026-11-06","g":"2026-11-17"},
     "8356128": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
     "8356130": {"t":"Principal Product Manager, Ads Quality","f":"2026-11-06"},
     "8356881": {"t":"Senior Data Scientist","f":"2026-11-06","g":"2026-11-09"},
@@ -157,6 +157,9 @@
     "8383333": {"t":"Security Incident Manager","f":"2026-11-13"},
     "8383513": {"t":"Sr Software Engineer II - Ads Manager (Front End)","f":"2026-11-13"},
     "8384511": {"t":"Measurement Science Manager II","f":"2026-11-13"},
-    "8386574": {"t":"Senior iOS Engineer","f":"2026-11-14"}
+    "8386574": {"t":"Senior iOS Engineer","f":"2026-11-14"},
+    "8394152": {"t":"Senior Product Designer II - Commerce & Retailer Platform","f":"2026-11-17"},
+    "8394157": {"t":"Senior Product Designer II - Commerce & Retailer Platform","f":"2026-11-17"},
+    "8394386": {"t":"Sales Engineer","f":"2026-11-17"}
   }
 }

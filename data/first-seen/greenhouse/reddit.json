@@ -90,7 +90,7 @@
     "8140121": {"t":"Senior Client Partner, Large Customer Sales (Big Box Retail)","f":"2026-10-24"},
     "8142128": {"t":"Director, Intellectual Property","f":"2026-10-24"},
     "8143677": {"t":"Community Manager, French Speaking (Contract)","f":"2026-10-24"},
-    "8143702": {"t":"Senior Growth Manager (Contract)","f":"2026-10-24","g":"2026-11-12"},
+    "8143702": {"t":"Senior Growth Manager (Contract)","f":"2026-10-24"},
     "8147559": {"t":"Front End Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8147617": {"t":"Senior Frontend Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8147802": {"t":"Senior Support Engineer, Snoo Operations & Support","f":"2026-10-24","g":"2026-10-29"},
@@ -100,7 +100,7 @@
     "8157275": {"t":"Senior Staff Machine Learning Systems Engineer, Ads ML Platform","f":"2026-10-24"},
     "8157580": {"t":"Senior Data Scientist, Ads Integrity","f":"2026-10-24","g":"2026-11-07"},
     "8167412": {"t":"Staff Product Manager, Ads Formats","f":"2026-10-24"},
-    "8168390": {"t":"Senior Community Lifecycle Manager","f":"2026-10-24"},
+    "8168390": {"t":"Senior Community Lifecycle Manager","f":"2026-10-24","g":"2026-11-17"},
     "8171546": {"t":"Senior Client Account Manager, App Dev Enterprise","f":"2026-10-24"},
     "8172457": {"t":"Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8175131": {"t":"Staff Software Engineer - Site Defense","f":"2026-10-24"},
@@ -163,7 +163,7 @@
     "8289304": {"t":"Revenue Strategy & Operations Partner","f":"2026-10-27"},
     "8289345": {"t":"Principal Data Scientist, User Ecosystem","f":"2026-10-24"},
     "8293700": {"t":"Senior Client Partner, Mid-Market Sales (Goods)","f":"2026-10-24"},
-    "8299781": {"t":"Machine Learning Engineer, Answers Relevance","f":"2026-10-24"},
+    "8299781": {"t":"Machine Learning Engineer, Answers Relevance","f":"2026-10-24","g":"2026-11-17"},
     "8301736": {"t":"Lead Forward Deployed Engineer (AI Enablement)","f":"2026-10-24"},
     "8301784": {"t":"Senior Forward Deployed Engineer (AI Enablement)","f":"2026-10-24"},
     "8302227": {"t":"Staff Community Product Marketing Manager, Trust & Safety","f":"2026-10-24","g":"2026-10-31"},
@@ -198,6 +198,8 @@
     "8369767": {"t":"Senior SRE, Site Experience","f":"2026-11-10"},
     "8372525": {"t":"Senior Manager, Mid-Market Sales (Signature Goods)","f":"2026-11-11"},
     "8379092": {"t":"Engineering Manager, Ranking Platform","f":"2026-11-12"},
-    "8382925": {"t":"Staff Machine Learning Engineer, Ads Foundational Representations","f":"2026-11-12"}
+    "8382925": {"t":"Staff Machine Learning Engineer, Ads Foundational Representations","f":"2026-11-12"},
+    "8393472": {"t":"Community Manager, French Speaking (Contract)","f":"2026-11-17"},
+    "8395504": {"t":"Manager, Business Risk and AI Automation","f":"2026-11-17"}
   }
 }
