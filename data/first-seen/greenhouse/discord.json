@@ -50,7 +50,7 @@
     "8846732002": {"t":"Software Engineer, Consumer Revenue","f":"2026-10-24","g":"2026-11-04"},
     "8847080002": {"t":"Group Product Manager, Data/ML","f":"2026-10-24"},
     "8856467002": {"t":"Senior Full-Stack Software Engineer, Engagement","f":"2026-10-24","g":"2026-11-05"},
-    "8865033002": {"t":"Strategic Finance Analyst","f":"2026-11-11"},
+    "8865033002": {"t":"Strategic Finance Analyst","f":"2026-11-11","g":"2026-11-19"},
     "8879502002": {"t":"Product Designer, Player Experiences","f":"2026-10-24","g":"2026-10-30"},
     "8881544002": {"t":"Senior Litigation Counsel","f":"2026-10-24"},
     "8885940002": {"t":"Engineering Manager, Notifications","f":"2026-10-24","g":"2026-11-04"},
@@ -60,6 +60,8 @@
     "8917177002": {"t":"Associate Commercial Counsel","f":"2026-11-04"},
     "8927168002": {"t":"Account Executive, Mobile Gaming & Apps","f":"2026-11-14"},
     "8933480002": {"t":"Senior Staff Brand Designer","f":"2026-11-07"},
-    "8935135002": {"t":"Manager, Sales - Tech & Telco","f":"2026-11-18"}
+    "8935135002": {"t":"Manager, Sales - Tech & Telco","f":"2026-11-18"},
+    "8945979002": {"t":"Staff Software Engineer, Safety Processing","f":"2026-11-19"},
+    "8948573002": {"t":"Staff Software Engineer, Safety Platform","f":"2026-11-19"}
   }
 }

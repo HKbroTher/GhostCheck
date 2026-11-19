@@ -17,7 +17,7 @@
     "5686511004": {"t":"Recruiting Coordinator (Contract)","f":"2026-10-24"},
     "5691965004": {"t":"Senior Legal Counsel, Product","f":"2026-10-24"},
     "5701765004": {"t":"Engineering Manager, CDN","f":"2026-10-24","g":"2026-10-31"},
-    "5732855004": {"t":"Site Engineer","f":"2026-10-24"},
+    "5732855004": {"t":"Software Engineer, Website","f":"2026-10-24"},
     "5752684004": {"t":"Forward-Deployed Engineer","f":"2026-10-24"},
     "5752956004": {"t":"Account Executive-Startups, EMEA (French or German Speaker)","f":"2026-10-24"},
     "5778418004": {"t":"Forward-Deployed Engineer","f":"2026-10-24"},
@@ -32,7 +32,7 @@
     "5855000004": {"t":"Strategic Finance Manager, Product","f":"2026-10-24"},
     "5971203004": {"t":"Startups Program Lead","f":"2026-10-24","g":"2026-10-28"},
     "5974107004": {"t":"Director, Commercial Sales, EMEA","f":"2026-10-24","g":"2026-11-05"},
-    "5979111004": {"t":"Head of Field Engineering Operations","f":"2026-10-24"},
+    "5979111004": {"t":"Head of Field Engineering Operations","f":"2026-10-24","g":"2026-11-19"},
     "5995789004": {"t":"Senior Manager, Solutions Architecture","f":"2026-10-24"},
     "5999792004": {"t":"Account Executive, Majors","f":"2026-10-24"},
     "6011651004": {"t":"Product Strategy & Operations","f":"2026-10-24","g":"2026-11-03"},
@@ -93,7 +93,7 @@
     "6218743004": {"t":"IT Systems Engineer","f":"2026-10-24"},
     "6221327004": {"t":"People Systems Manager, Workday","f":"2026-10-24"},
     "6222271004": {"t":"Senior Deal Desk Analyst, EMEA","f":"2026-10-24"},
-    "6225825004": {"t":"GTM Engineer","f":"2026-10-24"},
+    "6225825004": {"t":"GTM Engineer","f":"2026-10-24","g":"2026-11-19"},
     "6228301004": {"t":"Product Manager, Storage","f":"2026-10-24"},
     "6230763004": {"t":"Customer Support Engineer","f":"2026-10-24"},
     "6231045004": {"t":"Engineering Director, Vercel for Platforms","f":"2026-10-24"},
@@ -111,6 +111,7 @@
     "6248594004": {"t":"Manager, Startup Sales - Greenfield","f":"2026-11-05"},
     "6248603004": {"t":"Manager, Startup Sales - Install Base","f":"2026-11-05"},
     "6262094004": {"t":"Field Marketing Manager, Enterprise","f":"2026-11-18"},
-    "6262657004": {"t":"Senior Strategic Sourcing Manager - Engineering","f":"2026-11-17"}
+    "6262657004": {"t":"Senior Strategic Sourcing Manager - Engineering","f":"2026-11-17"},
+    "6264524004": {"t":"Software Engineer, Vercel Agent","f":"2026-11-19"}
   }
 }

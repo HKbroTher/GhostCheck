@@ -102,7 +102,7 @@
     "8249753": {"t":"Senior Design Program Manager II","f":"2026-10-24","g":"2026-11-11"},
     "8250324": {"t":"Account Manager","f":"2026-10-24"},
     "8250361": {"t":"Commercial Counsel","f":"2026-10-24"},
-    "8257641": {"t":"Bilingual CX Specialist (French)","f":"2026-10-24","g":"2026-11-07"},
+    "8257641": {"t":"Bilingual CX Specialist (French)","f":"2026-10-24"},
     "8263109": {"t":"Senior Manager, Machine Learning Engineering","f":"2026-10-31"},
     "8263161": {"t":"Sales Executive, Mid Market","f":"2026-10-24"},
     "8265981": {"t":"Director, AI Solutions Strategy & Planning","f":"2026-10-24"},
@@ -151,7 +151,7 @@
     "8373036": {"t":"Senior Product Manager, Instacart Business - Growth","f":"2026-11-11"},
     "8374809": {"t":"Principal Creative, Growth Production","f":"2026-11-11","g":"2026-11-12"},
     "8374889": {"t":"Senior Customer Success Associate","f":"2026-11-13"},
-    "8379400": {"t":"Senior IT Support Specialist","f":"2026-11-12"},
+    "8379400": {"t":"Senior IT Support Specialist","f":"2026-11-12","g":"2026-11-19"},
     "8379682": {"t":"Senior Software Engineer, Catalog Store","f":"2026-11-12"},
     "8383331": {"t":"Security Incident Manager","f":"2026-11-13"},
     "8383333": {"t":"Security Incident Manager","f":"2026-11-13"},
@@ -160,6 +160,8 @@
     "8386574": {"t":"Senior iOS Engineer","f":"2026-11-14"},
     "8394152": {"t":"Senior Product Designer II - Commerce & Retailer Platform","f":"2026-11-17"},
     "8394157": {"t":"Senior Product Designer II - Commerce & Retailer Platform","f":"2026-11-17"},
-    "8394386": {"t":"Sales Engineer","f":"2026-11-17"}
+    "8394386": {"t":"Sales Engineer","f":"2026-11-17"},
+    "8400955": {"t":"Insights Manager","f":"2026-11-19"},
+    "8400957": {"t":"Insights Manager","f":"2026-11-19"}
   }
 }

@@ -40,7 +40,7 @@
     "8001778": {"t":"Deputy Chief Regulatory Officer","f":"2026-10-24"},
     "8008569": {"t":"Senior Machine Learning Engineer, CX Intelligence","f":"2026-10-24"},
     "8013892": {"t":"Technical Program Manager, Knowledge Systems","f":"2026-10-24","g":"2026-11-07"},
-    "8013948": {"t":"Technical Program Manager, CX Intelligence & AI","f":"2026-10-24"},
+    "8013948": {"t":"Technical Program Manager, CX Intelligence & AI","f":"2026-10-24","g":"2026-11-19"},
     "8013951": {"t":"Prime Sales Trader","f":"2026-10-24"},
     "8017607": {"t":"Group Product Manager, Developer Infrastructure","f":"2026-10-24"},
     "8017697": {"t":"Senior Sourcing Analyst","f":"2026-10-24","g":"2026-11-10"},
@@ -199,7 +199,7 @@
     "8243517": {"t":"Senior Software Engineer, Backend (Retail DEX)","f":"2026-10-24"},
     "8243520": {"t":"Senior Software Engineer, Backend (Retail DEX)","f":"2026-10-24"},
     "8244259": {"t":"Head of KYC","f":"2026-10-24"},
-    "8247401": {"t":"Senior Software Engineer, Backend - Payments Platform","f":"2026-10-24"},
+    "8247401": {"t":"Senior Software Engineer, Backend - Payments Platform","f":"2026-10-24","g":"2026-11-19"},
     "8247881": {"t":"Group Product Manager, Customer Engagement & Experience","f":"2026-10-24"},
     "8248766": {"t":"Senior Software Engineer (Institutional, Financing)","f":"2026-10-24","g":"2026-11-06"},
     "8248775": {"t":"Broker Dealer Operations, Associate","f":"2026-10-24"},
@@ -239,6 +239,7 @@
     "8304034": {"t":"Senior Software Engineer","f":"2026-10-24"},
     "8304038": {"t":"Software Engineer - Crypto Data Foundations","f":"2026-10-24"},
     "8304052": {"t":"Senior Data Scientist, Platform","f":"2026-11-03","g":"2026-11-05"},
+    "8311332": {"t":"Institutional Sales Manager, Hedge Funds","f":"2026-11-19"},
     "8311335": {"t":"Sr Manager, Infrastructure Sales","f":"2026-10-24"},
     "8311341": {"t":"Product Manager II, Wallets and DeFi","f":"2026-10-27"},
     "8312623": {"t":"Regional Security Manager, APAC","f":"2026-10-27"},
@@ -308,6 +309,7 @@
     "8348153": {"t":"Staff Enterprise Architect","f":"2026-11-04"},
     "8348406": {"t":"Senior Product Manager, Risk","f":"2026-11-04"},
     "8348533": {"t":"Inbound Specialist II, Premium & Wealth","f":"2026-11-07"},
+    "8349028": {"t":"Senior Software Engineer, Native Mobile - International","f":"2026-11-19"},
     "8350017": {"t":"IT Support Engineer","f":"2026-11-04"},
     "8350050": {"t":"Senior Associate, Compliance Model Governance","f":"2026-11-04"},
     "8350362": {"t":"Customer Support Specialist ll","f":"2026-11-04","g":"2026-11-16"},
@@ -339,7 +341,7 @@
     "8375692": {"t":"Senior SAM Analyst","f":"2026-11-11"},
     "8375696": {"t":"Senior SAM Analyst","f":"2026-11-11"},
     "8376084": {"t":"Strategic Sourcing Intern","f":"2026-11-11"},
-    "8382331": {"t":"Product Manager I - International","f":"2026-11-13"},
+    "8382331": {"t":"Product Manager I - International","f":"2026-11-13","g":"2026-11-19"},
     "8382332": {"t":"Product Manager I","f":"2026-11-13","g":"2026-11-14"},
     "8382718": {"t":"Compliance, International Investigations Associate","f":"2026-11-12"},
     "8382720": {"t":"Compliance, International Investigations Associate","f":"2026-11-12"},
@@ -350,6 +352,7 @@
     "8394348": {"t":"Associate Manager, SOX and Internal Controls","f":"2026-11-18"},
     "8394402": {"t":"Senior Analytics Engineer","f":"2026-11-17","g":"2026-11-18"},
     "8394654": {"t":"Product Security Engineer, Offensive Security","f":"2026-11-17"},
-    "8395582": {"t":"Senior Software Engineer, Financial Integrity","f":"2026-11-17"}
+    "8395582": {"t":"Senior Software Engineer, Financial Integrity","f":"2026-11-17"},
+    "8397873": {"t":"Staff Product Designer, Onchain Yield & Investments","f":"2026-11-19"}
   }
 }

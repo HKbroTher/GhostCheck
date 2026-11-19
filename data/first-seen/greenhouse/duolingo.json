@@ -30,7 +30,7 @@
     "8701378002": {"t":"Senior Software Engineer, iOS, Monetization","f":"2026-10-24","g":"2026-11-18"},
     "8702288002": {"t":"Senior Software Engineer, Backend, Monetization","f":"2026-10-24"},
     "8702391002": {"t":"Senior Software Engineer, Android, Monetization","f":"2026-10-24"},
-    "8705196002": {"t":"Ad Sales Lead - West","f":"2026-10-24"},
+    "8705196002": {"t":"Ad Sales Lead - West","f":"2026-10-24","g":"2026-11-19"},
     "8722385002": {"t":"Senior Learning Designer, Indian Languages","f":"2026-10-24"},
     "8725638002": {"t":"Senior Engineering Manager, Product","f":"2026-10-24"},
     "8729596002": {"t":"Staff Product Designer, Monetization","f":"2026-10-24"},
@@ -42,7 +42,7 @@
     "8750527002": {"t":"Senior Data Scientist, User Growth","f":"2026-10-24","g":"2026-11-03"},
     "8750636002": {"t":"Senior Data Scientist, Growth Forecasting","f":"2026-10-24","g":"2026-11-18"},
     "8759720002": {"t":"Senior Marketing Analytics Manager","f":"2026-10-24"},
-    "8761234002": {"t":"Director of Ad Sales - West","f":"2026-10-24"},
+    "8761234002": {"t":"Director of Ad Sales - West","f":"2026-10-24","g":"2026-11-19"},
     "8761428002": {"t":"Senior Enterprise Engineer","f":"2026-10-24","g":"2026-11-14"},
     "8764849002": {"t":"Senior Engineering Manager, AI Platform","f":"2026-10-24","g":"2026-10-27"},
     "8778318002": {"t":"Senior Performance Marketing Manager","f":"2026-10-24","g":"2026-10-30"},
@@ -57,7 +57,7 @@
     "8875080002": {"t":"Staff Technical Program Manager, Growth","f":"2026-10-24"},
     "8881612002": {"t":"AI Research Engineer, New PhD Graduate","f":"2026-10-24"},
     "8883563002": {"t":"General Manager, India","f":"2026-10-24"},
-    "8888045002": {"t":"Product Manager, MBA Intern","f":"2026-10-24"},
+    "8888045002": {"t":"Product Manager, MBA Intern","f":"2026-10-24","g":"2026-11-19"},
     "8888721002": {"t":"Data Scientist, Intern","f":"2026-10-24","g":"2026-11-10"},
     "8888848002": {"t":"Data Scientist, Intern (PhD)","f":"2026-10-24"},
     "8891322002": {"t":"People Relations Business Partner","f":"2026-10-24"},
@@ -78,6 +78,7 @@
     "8935541002": {"t":"Staff Security Engineer","f":"2026-11-10"},
     "8939678002": {"t":"Strategic Finance & FP&A Manager","f":"2026-11-14"},
     "8942115002": {"t":"Language Measurement Scientist","f":"2026-11-14"},
-    "8943317002": {"t":"Associate Creative Director","f":"2026-11-14"}
+    "8943317002": {"t":"Associate Creative Director","f":"2026-11-14"},
+    "8951657002": {"t":"Head of Technical Recruiting","f":"2026-11-19"}
   }
 }
