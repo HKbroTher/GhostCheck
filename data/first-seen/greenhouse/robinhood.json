@@ -69,7 +69,7 @@
     "8107212": {"t":"Staff Machine Learning Engineer, AI Platform & Agentic Apps","f":"2026-10-24"},
     "8112333": {"t":"Knowledge & Operational Readiness Lead","f":"2026-10-24","g":"2026-10-27"},
     "8114730": {"t":"Staff Android Engineer","f":"2026-10-24"},
-    "8120094": {"t":"Software Engineer, Enterprise Build","f":"2026-11-04","g":"2026-11-19"},
+    "8120094": {"t":"Software Engineer, Enterprise Build","f":"2026-11-04"},
     "8120101": {"t":"Senior Software Engineer, Enterprise Build","f":"2026-10-24","g":"2026-11-05"},
     "8120681": {"t":"Data Solutions & Validation Sr. Specialist","f":"2026-10-24","g":"2026-11-11"},
     "8126312": {"t":"Senior Software Engineer, International","f":"2026-10-24","g":"2026-10-31"},
@@ -79,7 +79,7 @@
     "8144996": {"t":"Crypto Risk Lead","f":"2026-10-24","g":"2026-10-31"},
     "8159896": {"t":"Senior Product Designer, Prediction Markets","f":"2026-10-24"},
     "8160668": {"t":"Senior Product Designer, Trading","f":"2026-10-24"},
-    "8162169": {"t":"Customer Experience Manager, Robinhood Concierge","f":"2026-11-06"},
+    "8162169": {"t":"Customer Experience Manager, Robinhood Concierge","f":"2026-11-06","g":"2026-11-20"},
     "8162450": {"t":"Sanctions Crypto Investigator","f":"2026-10-28"},
     "8164459": {"t":"Staff Product Manager - Prediction Markets","f":"2026-10-24","g":"2026-10-29"},
     "8164884": {"t":"Financial Operations Manager","f":"2026-10-24","g":"2026-11-06"},
@@ -136,7 +136,7 @@
     "8226689": {"t":"Crypto Product Compliance Lead","f":"2026-10-24"},
     "8226972": {"t":"Fraud Investigations Analyst","f":"2026-10-24","g":"2026-11-13"},
     "8230730": {"t":"Customer Experience Representative, Trump Accounts","f":"2026-10-24","g":"2026-11-10"},
-    "8231449": {"t":"Director of Corporate Development","f":"2026-11-03"},
+    "8231449": {"t":"Director of Corporate Development","f":"2026-11-03","g":"2026-11-20"},
     "8232853": {"t":"Senior Software Engineer, Prime","f":"2026-10-24"},
     "8232855": {"t":"Senior Software Engineer, Prime","f":"2026-10-24","g":"2026-11-09"},
     "8238000": {"t":"Relationship Manager","f":"2026-10-24","g":"2026-11-04"},
@@ -159,7 +159,7 @@
     "8257655": {"t":"Senior Product Manager, Trading Tools","f":"2026-10-24"},
     "8258305": {"t":"Software Engineer, Web3 Backend","f":"2026-10-24"},
     "8258307": {"t":"Software Engineer, Web3 Backend","f":"2026-10-24"},
-    "8259035": {"t":"Compliance Advisory Lead","f":"2026-10-24"},
+    "8259035": {"t":"Compliance Advisory Lead","f":"2026-10-24","g":"2026-11-20"},
     "8259642": {"t":"AML Investigator","f":"2026-11-13"},
     "8259652": {"t":"Senior Physical Security Operations Manager","f":"2026-10-24"},
     "8259694": {"t":"Senior Technical Recruiter, Infrastructure","f":"2026-10-24"},
@@ -232,6 +232,8 @@
     "8384079": {"t":"Staff Product Manager, Prediction Markets","f":"2026-11-18"},
     "8384669": {"t":"Senior Software Engineer,  Government Products","f":"2026-11-13"},
     "8385931": {"t":"Software Engineer, Backend - Government Products","f":"2026-11-17"},
-    "8399778": {"t":"Crypto Compliance Senior Lead","f":"2026-11-19"}
+    "8394397": {"t":"Executive Sourcer","f":"2026-11-20"},
+    "8399778": {"t":"Crypto Compliance Senior Lead","f":"2026-11-19"},
+    "8402939": {"t":"Senior Technical Recruiter, GenEng","f":"2026-11-20"}
   }
 }

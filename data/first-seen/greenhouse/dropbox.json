@@ -5,6 +5,7 @@
   "since": "2026-10-24",
   "jobs": {
     "6330377": {"t":"Infrastructure Software Engineer","f":"2026-10-24","g":"2026-11-16"},
+    "6333181": {"t":"Senior Infrastructure Software Engineer","f":"2026-11-20"},
     "6449729": {"t":"Full Stack Product Software Engineer","f":"2026-10-30"},
     "7172701": {"t":"Backend Product Software Engineer","f":"2026-10-29"},
     "7172713": {"t":"Infrastructure Software Engineer","f":"2026-11-07"},
@@ -41,7 +42,7 @@
     "8286536": {"t":"Executive Assistant to the Chief Business Officer","f":"2026-10-24","g":"2026-10-26"},
     "8296377": {"t":"Learning Experience Designer","f":"2026-10-24","g":"2026-10-28"},
     "8328394": {"t":"Product Support Representative","f":"2026-11-03","g":"2026-11-07"},
-    "8328421": {"t":"Senior Infrastructure Software Engineer, Build & Test Toolchains","f":"2026-11-19"},
+    "8328421": {"t":"Senior Infrastructure Software Engineer, Build & Test Toolchains","f":"2026-11-19","g":"2026-11-20"},
     "8328469": {"t":"Legal Operations Associate","f":"2026-11-04"},
     "8328470": {"t":"Legal Operations Associate","f":"2026-11-06"},
     "8328476": {"t":"Stock Administrator","f":"2026-11-04"},
@@ -67,6 +68,7 @@
     "8374439": {"t":"Implementation Architect","f":"2026-11-14"},
     "8381085": {"t":"Senior Oracle Functional Lead - Record to Report","f":"2026-11-19"},
     "8381086": {"t":"Senior Oracle Functional Lead - Record to Report","f":"2026-11-19"},
+    "8393442": {"t":"APJ Communications Lead","f":"2026-11-20"},
     "8394046": {"t":"Infrastructure Software Engineer, Orchestration","f":"2026-11-19"}
   }
 }

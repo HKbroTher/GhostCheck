@@ -1,194 +1,194 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "boards": {
     "data/first-seen/ashby/linear.json": {
       "ats": "ashby",
       "slug": "linear",
       "open": 32,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/ashby/notion.json": {
       "ats": "ashby",
       "slug": "notion",
       "open": 169,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/ashby/openai.json": {
       "ats": "ashby",
       "slug": "openai",
-      "open": 833,
+      "open": 852,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/ashby/ramp.json": {
       "ats": "ashby",
       "slug": "ramp",
-      "open": 182,
+      "open": 185,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/ashby/supabase.json": {
       "ats": "ashby",
       "slug": "supabase",
-      "open": 77,
+      "open": 80,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/airbnb.json": {
       "ats": "greenhouse",
       "slug": "airbnb",
-      "open": 197,
+      "open": 201,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/airtable.json": {
       "ats": "greenhouse",
       "slug": "airtable",
       "open": 11,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/anthropic.json": {
       "ats": "greenhouse",
       "slug": "anthropic",
-      "open": 638,
+      "open": 640,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/asana.json": {
       "ats": "greenhouse",
       "slug": "asana",
-      "open": 116,
+      "open": 113,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/cloudflare.json": {
       "ats": "greenhouse",
       "slug": "cloudflare",
-      "open": 499,
+      "open": 497,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/coinbase.json": {
       "ats": "greenhouse",
       "slug": "coinbase",
-      "open": 255,
+      "open": 253,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/databricks.json": {
       "ats": "greenhouse",
       "slug": "databricks",
-      "open": 908,
+      "open": 897,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/discord.json": {
       "ats": "greenhouse",
       "slug": "discord",
-      "open": 27,
+      "open": 29,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/dropbox.json": {
       "ats": "greenhouse",
       "slug": "dropbox",
-      "open": 46,
+      "open": 47,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/duolingo.json": {
       "ats": "greenhouse",
       "slug": "duolingo",
-      "open": 55,
+      "open": 54,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/figma.json": {
       "ats": "greenhouse",
       "slug": "figma",
-      "open": 143,
+      "open": 146,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/gitlab.json": {
       "ats": "greenhouse",
       "slug": "gitlab",
-      "open": 246,
+      "open": 244,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/instacart.json": {
       "ats": "greenhouse",
       "slug": "instacart",
       "open": 85,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/lyft.json": {
       "ats": "greenhouse",
       "slug": "lyft",
-      "open": 147,
+      "open": 144,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/pinterest.json": {
       "ats": "greenhouse",
       "slug": "pinterest",
-      "open": 173,
+      "open": 175,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/reddit.json": {
       "ats": "greenhouse",
       "slug": "reddit",
-      "open": 145,
+      "open": 147,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/robinhood.json": {
       "ats": "greenhouse",
       "slug": "robinhood",
       "open": 165,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/stripe.json": {
       "ats": "greenhouse",
       "slug": "stripe",
-      "open": 782,
+      "open": 774,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/greenhouse/vercel.json": {
       "ats": "greenhouse",
       "slug": "vercel",
       "open": 86,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/lever/palantir.json": {
       "ats": "lever",
       "slug": "palantir",
-      "open": 308,
+      "open": 306,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/lever/spotify.json": {
       "ats": "lever",
       "slug": "spotify",
-      "open": 91,
+      "open": 90,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     },
     "data/first-seen/workable/sakana-ai.json": {
       "ats": "workable",
       "slug": "sakana-ai",
       "open": 26,
       "since": "2026-10-24",
-      "checked": "2026-11-19"
+      "checked": "2026-11-20"
     }
   }
 }

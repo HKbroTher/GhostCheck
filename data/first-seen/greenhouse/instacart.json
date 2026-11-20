@@ -126,7 +126,7 @@
     "8304279": {"t":"Senior Software Engineer II - Enterprise Foundations","f":"2026-10-24"},
     "8304487": {"t":"Senior Software Engineer - Ads Manager","f":"2026-10-24","g":"2026-11-14"},
     "8304802": {"t":"Associate Manager, Influencer Marketing","f":"2026-10-24","g":"2026-10-28"},
-    "8304832": {"t":"Social Content Producer","f":"2026-10-24"},
+    "8304832": {"t":"Social Content Producer","f":"2026-10-24","g":"2026-11-20"},
     "8315996": {"t":"Senior Software Engineer, Fulfillment","f":"2026-10-27"},
     "8336857": {"t":"Bilingual Customer Experience T3 Specialist (Spanish)","f":"2026-10-31"},
     "8336883": {"t":"Customer Experience T3 Specialist","f":"2026-10-31","g":"2026-11-10"},
@@ -162,6 +162,7 @@
     "8394157": {"t":"Senior Product Designer II - Commerce & Retailer Platform","f":"2026-11-17"},
     "8394386": {"t":"Sales Engineer","f":"2026-11-17"},
     "8400955": {"t":"Insights Manager","f":"2026-11-19"},
-    "8400957": {"t":"Insights Manager","f":"2026-11-19"}
+    "8400957": {"t":"Insights Manager","f":"2026-11-19"},
+    "8403432": {"t":"Applied Scientist II - Advertiser Optimization","f":"2026-11-20"}
   }
 }
