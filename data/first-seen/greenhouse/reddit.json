@@ -10,8 +10,8 @@
     "6909093": {"t":"Senior Software Engineer, Ads","f":"2026-10-24"},
     "6960831": {"t":"Senior Machine Learning Engineer","f":"2026-10-24"},
     "6960833": {"t":"Senior Machine Learning Engineer","f":"2026-10-24"},
-    "7131932": {"t":"Machine Learning Engineer","f":"2026-10-24"},
-    "7131934": {"t":"Machine Learning Engineer","f":"2026-10-24"},
+    "7131932": {"t":"Machine Learning Engineer","f":"2026-10-24","g":"2026-11-21"},
+    "7131934": {"t":"Machine Learning Engineer","f":"2026-10-24","g":"2026-11-21"},
     "7330347": {"t":"Principal Data Scientist, Ads","f":"2026-10-24"},
     "7445240": {"t":"Staff Data Scientist, Marketing","f":"2026-10-24"},
     "7511679": {"t":"Senior Software Engineer, Storage","f":"2026-10-24","g":"2026-11-12"},
@@ -170,7 +170,7 @@
     "8301784": {"t":"Senior Forward Deployed Engineer (AI Enablement)","f":"2026-10-24"},
     "8302227": {"t":"Staff Community Product Marketing Manager, Trust & Safety","f":"2026-10-24","g":"2026-10-31"},
     "8303511": {"t":"Senior Director of Design, Search & Feeds","f":"2026-10-27"},
-    "8303790": {"t":"Client Account Manager, Mid-Market Sales (Goods)","f":"2026-10-24"},
+    "8303790": {"t":"Client Account Manager, Mid-Market Sales (Goods)","f":"2026-10-24","g":"2026-11-21"},
     "8303798": {"t":"Senior Software Engineer, Web Platform","f":"2026-10-24"},
     "8304463": {"t":"Senior Machine Learning Engineer, Ads ML Efficiency","f":"2026-10-24"},
     "8311209": {"t":"Staff Software Engineer, iOS Platform","f":"2026-10-24"},
@@ -207,9 +207,13 @@
     "8395504": {"t":"Manager, Business Risk and AI Automation","f":"2026-11-17"},
     "8396679": {"t":"Lead Client Partner, Large Customer Sales (Tech / AI)","f":"2026-11-18"},
     "8399227": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
+    "8399795": {"t":"Lead Client Partner, Large Customer Sales (AUS)","f":"2026-11-21"},
     "8399813": {"t":"Senior Client Account Manager, Large Customer Sales (AUS)","f":"2026-11-19"},
+    "8399817": {"t":"Principal Engineer, Security","f":"2026-11-21"},
+    "8400056": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"},
     "8406144": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8406146": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
-    "8406151": {"t":"Manager, Creative Strategy","f":"2026-11-20"}
+    "8406151": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
+    "8407162": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"}
   }
 }

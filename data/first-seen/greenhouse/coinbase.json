@@ -24,7 +24,7 @@
     "7746572": {"t":"Communications Manager, Policy & Public Affairs","f":"2026-10-24"},
     "7773776": {"t":"Staff Software Engineer (Platform - Identity IDV)","f":"2026-10-24"},
     "7812407": {"t":"Senior Software Engineer - Data Platform","f":"2026-10-24"},
-    "7822885": {"t":"Accounting Manager, GL Operations & Intercompany","f":"2026-10-24"},
+    "7822885": {"t":"Corporate Accounting Manager","f":"2026-10-24"},
     "7891045": {"t":"Staff Machine Learning Engineer(Platform - Identity)","f":"2026-10-24"},
     "7930686": {"t":"Senior Software Engineer, Backend (Consumer - Risk)","f":"2026-10-24"},
     "7948222": {"t":"Senior Manager, Finance & Strategy","f":"2026-10-24"},
@@ -224,7 +224,7 @@
     "8275226": {"t":"Senior Engineering Manager, AI Foundations","f":"2026-10-24"},
     "8275465": {"t":"Counsel, Employment","f":"2026-10-24"},
     "8278991": {"t":"Software Engineer-1, Money Movement","f":"2026-11-10"},
-    "8279479": {"t":"Software Engineer, Enterprise Apps","f":"2026-10-24"},
+    "8279479": {"t":"Software Engineer, Enterprise Apps","f":"2026-10-24","g":"2026-11-21"},
     "8280149": {"t":"Senior Product Designer, Platform","f":"2026-10-24"},
     "8281622": {"t":"Analyst, Privacy (Privacy Assessments)","f":"2026-10-24"},
     "8285182": {"t":"Senior Frontend Engineer, Portfolio","f":"2026-10-24"},
@@ -235,7 +235,7 @@
     "8289798": {"t":"Senior Complaints Analyst","f":"2026-10-24"},
     "8292793": {"t":"Senior Machine Learning Engineer, CX","f":"2026-10-24"},
     "8301285": {"t":"Senior Product Designer, Developer Foundations","f":"2026-10-24"},
-    "8302189": {"t":"Staff Software Enginer, Backend - Payments Platform","f":"2026-10-24"},
+    "8302189": {"t":"Staff Software Enginer, Backend - Payments Platform","f":"2026-10-24","g":"2026-11-21"},
     "8304034": {"t":"Senior Software Engineer","f":"2026-10-24"},
     "8304038": {"t":"Software Engineer - Crypto Data Foundations","f":"2026-10-24"},
     "8304052": {"t":"Senior Data Scientist, Platform","f":"2026-11-03","g":"2026-11-05"},
@@ -356,6 +356,7 @@
     "8395582": {"t":"Senior Software Engineer, Financial Integrity","f":"2026-11-17"},
     "8397873": {"t":"Staff Product Designer, Onchain Yield & Investments","f":"2026-11-19"},
     "8402367": {"t":"International Expansion Operations Associate","f":"2026-11-20"},
-    "8402798": {"t":"Senior Product Creative Designer","f":"2026-11-20"}
+    "8402798": {"t":"Senior Product Creative Designer","f":"2026-11-20"},
+    "8406680": {"t":"Senior SEC Reporting Accountant","f":"2026-11-21"}
   }
 }

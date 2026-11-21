@@ -69,7 +69,7 @@
     "8107212": {"t":"Staff Machine Learning Engineer, AI Platform & Agentic Apps","f":"2026-10-24"},
     "8112333": {"t":"Knowledge & Operational Readiness Lead","f":"2026-10-24","g":"2026-10-27"},
     "8114730": {"t":"Staff Android Engineer","f":"2026-10-24"},
-    "8120094": {"t":"Software Engineer, Enterprise Build","f":"2026-11-04"},
+    "8120094": {"t":"Software Engineer, Enterprise Build","f":"2026-11-04","g":"2026-11-21"},
     "8120101": {"t":"Senior Software Engineer, Enterprise Build","f":"2026-10-24","g":"2026-11-05"},
     "8120681": {"t":"Data Solutions & Validation Sr. Specialist","f":"2026-10-24","g":"2026-11-11"},
     "8126312": {"t":"Senior Software Engineer, International","f":"2026-10-24","g":"2026-10-31"},
@@ -132,7 +132,7 @@
     "8224764": {"t":"Overnight Customer Experience Representative, Brokerage Services","f":"2026-10-24"},
     "8224805": {"t":"Overnight Customer Experience Representative, Concierge","f":"2026-10-24"},
     "8224813": {"t":"Overnight Customer Experience Representative, Advanced Services","f":"2026-10-24"},
-    "8226687": {"t":"Chief Compliance Officer, UK","f":"2026-10-24"},
+    "8226687": {"t":"Chief Compliance Officer, UK","f":"2026-10-24","g":"2026-11-21"},
     "8226689": {"t":"Crypto Product Compliance Lead","f":"2026-10-24"},
     "8226972": {"t":"Fraud Investigations Analyst","f":"2026-10-24","g":"2026-11-13"},
     "8230730": {"t":"Customer Experience Representative, Trump Accounts","f":"2026-10-24","g":"2026-11-10"},
@@ -152,7 +152,7 @@
     "8250279": {"t":"Manager of Accounts Payable","f":"2026-10-24","g":"2026-11-17"},
     "8250286": {"t":"Internal Audit Senior Manager, Crypto","f":"2026-10-24"},
     "8250300": {"t":"Senior Manager, Valuation","f":"2026-10-24"},
-    "8250341": {"t":"IT Financial Compliance Senior Manager","f":"2026-10-24"},
+    "8250341": {"t":"IT Financial Compliance Senior Manager","f":"2026-10-24","g":"2026-11-21"},
     "8255840": {"t":"Senior Software Engineer, Web3 Backend","f":"2026-10-24"},
     "8255842": {"t":"Senior Software Engineer, Web3 Backend","f":"2026-10-24"},
     "8257636": {"t":"Senior Product Manager, Money Movement Experiences","f":"2026-10-27"},
@@ -162,8 +162,8 @@
     "8259035": {"t":"Compliance Advisory Lead","f":"2026-10-24","g":"2026-11-20"},
     "8259642": {"t":"AML Investigator","f":"2026-11-13"},
     "8259652": {"t":"Senior Physical Security Operations Manager","f":"2026-10-24"},
-    "8259694": {"t":"Senior Technical Recruiter, Infrastructure","f":"2026-10-24"},
-    "8259696": {"t":"Senior Technical Recruiter, Infrastructure","f":"2026-10-24"},
+    "8259694": {"t":"Senior Technical Recruiter, Infrastructure","f":"2026-10-24","g":"2026-11-21"},
+    "8259696": {"t":"Senior Technical Recruiter, Infrastructure","f":"2026-10-24","g":"2026-11-21"},
     "8259772": {"t":"Director of Risk, Brokerage","f":"2026-10-24"},
     "8262110": {"t":"Cashiering Support Associate","f":"2026-10-24","g":"2026-11-07"},
     "8262776": {"t":"Senior Product Designer, Crypto","f":"2026-10-24"},
@@ -234,6 +234,9 @@
     "8385931": {"t":"Software Engineer, Backend - Government Products","f":"2026-11-17"},
     "8394397": {"t":"Executive Sourcer","f":"2026-11-20"},
     "8399778": {"t":"Crypto Compliance Senior Lead","f":"2026-11-19"},
-    "8402939": {"t":"Senior Technical Recruiter, GenEng","f":"2026-11-20"}
+    "8400286": {"t":"Events Marketing Manager","f":"2026-11-21"},
+    "8402673": {"t":"Internal Audit Manager","f":"2026-11-21"},
+    "8402939": {"t":"Senior Technical Recruiter, GenEng","f":"2026-11-20"},
+    "8404475": {"t":"Education Lead","f":"2026-11-21"}
   }
 }

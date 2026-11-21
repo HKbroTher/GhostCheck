@@ -6,7 +6,7 @@
   "jobs": {
     "8402813002": {"t":"Applied Scientist- Pricing, Dynamic Pricing & Offer Selection","f":"2026-10-24","g":"2026-10-31"},
     "8430552002": {"t":"Senior Machine Learning Engineer, Recommendations","f":"2026-10-24"},
-    "8445493002": {"t":"Senior Software Engineer, Lyft Business","f":"2026-10-24","g":"2026-11-20"},
+    "8445493002": {"t":"Senior Software Engineer, Lyft Business","f":"2026-10-24"},
     "8483261002": {"t":"Business Systems Engineer, Oracle STP","f":"2026-10-24","g":"2026-11-05"},
     "8503985002": {"t":"Analytics Lead, Market Insights","f":"2026-10-24"},
     "8514422002": {"t":"Senior Analyst, Executive Chauffeur (Alcove)","f":"2026-10-31","g":"2026-11-06"},
@@ -256,6 +256,9 @@
     "8950105002": {"t":"Développeur(se) Logiciel Android, Lyft Solutions Urbaines","f":"2026-11-19"},
     "8952091002": {"t":"Engineering Manager, Business Travel","f":"2026-11-20"},
     "8952093002": {"t":"Senior Technical Program Manager, Finance (Quote to Cash)","f":"2026-11-20"},
-    "8952244002": {"t":"People Business Partner","f":"2026-11-20"}
+    "8952244002": {"t":"People Business Partner","f":"2026-11-20"},
+    "8952328002": {"t":"Account Manager, Lyft Ads","f":"2026-11-21"},
+    "8957556002": {"t":"Director, Data Science, EU","f":"2026-11-21"},
+    "8957597002": {"t":"Senior Director, Infrastructure Engineering","f":"2026-11-21"}
   }
 }
