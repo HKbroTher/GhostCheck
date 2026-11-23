@@ -29,7 +29,7 @@
     "7950520": {"t":"Senior Software Engineer - DevX","f":"2026-10-24"},
     "7954001": {"t":"Staff Technical Product Manager, Ads ML Platform","f":"2026-10-24","g":"2026-11-14"},
     "7954598": {"t":"Senior Business Engineer - Ads","f":"2026-10-24","g":"2026-11-09"},
-    "7957771": {"t":"Principal, Consumer Insights","f":"2026-10-24"},
+    "7957771": {"t":"Principal, Consumer Insights","f":"2026-10-24","g":"2026-11-23"},
     "7961154": {"t":"Staff Software Engineer, Onboarding","f":"2026-10-24"},
     "7974605": {"t":"Senior Staff Data Scientist, Consumer Relevance","f":"2026-10-24"},
     "7980795": {"t":"Senior Software Engineer, Agentic Ads Experience","f":"2026-10-24"},
@@ -139,7 +139,7 @@
     "8238227": {"t":"Staff Product Manager, Youth","f":"2026-10-24","g":"2026-11-10"},
     "8240716": {"t":"Frontend Engineer, Ads Campaign Manager","f":"2026-10-24"},
     "8243010": {"t":"Senior Staff Machine Learning Engineer, ML Understanding","f":"2026-10-24"},
-    "8244067": {"t":"Strategic Finance Senior Manager","f":"2026-10-24"},
+    "8244067": {"t":"Strategic Finance Senior Manager","f":"2026-10-24","g":"2026-11-23"},
     "8244090": {"t":"Senior Client Partner, Large Customer Sales (Tech)","f":"2026-10-24","g":"2026-11-06"},
     "8247280": {"t":"Staff Machine Learning Engineer, Ads ML Efficiency","f":"2026-10-24"},
     "8249259": {"t":"Chief of Staff, Global Sales","f":"2026-10-24"},
@@ -206,6 +206,7 @@
     "8393472": {"t":"Community Manager, French Speaking (Contract)","f":"2026-11-17","g":"2026-11-18"},
     "8395504": {"t":"Manager, Business Risk and AI Automation","f":"2026-11-17"},
     "8396679": {"t":"Lead Client Partner, Large Customer Sales (Tech / AI)","f":"2026-11-18"},
+    "8398820": {"t":"Senior Client Partner, Large Customer Sales – DACH","f":"2026-11-23"},
     "8399227": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8399795": {"t":"Lead Client Partner, Large Customer Sales (AUS)","f":"2026-11-21"},
     "8399813": {"t":"Senior Client Account Manager, Large Customer Sales (AUS)","f":"2026-11-19"},
@@ -214,6 +215,7 @@
     "8406144": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8406146": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8406151": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
-    "8407162": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"}
+    "8407162": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"},
+    "8411613": {"t":"Senior Software Engineer, AI & Science Platform","f":"2026-11-23"}
   }
 }
