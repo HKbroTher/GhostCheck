@@ -53,7 +53,7 @@
     "6119846004": {"t":"Head of Solutions Architecture, Startups","f":"2026-10-24"},
     "6120051004": {"t":"Head of Professional Services","f":"2026-10-24"},
     "6121381004": {"t":"Senior Technical Account Manager","f":"2026-10-24"},
-    "6121468004": {"t":"Senior Manager, Accounting (India)","f":"2026-10-24"},
+    "6121468004": {"t":"Senior Manager, Accounting (India)","f":"2026-10-24","g":"2026-11-24"},
     "6122437004": {"t":"DevRel Engineer, Agentic Infrastructure","f":"2026-10-24"},
     "6122619004": {"t":"Senior Integrated Campaigns Manager","f":"2026-10-24"},
     "6123443004": {"t":"Commercial Account Executive, Install Base","f":"2026-10-24"},
@@ -82,7 +82,7 @@
     "6195280004": {"t":"Software Engineer, Platform","f":"2026-10-24"},
     "6196563004": {"t":"Senior Accountant","f":"2026-10-24"},
     "6199608004": {"t":"Software Engineer, Agentic Infrastructure","f":"2026-10-24"},
-    "6200325004": {"t":"Legal Counsel - Commercial","f":"2026-10-24"},
+    "6200325004": {"t":"Legal Counsel - Commercial","f":"2026-10-24","g":"2026-11-24"},
     "6201179004": {"t":"Partner Solutions Engineer","f":"2026-10-24"},
     "6201403004": {"t":"Senior Recruiter","f":"2026-10-24"},
     "6205772004": {"t":"Product Manager, Dashboard","f":"2026-10-24"},
@@ -114,6 +114,7 @@
     "6262094004": {"t":"Field Marketing Manager, Enterprise","f":"2026-11-18"},
     "6262657004": {"t":"Senior Strategic Sourcing Manager - Engineering","f":"2026-11-17"},
     "6264524004": {"t":"Software Engineer, Vercel Agent","f":"2026-11-19"},
-    "6268187004": {"t":"Director, Partner Marketing","f":"2026-11-21"}
+    "6268187004": {"t":"Director, Partner Marketing","f":"2026-11-21"},
+    "6269284004": {"t":"Manager, Technical Account Management","f":"2026-11-24"}
   }
 }

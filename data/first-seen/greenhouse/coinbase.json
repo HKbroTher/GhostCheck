@@ -53,7 +53,7 @@
     "8030686": {"t":"Risk & Monitoring Analyst IV","f":"2026-10-24"},
     "8031260": {"t":"Machine Learning Engineer, CX Intelligence","f":"2026-10-24"},
     "8031308": {"t":"Concierge Specialist IV","f":"2026-10-24"},
-    "8047150": {"t":"Staff Analytics Engineer","f":"2026-10-31"},
+    "8047150": {"t":"Staff Analytics Engineer","f":"2026-10-31","g":"2026-11-24"},
     "8049976": {"t":"Risk & Monitoring Analyst IV","f":"2026-11-13"},
     "8051513": {"t":"Senior Onchain Investigator","f":"2026-10-24"},
     "8054055": {"t":"Senior IT Automation Engineer","f":"2026-10-24"},
@@ -177,7 +177,7 @@
     "8224901": {"t":"Senior Counsel, Business Legal","f":"2026-10-24","g":"2026-11-10"},
     "8224979": {"t":"Senior Accountant","f":"2026-10-24"},
     "8227393": {"t":"Associate General Counsel, Privacy","f":"2026-10-24","g":"2026-10-27"},
-    "8230848": {"t":"Senior Strategic Program Lead, GFCO","f":"2026-10-24"},
+    "8230848": {"t":"Senior Strategic Program Lead, GFCO","f":"2026-10-24","g":"2026-11-24"},
     "8232211": {"t":"Senior Strategic Program Manager","f":"2026-10-24"},
     "8232451": {"t":"Compliance, Senior Associate","f":"2026-10-24"},
     "8233500": {"t":"Staff Software Engineer, Developer Infrastructure","f":"2026-10-24"},
@@ -357,6 +357,7 @@
     "8397873": {"t":"Staff Product Designer, Onchain Yield & Investments","f":"2026-11-19"},
     "8402367": {"t":"International Expansion Operations Associate","f":"2026-11-20"},
     "8402798": {"t":"Senior Product Creative Designer","f":"2026-11-20"},
-    "8406680": {"t":"Senior SEC Reporting Accountant","f":"2026-11-21"}
+    "8406680": {"t":"Senior SEC Reporting Accountant","f":"2026-11-21"},
+    "8412539": {"t":"Executive Assistant","f":"2026-11-24"}
   }
 }

@@ -81,7 +81,7 @@
     "8122606": {"t":"Senior Staff Machine Learning Engineer, Feed Relevance","f":"2026-10-24"},
     "8122887": {"t":"Principal UX Engineer, Ads","f":"2026-10-24"},
     "8125507": {"t":"Senior Machine Learning Manager, Video Ranking","f":"2026-10-24"},
-    "8125836": {"t":"Senior Principal Program Manager, GTM Excellence","f":"2026-10-24"},
+    "8125836": {"t":"Senior Principal Program Manager, GTM Excellence","f":"2026-10-24","g":"2026-11-24"},
     "8126946": {"t":"Senior Data Scientist - Consumer","f":"2026-10-28"},
     "8127002": {"t":"Staff Android Engineer, Brand Ad Formats","f":"2026-10-24","g":"2026-11-06"},
     "8128860": {"t":"Senior Backend Engineer, Compliance Engineering","f":"2026-10-24"},
@@ -216,6 +216,7 @@
     "8406146": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8406151": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8407162": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"},
+    "8407605": {"t":"Senior Client Partner, Large Customer Sales (Retail)","f":"2026-11-24"},
     "8411613": {"t":"Senior Software Engineer, AI & Science Platform","f":"2026-11-23"}
   }
 }

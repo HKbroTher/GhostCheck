@@ -54,6 +54,10 @@
     "8328537": {"t":"Security Engineer, IAM","f":"2026-11-11"},
     "8328546": {"t":"Senior Security Engineer, AI Security","f":"2026-11-11"},
     "8328549": {"t":"Senior Security Engineer, AI Security","f":"2026-11-11"},
+    "8328556": {"t":"Senior Security Engineer, Offensive Security","f":"2026-11-24"},
+    "8328561": {"t":"Senior Security Engineer, Offensive Security","f":"2026-11-24"},
+    "8328568": {"t":"Security Engineer, Offensive Security","f":"2026-11-24"},
+    "8328573": {"t":"Security Engineer, Offensive Security","f":"2026-11-24"},
     "8353167": {"t":"Senior Account Executive - ANZ","f":"2026-11-16"},
     "8356282": {"t":"Director, Data Science & Engineering, Finance","f":"2026-11-06"},
     "8356674": {"t":"GTM Program Manager","f":"2026-11-11"},
@@ -66,9 +70,13 @@
     "8371054": {"t":"Senior Full Stack Product Software Engineer, Application Platform","f":"2026-11-19"},
     "8374438": {"t":"Implementation Architect","f":"2026-11-14"},
     "8374439": {"t":"Implementation Architect","f":"2026-11-14"},
+    "8380185": {"t":"Region Head, Asia","f":"2026-11-24"},
+    "8380192": {"t":"Partner Sales Manager (Hindi Speaking) - Singapore","f":"2026-11-24"},
     "8381085": {"t":"Senior Oracle Functional Lead - Record to Report","f":"2026-11-19"},
     "8381086": {"t":"Senior Oracle Functional Lead - Record to Report","f":"2026-11-19"},
-    "8393442": {"t":"APJ Communications Lead","f":"2026-11-20"},
+    "8386724": {"t":"Financial Reporting & Technical Accounting Sr Analyst","f":"2026-11-24"},
+    "8386725": {"t":"Financial Reporting & Technical Accounting Sr Analyst","f":"2026-11-24"},
+    "8393442": {"t":"APJ Communications Lead","f":"2026-11-20","g":"2026-11-24"},
     "8394046": {"t":"Infrastructure Software Engineer, Orchestration","f":"2026-11-19"}
   }
 }
