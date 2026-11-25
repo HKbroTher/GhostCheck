@@ -75,7 +75,7 @@
     "8188918": {"t":"Senior Security Technical Program Manager","f":"2026-10-24"},
     "8189390": {"t":"Revenue Manager","f":"2026-10-24","g":"2026-11-10"},
     "8189734": {"t":"Renewals Manager","f":"2026-10-24"},
-    "8193555": {"t":"Head of Research","f":"2026-10-24"},
+    "8193555": {"t":"Head of Research","f":"2026-10-24","g":"2026-11-25"},
     "8194380": {"t":"AI GTM Account Executive","f":"2026-10-24"},
     "8194410": {"t":"Technical Consultant","f":"2026-10-24"},
     "8194506": {"t":"Senior Product Marketing Manager, Marketing & Operations Audiences","f":"2026-10-27"},
@@ -158,12 +158,14 @@
     "8357334": {"t":"SMB Account Executive","f":"2026-11-17"},
     "8367544": {"t":"Head of Content Design","f":"2026-11-17"},
     "8369132": {"t":"Staff Product Designer, AI","f":"2026-11-13"},
+    "8369137": {"t":"Staff Product Designer","f":"2026-11-25"},
     "8370078": {"t":"Software Engineer, Android","f":"2026-11-16"},
     "8375265": {"t":"Enterprise New Business Account Executive","f":"2026-11-19"},
     "8375451": {"t":"Program Manager","f":"2026-11-16"},
     "8379094": {"t":"Customer Marketing & Advocacy Manager","f":"2026-11-12"},
     "8383867": {"t":"Partner Program Operations Manager","f":"2026-11-13"},
     "8383870": {"t":"Partner Program Operations Manager","f":"2026-11-13"},
+    "8386666": {"t":"SEC Reporting and Equity Accounting Manager","f":"2026-11-25"},
     "8411739": {"t":"Workplace Lead","f":"2026-11-24"}
   }
 }

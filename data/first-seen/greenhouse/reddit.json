@@ -108,14 +108,14 @@
     "8175520": {"t":"Senior Frontend Engineer, Ads Creative","f":"2026-10-24"},
     "8178085": {"t":"Staff Machine Learning Engineer, Retrieval","f":"2026-10-24"},
     "8180636": {"t":"Staff Software Engineer, Developer Ecosystem","f":"2026-10-24","g":"2026-11-20"},
-    "8186566": {"t":"Global Indirect Tax Manager","f":"2026-10-24"},
+    "8186566": {"t":"Global Indirect Tax Manager","f":"2026-10-24","g":"2026-11-25"},
     "8187247": {"t":"Senior Software Engineer, Consumer Engineering","f":"2026-10-24"},
     "8187521": {"t":"Chief of Staff, Global Sales","f":"2026-10-24"},
     "8187652": {"t":"Staff Machine Learning Engineer, App Ads Modeling","f":"2026-10-24","g":"2026-11-03"},
     "8188275": {"t":"Trust and Safety Policy, Ads Policy,  Lead (Europe)","f":"2026-10-24","g":"2026-11-19"},
     "8189395": {"t":"Staff Threat Analyst, Ads Fraud","f":"2026-10-24"},
-    "8189894": {"t":"Global Indirect Tax Manager","f":"2026-10-24"},
-    "8189899": {"t":"Global Indirect Tax Manager","f":"2026-10-24"},
+    "8189894": {"t":"Global Indirect Tax Manager","f":"2026-10-24","g":"2026-11-25"},
+    "8189899": {"t":"Global Indirect Tax Manager","f":"2026-10-24","g":"2026-11-25"},
     "8190627": {"t":"Trust and Safety Policy, Ads Policy,  Lead (Europe)","f":"2026-10-24","g":"2026-11-19"},
     "8190630": {"t":"Trust and Safety Policy, Ads Policy,  Lead (Europe)","f":"2026-10-24","g":"2026-11-19"},
     "8191664": {"t":"Creative Strategist (M&E/Retail)","f":"2026-10-24"},
@@ -217,6 +217,7 @@
     "8406151": {"t":"Manager, Creative Strategy","f":"2026-11-20"},
     "8407162": {"t":"Staff Product Manager, Agentic Ads Buying","f":"2026-11-21"},
     "8407605": {"t":"Senior Client Partner, Large Customer Sales (Retail)","f":"2026-11-24"},
-    "8411613": {"t":"Senior Software Engineer, AI & Science Platform","f":"2026-11-23"}
+    "8411613": {"t":"Senior Software Engineer, AI & Science Platform","f":"2026-11-23"},
+    "8414836": {"t":"Lower Funnel Product Adoption Strategist","f":"2026-11-25"}
   }
 }

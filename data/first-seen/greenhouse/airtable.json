@@ -5,9 +5,9 @@
   "since": "2026-10-24",
   "jobs": {
     "7909563002": {"t":"Account Executive, Corporate","f":"2026-11-18"},
-    "8368711002": {"t":"Sales Manager, Strategic Accounts","f":"2026-10-24"},
-    "8403107002": {"t":"Account Executive, Corporate","f":"2026-10-24"},
-    "8403127002": {"t":"Account Executive, Strategic","f":"2026-10-24"},
+    "8368711002": {"t":"Sales Manager, Strategic Accounts","f":"2026-10-24","g":"2026-11-25"},
+    "8403107002": {"t":"Account Executive, Corporate","f":"2026-10-24","g":"2026-11-25"},
+    "8403127002": {"t":"Account Executive, Strategic","f":"2026-10-24","g":"2026-11-25"},
     "8425211002": {"t":"Business Development Representative","f":"2026-10-24","g":"2026-11-24"},
     "8498915002": {"t":"Senior Solutions Architect","f":"2026-11-10"},
     "8579474002": {"t":"Senior Account Executive, Strategic Accounts  UK&I + Northern Europe","f":"2026-11-18"},

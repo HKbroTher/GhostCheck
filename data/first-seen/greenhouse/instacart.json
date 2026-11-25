@@ -78,7 +78,7 @@
     "8232312": {"t":"Billing Operations Lead","f":"2026-10-24","g":"2026-11-14"},
     "8233716": {"t":"Software Engineer II, Advertiser Optimization","f":"2026-10-27","g":"2026-11-11"},
     "8234282": {"t":"Senior Software Engineer II - Ads Quality","f":"2026-10-24","g":"2026-11-14"},
-    "8234552": {"t":"Senior Marketing Manager II, Canada","f":"2026-10-24"},
+    "8234552": {"t":"Senior Marketing Manager II, Canada","f":"2026-10-24","g":"2026-11-25"},
     "8234578": {"t":"Legislative Counsel","f":"2026-10-24"},
     "8234595": {"t":"Privacy Counsel","f":"2026-10-24"},
     "8236905": {"t":"Senior Data Scientist I - Meals","f":"2026-10-24","g":"2026-10-27"},
@@ -171,6 +171,9 @@
     "8412255": {"t":"Senior Software Engineer II, Pricing & Incentives (Fulfillment)","f":"2026-11-24"},
     "8412533": {"t":"Director, Technical Program Management","f":"2026-11-24"},
     "8412535": {"t":"Director, Technical Program Management","f":"2026-11-24"},
-    "8412568": {"t":"Product Counsel","f":"2026-11-24"}
+    "8412568": {"t":"Product Counsel","f":"2026-11-24"},
+    "8415370": {"t":"Senior Salesforce Developer","f":"2026-11-25"},
+    "8415557": {"t":"Staff Software Engineer, Developer Experience","f":"2026-11-25"},
+    "8415777": {"t":"Senior Staff Software Engineer, AI Productivity","f":"2026-11-25"}
   }
 }
