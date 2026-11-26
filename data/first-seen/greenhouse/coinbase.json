@@ -98,6 +98,7 @@
     "8144776": {"t":"Sr. Staff Technical Risk Architect, Unified Trading","f":"2026-10-24"},
     "8144836": {"t":"Staff Data Engineer, Market Data","f":"2026-10-24"},
     "8146039": {"t":"Senior Software Engineer - Access & Authorization (Platform)","f":"2026-10-24","g":"2026-11-25"},
+    "8147693": {"t":"EDD Analyst III","f":"2026-11-26"},
     "8147696": {"t":"Risk & Monitoring Analyst III","f":"2026-10-24"},
     "8147699": {"t":"Risk & Monitoring Analyst III","f":"2026-10-24"},
     "8147917": {"t":"Senior Data Scientist","f":"2026-10-24"},
@@ -139,7 +140,7 @@
     "8175459": {"t":"Data Engineer Intern","f":"2026-10-24","g":"2026-11-14"},
     "8175462": {"t":"Data Science Intern","f":"2026-10-24","g":"2026-11-14"},
     "8175471": {"t":"Analytics Engineer Intern","f":"2026-10-24"},
-    "8175507": {"t":"Real Estate & Builds Intern","f":"2026-10-24"},
+    "8175507": {"t":"Real Estate & Builds Intern","f":"2026-10-24","g":"2026-11-26"},
     "8175510": {"t":"Forward Deployed Engineer Intern (HR Technology)","f":"2026-10-24"},
     "8175514": {"t":"Learning & Development Intern","f":"2026-10-24","g":"2026-11-17"},
     "8175517": {"t":"People Analytics Intern","f":"2026-10-24"},
@@ -362,7 +363,18 @@
     "8406680": {"t":"Senior SEC Reporting Accountant","f":"2026-11-21"},
     "8411576": {"t":"Brand Partnership Associate - esports, Gaming & Internet Culture","f":"2026-11-25"},
     "8412539": {"t":"Executive Assistant","f":"2026-11-24"},
+    "8414888": {"t":"EDD Compliance Analyst III","f":"2026-11-26"},
+    "8414893": {"t":"EDD Compliance Analyst III","f":"2026-11-26"},
+    "8414941": {"t":"Concierge Specialist III","f":"2026-11-26"},
+    "8415594": {"t":"Risk & Monitoring Analyst III","f":"2026-11-26"},
+    "8415597": {"t":"Risk & Monitoring Analyst III","f":"2026-11-26"},
     "8415721": {"t":"Senior Product Manager, Workforce Management","f":"2026-11-25"},
-    "8415764": {"t":"Head of Finance, Canada","f":"2026-11-25"}
+    "8415764": {"t":"Head of Finance, Canada","f":"2026-11-25"},
+    "8415869": {"t":"Security Engineer Intern","f":"2026-11-26"},
+    "8417588": {"t":"Senior Staff Software Engineer, Native Mobile","f":"2026-11-26"},
+    "8417596": {"t":"Staff Software Engineer, Native Mobile","f":"2026-11-26"},
+    "8417630": {"t":"Senior Software Engineer, Native Mobile","f":"2026-11-26"},
+    "8417917": {"t":"Customer Support Specialist ll","f":"2026-11-26"},
+    "8418037": {"t":"Risk & Monitoring Analyst III","f":"2026-11-26"}
   }
 }

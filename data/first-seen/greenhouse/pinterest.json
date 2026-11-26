@@ -172,7 +172,7 @@
     "8249279": {"t":"Sr. Product Designer - Measurement, Data, & AI","f":"2026-11-07"},
     "8249643": {"t":"Lead Client Partner, Beauty - Global Accounts","f":"2026-10-24","g":"2026-11-04"},
     "8257181": {"t":"Engineering Manager II, Runtime Services","f":"2026-10-28","g":"2026-11-13"},
-    "8257653": {"t":"Sr. Client Partner, Auto","f":"2026-10-24"},
+    "8257653": {"t":"Sr. Client Partner, Auto","f":"2026-10-24","g":"2026-11-26"},
     "8258175": {"t":"Director, Machine Learning Engineering, Ads Quality","f":"2026-10-24"},
     "8260075": {"t":"Sr. SMB & Channel Sales Program Manager","f":"2026-10-24"},
     "8262940": {"t":"Staff Software Engineer","f":"2026-11-10"},
@@ -252,6 +252,7 @@
     "8396724": {"t":"Administrative Business Partner I - Engineering, Product and Design","f":"2026-11-18"},
     "8399210": {"t":"Client Account Manager II, Travel","f":"2026-11-25"},
     "8401528": {"t":"Global Privacy Operations Manager","f":"2026-11-24"},
-    "8402791": {"t":"Sr. Counsel - Product, Engineering & AI","f":"2026-11-20"}
+    "8402791": {"t":"Sr. Counsel - Product, Engineering & AI","f":"2026-11-20"},
+    "8410813": {"t":"Sr. Client Partner","f":"2026-11-26"}
   }
 }

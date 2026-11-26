@@ -175,6 +175,7 @@
     "8176503002": {"t":"Manager, Engineering - AI/BI","f":"2026-10-24"},
     "8178287002": {"t":"Staff Data Scientist - Trust and Safety","f":"2026-10-24"},
     "8183195002": {"t":"Senior Software Engineer  - Application Traffic team","f":"2026-10-24"},
+    "8184634002": {"t":"Staff Security Detection Engineer","f":"2026-11-26"},
     "8186386002": {"t":"Sr. Product Manager, Lakeflow","f":"2026-10-24"},
     "8190108002": {"t":"Senior Engineering Manager - Notebook Dataplane","f":"2026-10-24"},
     "8193165002": {"t":"Strategic Core Account Executive, Federal System Integrators","f":"2026-10-24","g":"2026-11-20"},
@@ -261,7 +262,7 @@
     "8427954002": {"t":"Staff Product Manager, Serverless Workspaces","f":"2026-10-24"},
     "8428818002": {"t":"Sr. Developer Advocate - Neon","f":"2026-10-24","g":"2026-11-19"},
     "8429240002": {"t":"Solutions Architect  - Kansai Region","f":"2026-11-19"},
-    "8429978002": {"t":"Sr. Product Designer, AI/BI","f":"2026-10-24"},
+    "8429978002": {"t":"Sr. Product Designer, AI/BI","f":"2026-10-24","g":"2026-11-26"},
     "8430837002": {"t":"Staff Security Assurance Engineer","f":"2026-10-24"},
     "8431459002": {"t":"Strategic Core Account Executive - CMEG - Telco","f":"2026-10-24"},
     "8431931002": {"t":"Sr. Manager, Field Engineering - Public Sector (Intel, Navy, Air Force)","f":"2026-10-24","g":"2026-11-12"},
@@ -678,6 +679,7 @@
     "8735551002": {"t":"Delivery Solutions Architect - Healthcare & Life Sciences","f":"2026-10-24"},
     "8735569002": {"t":"Delivery Solutions Architect - Communications, Media, Entertainment & Games","f":"2026-10-24","g":"2026-11-11"},
     "8735590002": {"t":"Director, Marketing Strategy and AI Transformation","f":"2026-10-24","g":"2026-11-21"},
+    "8735814002": {"t":"Delivery Solutions Architect","f":"2026-11-26"},
     "8735820002": {"t":"Delivery Solutions Architect","f":"2026-10-24"},
     "8735828002": {"t":"Sr. Delivery Solutions Architect (Greater China Region)","f":"2026-10-24","g":"2026-11-25"},
     "8736179002": {"t":"Sr. Manager, Field Engineering","f":"2026-10-24","g":"2026-11-20"},
@@ -829,7 +831,7 @@
     "8824179002": {"t":"GTM Product Enablement Lead","f":"2026-10-24"},
     "8826668002": {"t":"Strategic Core Account Executive - Conglomerates","f":"2026-10-24"},
     "8826872002": {"t":"Delivery Solutions Architect","f":"2026-10-24","g":"2026-10-31"},
-    "8829029002": {"t":"Software Engineer, Infrastructure","f":"2026-10-24","g":"2026-11-23"},
+    "8829029002": {"t":"Software Engineer, Infrastructure","f":"2026-10-24"},
     "8829033002": {"t":"AI Automation Engineer","f":"2026-10-24"},
     "8829039002": {"t":"Software Engineer, Infrastructure","f":"2026-10-29"},
     "8829047002": {"t":"Sr. Automation Engineer - IT Asset Management","f":"2026-10-24"},
@@ -1111,6 +1113,7 @@
     "8937105002": {"t":"GTM Talent Sourcer (Contract)","f":"2026-11-11"},
     "8937106002": {"t":"GTM Recruiter","f":"2026-11-11"},
     "8937118002": {"t":"Geo Core Account Executive - Digital Natives","f":"2026-11-13"},
+    "8937350002": {"t":"Solutions Architect","f":"2026-11-26"},
     "8937360002": {"t":"Senior Manager, AI Forward Deployed Engineering","f":"2026-11-19"},
     "8937362002": {"t":"Solutions Architect","f":"2026-11-25"},
     "8937807002": {"t":"Engineering Manager - Developer Ecosystem","f":"2026-11-13","g":"2026-11-23"},
@@ -1142,6 +1145,10 @@
     "8958450002": {"t":"Business Development Representative (Dutch-speaking)","f":"2026-11-24"},
     "8959562002": {"t":"Sr. Solutions Architect","f":"2026-11-24"},
     "8959902002": {"t":"Sr. Legal Counsel, International Public Sector Compliance","f":"2026-11-24"},
-    "8961261002": {"t":"Sr. Engineering Manager - Notebook Foundations","f":"2026-11-25"}
+    "8960956002": {"t":"Deployment Strategist","f":"2026-11-26"},
+    "8960958002": {"t":"Deployment Strategist","f":"2026-11-26"},
+    "8960976002": {"t":"Deployment Strategist","f":"2026-11-26"},
+    "8961261002": {"t":"Sr. Engineering Manager - Notebook Foundations","f":"2026-11-25"},
+    "8963204002": {"t":"Manager, Field Engineering (Greater China)","f":"2026-11-26"}
   }
 }

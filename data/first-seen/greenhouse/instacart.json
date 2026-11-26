@@ -27,8 +27,8 @@
     "8029663": {"t":"Sales Development Representative II, Local Independent Grocery - Toronto","f":"2026-11-21"},
     "8069980": {"t":"Sales Development Representative II, Local Independent Grocery - Chicago","f":"2026-10-24"},
     "8069983": {"t":"Sales Development Representative II, Local Independent Grocery - Boston","f":"2026-10-24"},
-    "8077677": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24"},
-    "8077679": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24"},
+    "8077677": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24","g":"2026-11-26"},
+    "8077679": {"t":"Senior Manager, Technical Account Management (Enterprise)","f":"2026-10-24","g":"2026-11-26"},
     "8080512": {"t":"Detection Engineer II","f":"2026-11-02"},
     "8080532": {"t":"Detection Engineer II","f":"2026-11-02"},
     "8084089": {"t":"Staff Experience Designer","f":"2026-10-24","g":"2026-11-13"},
@@ -174,6 +174,7 @@
     "8412568": {"t":"Product Counsel","f":"2026-11-24"},
     "8415370": {"t":"Senior Salesforce Developer","f":"2026-11-25"},
     "8415557": {"t":"Staff Software Engineer, Developer Experience","f":"2026-11-25"},
-    "8415777": {"t":"Senior Staff Software Engineer, AI Productivity","f":"2026-11-25"}
+    "8415777": {"t":"Senior Staff Software Engineer, AI Productivity","f":"2026-11-25"},
+    "8417827": {"t":"Ads Ops, Off Platform, Manager","f":"2026-11-26"}
   }
 }
