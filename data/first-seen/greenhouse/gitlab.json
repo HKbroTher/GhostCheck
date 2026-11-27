@@ -296,7 +296,7 @@
     "8920912002": {"t":"Customer Experience Enablement Lead","f":"2026-10-31"},
     "8921380002": {"t":"Engineering Manager, Architecture Engineering: Async","f":"2026-10-29"},
     "8921443002": {"t":"Commercial Account Executive, Belux","f":"2026-11-06"},
-    "8922013002": {"t":"Data Scientist, Enterprise Analytics","f":"2026-10-31","g":"2026-11-26"},
+    "8922013002": {"t":"Senior Data Scientist, Enterprise Analytics","f":"2026-10-31"},
     "8922062002": {"t":"Senior Manager, Data Science","f":"2026-10-31"},
     "8922249002": {"t":"Intermediate Fullstack Engineer, Subscription Lifecycle","f":"2026-11-04"},
     "8922427002": {"t":"Fullstack Engineer, Source Code: Repository Services (Ruby)","f":"2026-10-30"},
@@ -392,6 +392,7 @@
     "8957093002": {"t":"Professional Services, Program Manager","f":"2026-11-21"},
     "8957097002": {"t":"Senior Solutions Architect Operations Manager","f":"2026-11-21"},
     "8957104002": {"t":"Principal Revenue Strategist","f":"2026-11-21"},
-    "8959549002": {"t":"Business Development Representative, Australia","f":"2026-11-25"}
+    "8959549002": {"t":"Business Development Representative, Australia","f":"2026-11-25"},
+    "8961167002": {"t":"Enterprise Applications Engineer, Zendesk","f":"2026-11-27"}
   }
 }
